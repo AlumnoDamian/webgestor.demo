@@ -37,12 +37,6 @@
 
 <body class="bg-gradient-to-r from-blue-600 to-blue-900 text-white font-sans">
 
-    <!-- Header -->
-    <header class="text-center p-8">
-        <h1 class="text-4xl font-extrabold animate__animated animate__fadeIn">Bienvenido al Dashboard</h1>
-        <p class="text-xl mt-2">Tu portal de administración personal</p>
-    </header>
-
     <!-- Card principal -->
     <div class="flex justify-center items-center min-h-screen fade-in">
         <div class="card bg-white text-gray-800 dark:bg-gray-800 w-full max-w-6xl p-12 rounded-2xl shadow-xl">
