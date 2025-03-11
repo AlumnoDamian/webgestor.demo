@@ -114,6 +114,24 @@
 
             <img id="image-preview" src="" alt="Vista previa de la imagen" style="display: none; width: 100px;" class="mt-2 img-thumbnail">
         </div>
+
+        <!-- Campo Departamento -->
+        <div class="col-md-4 mb-3">
+            <label for="department_id" class="form-label">Departamento</label>
+            <select name="department_id" id="department_id" class="form-control @error('department_id') is-invalid @enderror">
+                <option value="">Selecciona un departamento</option>
+                @foreach ($departments as $department)
+                    <option value="{{ $department->id }}" 
+                        {{ old('department_id', $employee->department_id ?? '') == $department->id ? 'selected' : '' }}>
+                        {{ $department->name }}
+                    </option>
+                @endforeach
+            </select>
+            @error('department_id')
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+            @enderror
+        </div>
+
     </div>
 
     <div class="d-flex justify-content-between mt-4">

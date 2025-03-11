@@ -22,9 +22,6 @@ return new class extends Migration
             $table->string('email')->unique()->nullable(); // Correo electrónico del departamento
             $table->boolean('status')->default(true); // Estado activo/inactivo
             $table->timestamps();
-
-            // Clave foránea con la tabla employees (si manager_id se refiere a un empleado)
-            $table->foreign('manager_id')->references('id')->on('employees')->onDelete('set null');
         });
     }
 

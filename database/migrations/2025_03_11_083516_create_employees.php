@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('phone')->nullable(); // Teléfono
             $table->boolean('is_active')->default(true); // Estado del empleado
             $table->string('image')->nullable(); // Imagen opcional
+            $table->unsignedBigInteger('department_id')->nullable(); 
         });
     }
 

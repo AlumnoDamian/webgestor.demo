@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\Department;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +27,8 @@ class EmployeeController extends Controller
 
     public function create()
     {
-        return view('crud_employees.create');
+        $departments = Department::all();  // Obtener todos los departamentos
+        return view('crud_employees.create', compact('departments'));    
     }
 
     public function store(Request $request)
@@ -40,6 +43,7 @@ class EmployeeController extends Controller
             'birth_date' => 'required|date', // Fecha de nacimiento opcional
             'address' => 'required|string', // Dirección opcional
             'phone' => 'required|string|max:9', // Teléfono opcional
+            'department_id' => 'required|exists:departments,id'
         ]);
 
         // Si no se proporciona un email, generamos uno automáticamente
@@ -75,6 +79,8 @@ class EmployeeController extends Controller
             'address' => $request->address,
             'phone' => $request->phone,
             'image' => $imagePath,
+            'department_id' => $request->department_id,  // Almacenar el ID del departamento
+
         ]);
 
         return redirect()->route('empleados.index')->with('success', 'Empleado creado con éxito');
@@ -85,7 +91,8 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $employee = Employee::findOrFail($id);
-        return view('crud_employees.edit', compact('employee'));
+        $departments = Department::all();  // Obtener todos los departamentos
+        return view('crud_employees.edit', compact('employee', 'departments'));
     }
 
     public function update(Request $request, $id)
@@ -105,6 +112,7 @@ class EmployeeController extends Controller
             'address' => 'nullable|string',
             'phone' => 'nullable|string',
             'is_active' => 'required|boolean',
+            'department_id' => 'required|exists:departments,id'
         ]);
 
         $imagePath = $employee->image;
@@ -128,6 +136,7 @@ class EmployeeController extends Controller
             'phone' => $request->phone,
             'image' => $imagePath,
             'is_active' => $request->is_active,
+            'department_id' => $request->department_id,  // Actualizar el ID del departamento
         ]);
 
         // Si se ha proporcionado una nueva contraseña, la actualizamos también

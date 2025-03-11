@@ -21,4 +21,10 @@ class Employee extends Model
         'is_active',
         'image',
     ];
+    // En el modelo Employee
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+
 }
