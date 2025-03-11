@@ -18,23 +18,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Mostrar todos los empleados
-    Route::get('/employees', [EmployeeController::class, 'index'])->name('crud_employees.index');
-        
-    // Mostrar formulario para crear un empleado
-    Route::get('/employees/create', [EmployeeController::class, 'create'])->name('crud_employees.create');
-
-    // Guardar nuevo empleado
-    Route::post('/employees', [EmployeeController::class, 'store'])->name('crud_employees.store');
-
-    // Mostrar formulario para editar un empleado
-    Route::get('/employees/{employee}/edit', [EmployeeController::class, 'edit'])->name('crud_employees.edit');
-
-    // Actualizar empleado
-    Route::put('/employees/{employee}', [EmployeeController::class, 'update'])->name('crud_employees.update');
-
-    // Eliminar empleado
-    Route::delete('/employees/{employee}', [EmployeeController::class, 'destroy'])->name('crud_employees.destroy');
+    Route::get('/empleados', [EmployeeController::class, 'index'])->name('empleados.index');
+    Route::get('/empleados/crear', [EmployeeController::class, 'create'])->name('empleados.crear');
+    Route::post('/empleados', [EmployeeController::class, 'store'])->name('empleados.guardar');
+    Route::get('/empleados/{employee}/editar', [EmployeeController::class, 'edit'])->name('empleados.editar');
+    Route::put('/empleados/{employee}', [EmployeeController::class, 'update'])->name('empleados.actualizar');
+    Route::delete('/empleados/{employee}', [EmployeeController::class, 'destroy'])->name('empleados.eliminar');
 
 });
 

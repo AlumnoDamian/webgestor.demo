@@ -1,178 +1,229 @@
-:root {
-    --primary-color: #2b87e9;
-    --sidebar-width: 250px;
-  }
-  
-  body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  .sidebar {
-    width: var(--sidebar-width);
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 0;
-    background-color: #f8f9fa;
-    border-right: 1px solid #dee2e6;
-    padding-top: 60px;
-    transition: all 0.3s;
-    z-index: 1000;
-  }
-  
-  .sidebar.collapsed {
-    margin-left: calc(-1 * var(--sidebar-width));
-  }
-  
-  .main-content {
-    margin-left: var(--sidebar-width);
-    padding: 20px;
-    transition: all 0.3s;
-  }
-  
-  .main-content.expanded {
-    margin-left: 0;
-  }
-  
-  .navbar {
-    background-color: var(--primary-color);
-    padding: 10px 20px;
-    position: fixed;
-    width: 100%;
-    z-index: 1001;
-  }
-  
-  .navbar-toggler {
-    background-color: white;
-  }
-  
-  .content-container {
-    padding-top: 70px;
-  }
-  
-  .card {
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  }
-  
-  .card-header {
-    background-color: #f8f9fa;
-    font-weight: bold;
-    padding: 12px 15px;
-  }
-  
-  .btn-primary {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-  }
-  
-  .btn-primary:hover {
-    background-color: #1a68b3;
-    border-color: #1a68b3;
-  }
-  
-  .table {
-    margin-bottom: 0;
-  }
-  
-  .table th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-  }
-  
-  .form-control:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.25rem rgba(43, 135, 233, 0.25);
-  }
-  
-  .form-label {
-    font-weight: 500;
-  }
-  
-  .btn-warning {
-    background-color: #ffc107;
-    border-color: #ffc107;
-    color: #212529;
-  }
-  
-  .btn-danger {
-    background-color: #dc3545;
-    border-color: #dc3545;
-    color: #fff;
-  }
-  
-  .img-thumbnail {
-    border: 1px solid #dee2e6;
-    padding: 3px;
-  }
-  
-  .container {
-    max-width: 1200px;
-    padding: 0 15px;
-  }
-  
-  h1 {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-    font-weight: 600;
-    color: #333;
-  }
-  
-  .alert {
-    border-radius: 4px;
-    padding: 12px 15px;
-  }
-  
-  .form-group {
-    margin-bottom: 1.5rem;
-  }
-  
-  .form-control {
-    border-radius: 4px;
-    padding: 0.5rem 0.75rem;
-  }
-  
-  .btn {
-    border-radius: 4px;
-    padding: 0.5rem 1rem;
-    font-weight: 500;
-  }
-  
-  
-
-  .navbar-custom {
-    background-color: #2D89EF; /* Color azul personalizado */
+/* Estilos generales del cuerpo */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+  margin: 0;
+  padding: 0;
 }
 
-.navbar-custom .navbar-nav .nav-link {
-    color: white !important; /* Color blanco para los enlaces */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-.navbar-custom .navbar-nav .nav-link:hover {
-    color: #ffd700 !important; /* Color dorado en hover */
+/* Títulos */
+h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #007bff;
 }
 
-/* Estilo personalizado para sidebar */
-.sidebar-custom {
-    background-color: #343a40; /* Color de fondo oscuro para el sidebar */
-    color: #fff;
+/* Estilo de la tarjeta */
+.card {
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: #ffffff;
+  margin-bottom: 30px;
 }
 
-.sidebar-custom a {
-    color: #ccc;
+.card-header {
+  background-color: #007bff;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-size: 1.25rem;
 }
 
-.sidebar-custom a:hover {
-    color: #ffffff;
-    background-color: #007bff;
+.card-body {
+  padding: 20px;
 }
 
-/* Estilo para los botones de cierre del sidebar */
-.sidebar-close-btn {
-    color: #fff;
-    background-color: transparent;
-    border: none;
-    font-size: 1.5rem;
+/* Tabla */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.table th, .table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.thead-light th {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.badge {
+  font-size: 0.875rem;
+  padding: 5px 10px;
+  border-radius: 12px;
+}
+
+.badge.bg-secondary {
+  background-color: #6c757d;
+}
+
+/* Botones */
+.btn {
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-outline-primary {
+  border: 1px solid #007bff;
+  background-color: transparent;
+  color: #007bff;
+}
+
+.btn-outline-primary:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  color: black;
+}
+
+.btn-warning:hover {
+  background-color: #e0a800;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+.btn-sm {
+  font-size: 0.875rem;
+  padding: 5px 10px;
+}
+
+/* Estilos de formularios */
+.form-label {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.form-control {
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.25rem rgba(38, 143, 255, 0.25);
+}
+
+/* Sombra y transición en botones y filas */
+.shadow-md {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hover-shadow-lg:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Efecto de sombra al pasar el ratón sobre las filas */
+.hover-row:hover {
+  background-color: #f1f1f1;
+  transition: background-color 0.3s ease;
+}
+
+/* Transiciones suaves */
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+.transition-all:hover {
+  background-color: #e2e6ea;
+}
+
+/* Estilo de imagen */
+.img-thumbnail {
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.img-thumbnail:hover {
+  transform: scale(1.1);
+}
+
+.rounded-circle {
+  border-radius: 50%;
+}
+
+/* Espaciado de botones y formulario */
+.mb-3 {
+  margin-bottom: 1rem;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem;
+}
+
+.mt-4 {
+  margin-top: 1.5rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+/* Fondo y bordes de tarjetas */
+.bg-light {
+  background-color: #f8f9fa !important;
+}
+
+/* Botones de acción */
+.d-inline-block {
+  display: inline-block;
+}
+
+/* Otros ajustes */
+.text-center {
+  text-align: center;
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+.text-primary {
+  color: #007bff !important;
+}
+
+.card-dark-bg {
+  background-color: #f8f9fa; /* Fondo más oscuro que el predeterminado */
+  border-color: #e0e0e0; /* Border más claro */
 }

@@ -81,9 +81,9 @@
             </div>
             <ul>
                 <!-- Enlaces del sidebar con estilo personalizado -->
-                <li><a href="#" class="block px-4 py-2 hover:bg-blue-500">Inicio</a></li>
-                <li><a href="{{ route('profile.edit') }}" class="block px-4 py-2 hover:bg-blue-500">Perfil</a></li>
-                <li><a href="{{ route('crud_employees.index') }}" class="block px-4 py-2 hover:bg-blue-500">Listado empleados</a></li>
+                <li><a href="{{ route('dashboard') }}" class="block px-4 py-2 hover:bg-blue-500">Inicio</a></li>
+                <li><a href="#" class="block px-4 py-2 hover:bg-blue-500">Perfil</a></li>
+                <li><a href="{{ route('empleados.index') }}" class="block px-4 py-2 hover:bg-blue-500">Listado empleados</a></li>
                 <li><a href="#" class="block px-4 py-2 hover:bg-blue-500">Configuración</a></li>
                 <!-- Cerrar sesión con formulario -->
                 <li>

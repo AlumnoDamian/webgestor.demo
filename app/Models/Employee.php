@@ -12,6 +12,13 @@ class Employee extends Model
     protected $fillable = [
         'user_id',
         'dni',
-        'image', // Colocamos la columna para la imagen
+        'name',
+        'email',
+        'password',
+        'birth_date',
+        'address',
+        'phone',
+        'is_active',
+        'image',
     ];
 }

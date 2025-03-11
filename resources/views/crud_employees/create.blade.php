@@ -1,37 +1,20 @@
 @extends('layouts.layout')
 
 @section('content')
-<div class="container">
-    <h1>Crear Empleado</h1>
+<div class="container mt-2">
     
-    <div class="card">
-        <div class="card-header">
-            Formulario de Creación
-        </div>
-        <div class="card-body">
-            <form action="{{ route('crud_employees.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="form-group mb-3">
-                    <label for="dni" class="form-label">DNI</label>
-                    <input type="text" name="dni" id="dni" class="form-control @error('dni') is-invalid @enderror" value="{{ old('dni') }}" required>
-                    @error('dni')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="form-group mb-3">
-                    <label for="image" class="form-label">Imagen</label>
-                    <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror">
-                    @error('image')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="d-flex justify-content-between mt-4">
-                    <a href="{{ route('crud_employees.index') }}" class="btn btn-secondary">Cancelar</a>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
-        </div>
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb rounded-0 shadow-sm p-2">
+            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}" class="text-muted hover-text-primary transition-all duration-300">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('empleados.index') }}" class="text-muted hover-text-primary transition-all duration-300">Listado de empleados</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Crear un empleado</li>
+        </ol>
+    </nav>
+
+    <div class="card shadow-lg rounded-lg">
+        <div class="card-header bg-primary text-white">Crear un empleado</div>
+        @include('crud_employees.employees_form', ['route' => route('empleados.guardar'), 'buttonText' => 'Guardar'])
     </div>
 </div>
 @endsection
-

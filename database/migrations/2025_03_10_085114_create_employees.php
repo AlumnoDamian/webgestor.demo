@@ -16,8 +16,14 @@ return new class extends Migration
             $table->timestamps();
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Relación con users
             $table->string('dni')->unique(); // DNI único para evitar duplicados
-            $table->string('image')->nullable(); 
-
+            $table->string('name'); // Nombre completo del empleado
+            $table->string('email')->unique(); // Email único
+            $table->string('password'); // Contraseña
+            $table->date('birth_date')->nullable(); // Fecha de nacimiento
+            $table->text('address')->nullable(); // Dirección
+            $table->string('phone')->nullable(); // Teléfono
+            $table->boolean('is_active')->default(true); // Estado del empleado
+            $table->string('image')->nullable(); // Imagen opcional
         });
     }
 
