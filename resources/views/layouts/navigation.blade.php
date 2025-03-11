@@ -69,7 +69,7 @@
         <div x-show="openSidebar" class="fixed inset-0 bg-black bg-opacity-50 z-40" @click="openSidebar = false"></div>
         
         <div x-show="openSidebar" x-transition 
-            class="fixed left-0 top-0 h-full w-64 sidebar-custom z-50 p-4 transform -translate-x-full"
+            class="fixed left-0 top-0 h-full w-80 sidebar-custom z-50 p-4 transform -translate-x-full"
             :class="{ 'translate-x-0': openSidebar }">
             <div class="flex justify-between items-center mb-4">
                 <!-- Logo en el sidebar -->
@@ -82,8 +82,10 @@
             <ul>
                 <!-- Enlaces del sidebar con estilo personalizado -->
                 <li><a href="{{ route('dashboard') }}" class="block px-4 py-2 hover:bg-blue-500">Inicio</a></li>
-                <li><a href="#" class="block px-4 py-2 hover:bg-blue-500">Perfil</a></li>
+                <li><a href="{{ route('profile.index') }}" class="block px-4 py-2 hover:bg-blue-500">Perfil</a></li>
                 <li><a href="{{ route('empleados.index') }}" class="block px-4 py-2 hover:bg-blue-500">Listado empleados</a></li>
+                <li><a href="{{ route('departamentos.index') }}" class="block px-4 py-2 hover:bg-blue-500">Listado departamentos</a></li>
+
                 <li><a href="#" class="block px-4 py-2 hover:bg-blue-500">Configuración</a></li>
                 <!-- Cerrar sesión con formulario -->
                 <li>

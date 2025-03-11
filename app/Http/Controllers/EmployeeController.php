@@ -11,6 +11,12 @@ use App\Models\User;
 
 class EmployeeController extends Controller
 {
+    public function profile()
+    {
+        $employee = Employee::where('user_id', auth()->id())->firstOrFail();
+        return view('profile_employee.index', compact('employee'));
+    }
+    
     public function index()
     {
         $employees = Employee::all();
