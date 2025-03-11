@@ -31,6 +31,7 @@
                             <th>Código</th>
                             <th>Nombre</th>
                             <th>Correo</th>
+                            <th>Jefe de Departamento</th> <!-- Nueva columna -->
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
@@ -41,6 +42,7 @@
                                 <td>{{ $department->code }}</td>
                                 <td>{{ $department->name }}</td>
                                 <td>{{ $department->email ?? 'No disponible' }}</td>
+                                <td>{{ $department->manager ? $department->manager->name : 'No asignado' }}</td> <!-- Mostrar el nombre del jefe -->
                                 <td>
                                     <span class="badge {{ $department->status ? 'bg-success' : 'bg-danger' }}">
                                         {{ $department->status ? 'Activo' : 'Inactivo' }}

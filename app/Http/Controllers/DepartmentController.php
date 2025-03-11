@@ -22,7 +22,7 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        $managers = Employee::all(); // Obtener todos los empleados para asignar como jefes
+        $managers = Employee::jefe()->get();
         return view('crud_departments.create', compact('managers'));
     }
 
@@ -31,6 +31,12 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
+
+        // Validar que el jefe no esté asignado a otro departamento
+        if ($request->manager_id && Department::where('manager_id', $request->manager_id)->exists()) {
+            return redirect()->back()->withErrors(['manager_id' => 'Este jefe ya está asignado a otro departamento.']);
+        }
+
         // Validación de los datos
         $validatedData = $request->validate([
             'code' => 'required|string|unique:departments,code|max:10',
@@ -55,7 +61,7 @@ class DepartmentController extends Controller
     public function edit($id)
     {
         $department = Department::findOrFail($id);
-        $managers = Employee::all(); // Lista de empleados para seleccionar un jefe de departamento
+        $managers = Employee::jefe()->get(); // Solo empleados con rol "jefe"
         return view('crud_departments.edit', compact('department', 'managers'));
     }
 
@@ -65,6 +71,11 @@ class DepartmentController extends Controller
     public function update(Request $request, $id)
     {
         $department = Department::findOrFail($id);
+
+        // Validar que el jefe no esté asignado a otro departamento
+        if ($request->manager_id && Department::where('manager_id', $request->manager_id)->where('id', '!=', $department->id)->exists()) {
+            return redirect()->back()->withErrors(['manager_id' => 'Este jefe ya está asignado a otro departamento.']);
+        }
 
         // Validación de datos
         $validatedData = $request->validate([

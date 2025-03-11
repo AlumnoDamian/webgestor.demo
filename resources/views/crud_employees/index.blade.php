@@ -33,6 +33,8 @@
                             <th>Correo</th>
                             <th>Imagen</th>
                             <th>Estado</th>
+                            <th>Departamento</th>
+                            <th>Rol</th> <!-- Columna para mostrar el rol -->
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -53,6 +55,19 @@
                                     <span class="badge {{ $employee->is_active ? 'bg-success' : 'bg-danger' }}">
                                         {{ $employee->is_active ? 'Activo' : 'Inactivo' }}
                                     </span>
+                                </td>
+                                <td>
+                                    @if ($employee->departments->isNotEmpty()) <!-- Relación muchos a muchos -->
+                                        @foreach ($employee->departments as $department)
+                                            <span class="badge bg-primary">{{ $department->name }}</span>
+                                        @endforeach
+                                    @else
+                                        <span class="badge bg-secondary">Sin asignar</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <!-- Mostrar el rol -->
+                                    <span class="badge bg-info">{{ ucfirst($employee->role) }}</span> <!-- Rol en mayúsculas -->
                                 </td>
                                 <td>
                                     <a href="{{ route('empleados.editar', $employee->id) }}" class="btn btn-warning btn-sm shadow-sm hover-shadow-lg">

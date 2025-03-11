@@ -20,11 +20,16 @@ class Employee extends Model
         'phone',
         'is_active',
         'image',
+        'role'
     ];
-    // En el modelo Employee
-    public function department()
+    public function departments()
     {
-        return $this->belongsTo(Department::class);
+        return $this->belongsToMany(Department::class, 'employee_department');
     }
 
+    public function scopeJefe($query)
+    {
+        return $query->where('role', 'jefe');
+    }
+    
 }

@@ -10,18 +10,18 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::create('employee_department', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
-        $table->foreignId('department_id')->constrained('departments')->onDelete('cascade');
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('employee_department', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
+            $table->foreignId('department_id')->constrained('departments')->onDelete('cascade');
+            $table->timestamps();
+        });
+    }
 
-public function down(): void
-{
-    Schema::dropIfExists('employee_department');
-}
+    public function down(): void
+    {
+        Schema::dropIfExists('employee_department');
+    }
 
 };

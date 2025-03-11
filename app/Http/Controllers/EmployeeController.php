@@ -21,14 +21,15 @@ class EmployeeController extends Controller
     
     public function index()
     {
-        $employees = Employee::all();
+        $employees = Employee::with('departments')->get();
         return view('crud_employees.index', compact('employees'));
     }
 
     public function create()
     {
+        $roles = ['jefe', 'empleado', 'supervisor', 'auxiliar', 'gerente', 'recepcionista', 'cocinero', 'camarero', 'conserje', 'limpiador', 'guardia de seguridad', 'auxiliar administrativo', 'analista']; // Roles definidos
         $departments = Department::all();  // Obtener todos los departamentos
-        return view('crud_employees.create', compact('departments'));    
+        return view('crud_employees.create', compact('departments', 'roles'));    
     }
 
     public function store(Request $request)
@@ -37,13 +38,14 @@ class EmployeeController extends Controller
         $validatedData = $request->validate([
             'dni' => 'required|unique:employees,dni', // DNI único en la tabla de empleados
             'name' => 'required|string|max:255', // Nombre obligatorio y de longitud máxima
-            'email' => 'nullable|email|unique:users,email', // Email opcional, pero debe ser único en la tabla users
+            'email' => 'required|email|unique:users,email', // Email opcional, pero debe ser único en la tabla users
             'password' => 'required|string|min:8|confirmed', // Confirmación de contraseña
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Imagen opcional con tipo y tamaño específico
             'birth_date' => 'required|date', // Fecha de nacimiento opcional
             'address' => 'required|string', // Dirección opcional
             'phone' => 'required|string|max:9', // Teléfono opcional
-            'department_id' => 'required|exists:departments,id'
+            'department_id' => 'required|exists:departments,id',
+            'role' => 'required|string'  // Asegúrate de que el rol es requerido
         ]);
 
         // Si no se proporciona un email, generamos uno automáticamente
@@ -69,31 +71,34 @@ class EmployeeController extends Controller
         }
 
         // Crear el empleado
-        Employee::create([
+        $employee = Employee::create([
             'user_id' => $user->id,
             'dni' => $request->dni,
             'name' => $request->name,
-            'email' => $email,  // Usar el email generado o proporcionado
-            'password' => Hash::make($request->password), // Si es necesario, puedes guardar la contraseña también en employees
+            'email' => $email,
+            'password' => Hash::make($request->password),
             'birth_date' => $request->birth_date,
             'address' => $request->address,
             'phone' => $request->phone,
             'image' => $imagePath,
-            'department_id' => $request->department_id,  // Almacenar el ID del departamento
-
+            'role' => $request->role
         ]);
+
+        // Guardar el departamento en la tabla intermedia
+        $employee->departments()->attach($request->department_id);
 
         return redirect()->route('empleados.index')->with('success', 'Empleado creado con éxito');
     }
-
 
 
     public function edit($id)
     {
         $employee = Employee::findOrFail($id);
         $departments = Department::all();  // Obtener todos los departamentos
-        return view('crud_employees.edit', compact('employee', 'departments'));
+        $roles = ['jefe', 'empleado', 'supervisor', 'auxiliar', 'gerente', 'recepcionista', 'cocinero', 'camarero', 'conserje', 'limpiador', 'guardia de seguridad', 'auxiliar administrativo', 'analista']; // Roles definidos
+        return view('crud_employees.edit', compact('employee', 'departments', 'roles'));
     }
+
 
     public function update(Request $request, $id)
     {
@@ -105,14 +110,15 @@ class EmployeeController extends Controller
         $request->validate([
             'dni' => 'required|unique:employees,dni,' . $id, // El DNI es único, pero se permite el mismo para el empleado actual
             'name' => 'required|string|max:255',
-            'email' => 'nullable|email|unique:users,email,' . $user->id, // El email solo es único si se cambia
+            'email' => 'required|email|unique:users,email,' . $user->id, // El email solo es único si se cambia
             'password' => 'nullable|string|min:8|confirmed', // Contraseña opcional
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Imagen opcional
             'birth_date' => 'nullable|date',
             'address' => 'nullable|string',
             'phone' => 'nullable|string',
             'is_active' => 'required|boolean',
-            'department_id' => 'required|exists:departments,id'
+            'department_id' => 'required|exists:departments,id',
+            'role' => 'required|string'  // Asegúrate de que el rol es requerido
         ]);
 
         $imagePath = $employee->image;
@@ -136,8 +142,11 @@ class EmployeeController extends Controller
             'phone' => $request->phone,
             'image' => $imagePath,
             'is_active' => $request->is_active,
-            'department_id' => $request->department_id,  // Actualizar el ID del departamento
+            'role' => $request->role
         ]);
+
+        // Actualizar el departamento en la tabla intermedia
+        $employee->departments()->sync([$request->department_id]);
 
         // Si se ha proporcionado una nueva contraseña, la actualizamos también
         if ($request->filled('password')) {

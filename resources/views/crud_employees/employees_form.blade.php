@@ -8,7 +8,8 @@
         <!-- Campo DNI -->
         <div class="col-md-4 mb-3">
             <label for="dni" class="form-label">DNI</label>
-            <input type="text" name="dni" id="dni" class="form-control @error('dni') is-invalid @enderror" value="{{ old('dni', $employee->dni ?? '') }}">
+            <input type="text" name="dni" id="dni" class="form-control @error('dni') is-invalid @enderror" 
+                value="{{ old('dni', $employee->dni ?? '') }}">
             @error('dni')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
@@ -17,7 +18,8 @@
         <!-- Campo Nombre -->
         <div class="col-md-4 mb-3">
             <label for="name" class="form-label">Nombre completo</label>
-            <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $employee->name ?? '') }}">
+            <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" 
+                value="{{ old('name', $employee->name ?? '') }}">
             @error('name')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
@@ -26,7 +28,8 @@
         <!-- Campo Correo Electrónico -->
         <div class="col-md-4 mb-3">
             <label for="email" class="form-label">Correo Electrónico</label>
-            <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $employee->email ?? '') }}">
+            <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror" 
+                value="{{ old('email', $employee->email ?? '') }}">
             @error('email')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
@@ -57,7 +60,8 @@
         <!-- Campo Fecha de nacimiento -->
         <div class="col-md-4 mb-3">
             <label for="birth_date" class="form-label">Fecha de nacimiento</label>
-            <input type="text" name="birth_date" id="birth_date" class="form-control @error('birth_date') is-invalid @enderror" value="{{ old('birth_date', $employee->birth_date ?? '') }}">
+            <input type="text" name="birth_date" id="birth_date" class="form-control @error('birth_date') is-invalid @enderror" 
+                   value="{{ old('birth_date', $employee->birth_date ?? '') }}">
             @error('birth_date')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
@@ -77,7 +81,8 @@
         <!-- Campo Teléfono -->
         <div class="col-md-4 mb-3">
             <label for="phone" class="form-label">Teléfono</label>
-            <input type="text" name="phone" id="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone', $employee->phone ?? '') }}">
+            <input type="text" name="phone" id="phone" class="form-control @error('phone') is-invalid @enderror" 
+                value="{{ old('phone', $employee->phone ?? '') }}">
             @error('phone')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
@@ -120,9 +125,9 @@
             <label for="department_id" class="form-label">Departamento</label>
             <select name="department_id" id="department_id" class="form-control @error('department_id') is-invalid @enderror">
                 <option value="">Selecciona un departamento</option>
-                @foreach ($departments as $department)
+                @foreach($departments as $department)
                     <option value="{{ $department->id }}" 
-                        {{ old('department_id', $employee->department_id ?? '') == $department->id ? 'selected' : '' }}>
+                        {{ isset($employee) && $employee->departments->contains($department->id) ? 'selected' : '' }}>
                         {{ $department->name }}
                     </option>
                 @endforeach
@@ -132,6 +137,18 @@
             @enderror
         </div>
 
+        <!-- Campo Rol -->
+        <div class="col-md-4 mb-3">
+            <label for="role" class="form-label">Rol</label>
+            <select name="role" id="role" class="form-control">
+                <option value="">Selecciona un rol de trabajo</option>
+                @foreach($roles as $role)
+                    <option value="{{ $role }}" {{ old('role', $employee->role ?? '') == $role ? 'selected' : '' }}>
+                        {{ ucfirst($role) }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
     </div>
 
     <div class="d-flex justify-content-between mt-4">
