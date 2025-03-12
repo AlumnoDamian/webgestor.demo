@@ -7,7 +7,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\MemoController;
 use App\Http\Controllers\DashboardController;
-
+use App\Http\Controllers\ScheduleController;
 
 
 Route::get('/', function () {
@@ -41,6 +41,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/departamentos/{id}', [DepartmentController::class, 'destroy'])->name('departamentos.eliminar'); // Eliminar departamento
     Route::get('/departamentos', [DepartmentController::class, 'index'])->name('crud_departamentos.index');
     Route::get('/departamentos/{id}', [DepartmentController::class, 'show'])->name('departamentos.show');
+
+    Route::get('/cuadrante', [ScheduleController::class, 'index'])->name('cuadrante.index');
+    Route::post('/cuadrante', [ScheduleController::class, 'store'])->name('cuadrante.store');
 
     Route::get('/anuncio', [AnnouncementController::class, 'index']);
     Route::get('/comunicado', [MemoController::class, 'index']);
