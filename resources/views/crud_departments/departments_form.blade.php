@@ -100,7 +100,7 @@
     </div>
 
     <div class="d-flex justify-content-between mt-4">
-        <a href="{{ route('departamentos.index') }}" class="btn btn-secondary shadow-md hover-shadow-lg">Cancelar</a>
+        <a href="{{ route('crud_departamentos.index') }}" class="btn btn-secondary shadow-md hover-shadow-lg">Cancelar</a>
         <button type="submit" class="btn btn-primary shadow-md hover-shadow-lg">{{ $buttonText }}</button>
     </div>
 </form>

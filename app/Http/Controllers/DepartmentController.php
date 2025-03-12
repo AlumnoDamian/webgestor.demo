@@ -52,7 +52,7 @@ class DepartmentController extends Controller
         // Crear el departamento
         Department::create($validatedData);
 
-        return redirect()->route('departamentos.index')->with('success', 'Departamento creado con éxito.');
+        return redirect()->route('crud_departamentos.index')->with('success', 'Departamento creado con éxito.');
     }
 
     /**
@@ -63,6 +63,12 @@ class DepartmentController extends Controller
         $department = Department::findOrFail($id);
         $managers = Employee::jefe()->get(); // Solo empleados con rol "jefe"
         return view('crud_departments.edit', compact('department', 'managers'));
+    }
+
+    public function show($id)
+    {
+        $department = Department::with('manager', 'employees')->findOrFail($id);
+        return view('crud_departments.show', compact('department'));
     }
 
     /**
@@ -92,7 +98,7 @@ class DepartmentController extends Controller
         // Actualizar el departamento
         $department->update($validatedData);
 
-        return redirect()->route('departamentos.index')->with('success', 'Departamento actualizado con éxito.');
+        return redirect()->route('crud_departamentos.index')->with('success', 'Departamento actualizado con éxito.');
     }
 
     /**
@@ -103,6 +109,6 @@ class DepartmentController extends Controller
         $department = Department::findOrFail($id);
         $department->delete();
 
-        return redirect()->route('departamentos.index')->with('success', 'Departamento eliminado con éxito.');
+        return redirect()->route('crud_departamentos.index')->with('success', 'Departamento eliminado con éxito.');
     }
 }

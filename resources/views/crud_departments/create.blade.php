@@ -7,7 +7,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb rounded-0 shadow-sm p-2">
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}" class="text-muted hover-text-primary transition-all duration-300">Inicio</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('departamentos.index') }}" class="text-muted hover-text-primary transition-all duration-300">Listado de departamentos</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('crud_departamentos.index') }}" class="text-muted hover-text-primary transition-all duration-300">Listado de departamentos</a></li>
             <li class="breadcrumb-item active" aria-current="page">Crear un departamento</li>
         </ol>
     </nav>

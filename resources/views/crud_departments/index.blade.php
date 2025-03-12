@@ -17,7 +17,6 @@
             <a href="{{ route('departamentos.crear') }}" class="btn btn-primary mb-3 d-inline-block shadow-md hover-shadow-lg">
                 <i class="fas fa-building"></i> Crear Departamento
             </a>
-            
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
@@ -59,6 +58,9 @@
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </form>
+                                    <a href="{{ route('departamentos.show', $department->id) }}" class="btn btn-primary btn-sm shadow-sm hover-shadow-lg">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach

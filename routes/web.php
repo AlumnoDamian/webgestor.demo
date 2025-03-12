@@ -27,12 +27,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/empleados/{employee}', [EmployeeController::class, 'destroy'])->name('empleados.eliminar');
     Route::get('/perfil', [EmployeeController::class, 'profile'])->name('profile.index');
 
-    Route::get('/departamento', [DepartmentController::class, 'index'])->name('departamentos.index'); // Listar departamentos
+    Route::get('/departamento', [DepartmentController::class, 'index'])->name('crud_crud_departamentos.index'); // Listar departamentos
     Route::get('/departamentos/crear', [DepartmentController::class, 'create'])->name('departamentos.crear'); // Formulario de creación
     Route::post('/departamentos', [DepartmentController::class, 'store'])->name('departamentos.guardar'); // Guardar nuevo departamento
     Route::get('/departamentos/{id}/editar', [DepartmentController::class, 'edit'])->name('departamentos.editar'); // Formulario de edición
     Route::put('/departamentos/{id}', [DepartmentController::class, 'update'])->name('departamentos.actualizar'); // Actualizar departamento
     Route::delete('/departamentos/{id}', [DepartmentController::class, 'destroy'])->name('departamentos.eliminar'); // Eliminar departamento
+    Route::get('/departamentos', [DepartmentController::class, 'index'])->name('crud_departamentos.index');
+    Route::get('/departamentos/{id}', [DepartmentController::class, 'show'])->name('departamentos.show');
 });
 
 require __DIR__.'/auth.php';
