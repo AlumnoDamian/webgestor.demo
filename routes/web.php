@@ -42,8 +42,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/departamentos', [DepartmentController::class, 'index'])->name('crud_departamentos.index');
     Route::get('/departamentos/{id}', [DepartmentController::class, 'show'])->name('departamentos.show');
 
-    Route::get('/cuadrante', [ScheduleController::class, 'index'])->name('cuadrante.index');
-    Route::post('/cuadrante', [ScheduleController::class, 'store'])->name('cuadrante.store');
+    Route::get('cuadrante', [ScheduleController::class, 'show'])->name('cuadrante.show');
+    Route::post('cuadrante', [ScheduleController::class, 'store'])->name('cuadrante.store');
 
     Route::get('/anuncio', [AnnouncementController::class, 'index']);
     Route::get('/comunicado', [MemoController::class, 'index']);

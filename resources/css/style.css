@@ -13,6 +13,12 @@ body {
   padding: 20px;
 }
 
+.container-custom {
+  padding-top: 40px; /* Pequeño padding superior */
+  padding-left: 65px; /* Padding más grande a la izquierda */
+  padding-right: 65px; /* Padding más grande a la derecha */
+}
+
 /* Títulos */
 h1 {
   font-size: 2.5rem;
@@ -227,3 +233,4 @@ table {
   background-color: #f8f9fa; /* Fondo más oscuro que el predeterminado */
   border-color: #e0e0e0; /* Border más claro */
 }
+
