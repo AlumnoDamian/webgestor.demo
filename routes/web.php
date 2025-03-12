@@ -4,17 +4,23 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\MemoController;
+use App\Http\Controllers\DashboardController;
+
 
 
 Route::get('/', function () {
     return view('indexDemo');
 });
 
-Route::get('/index', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -35,6 +41,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/departamentos/{id}', [DepartmentController::class, 'destroy'])->name('departamentos.eliminar'); // Eliminar departamento
     Route::get('/departamentos', [DepartmentController::class, 'index'])->name('crud_departamentos.index');
     Route::get('/departamentos/{id}', [DepartmentController::class, 'show'])->name('departamentos.show');
+
+    Route::get('/anuncio', [AnnouncementController::class, 'index']);
+    Route::get('/comunicado', [MemoController::class, 'index']);
+
 });
 
 require __DIR__.'/auth.php';
