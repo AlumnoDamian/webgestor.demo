@@ -7,6 +7,8 @@
     <!-- Importación de Alpine.js y TailwindCSS -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Agregar FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         /* Estilos personalizados para Navbar */
         .navbar-custom {
@@ -88,13 +90,17 @@
                     <!-- Título o logo del sitio -->
                     <a href="#" class="text-lg font-semibold text-white">Mi App</a>
 
-                    <!-- Botón para abrir el sidebar derecho (comunicados y anuncios) -->
-                    <button @click="openRightSidebar = !openRightSidebar"
-                        class="text-white p-2 rounded-md">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                    </button>
+                    <!-- Iconos de Anuncios y Comunicados alineados horizontalmente -->
+                    <div class="flex space-x-4">
+                        <!-- Icono de campana para comunicados -->
+                        <a href="#" class="text-white p-2">
+                            <i class="fas fa-bell fa-lg"></i>
+                        </a>
+                        <!-- Icono de chat para anuncios -->
+                        <a href="#" class="text-white p-2">
+                            <i class="fas fa-comment-dots fa-lg"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -132,55 +138,6 @@
                 </li>
             </ul>
         </div>
-
-        <!-- Sidebar derecho para anuncios y comunicados -->
-        <div x-show="openRightSidebar" class="fixed right-0 top-0 h-full w-80 sidebar-right z-50 p-4 transform -translate-x-full"
-            :class="{ 'translate-x-0': openRightSidebar }" x-transition>
-            <div class="flex justify-between items-center mb-4">
-                <!-- Título del sidebar derecho -->
-                <h2 class="font-semibold text-lg text-white">Comunicados y Anuncios</h2>
-                <!-- Botón para cerrar el sidebar derecho -->
-                <button @click="openRightSidebar = false" class="sidebar-close-btn">
-                    ✖
-                </button>
-            </div>
-            
-            <!-- Botones para seleccionar entre Anuncios y Comunicados -->
-            <div class="flex justify-between mb-4">
-                <button @click="showAnuncios = true" :class="{ 'bg-blue-500': showAnuncios }" class="px-4 py-2 text-white rounded">
-                    <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15h18M3 19h18M3 11h18M3 7h18" />
-                    </svg>
-                    Anuncios
-                </button>
-                <button @click="showAnuncios = false" :class="{ 'bg-blue-500': !showAnuncios }" class="px-4 py-2 text-white rounded">
-                    <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2l2 7h6l-4 5 2 7-6-5-6 5 2-7-4-5h6l2-7z" />
-                    </svg>
-                    Comunicados
-                </button>
-            </div>
-
-            <!-- Contenido de anuncios -->
-            <div x-show="showAnuncios">
-                <h3 class="text-md font-medium mb-2 text-white">Crear Anuncio</h3>
-                <input type="text" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Escribe el anuncio aquí...">
-            </div>
-
-            <!-- Contenido de comunicados -->
-            <div x-show="!showAnuncios">
-                <h3 class="text-md font-medium mb-2 text-white">Comunicados</h3>
-                <input type="text" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Escribe el comunicado aquí...">
-
-                <select class="w-full p-2 border border-gray-300 rounded">
-                    <option value="informativo">Informativo</option>
-                    <option value="urgente">Urgente</option>
-                    <option value="notificación">Notificación</option>
-                    <option value="advertencia">Advertencia</option>
-                </select>
-            </div>
-        </div>
-
     </div>
 
 </body>
