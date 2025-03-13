@@ -8,6 +8,7 @@ use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\MemoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\ChatController;
 
 
 Route::get('/', function () {
@@ -20,6 +21,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/notificaciones', [AnnouncementController::class, 'index'])->name('notifications.index');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -24,11 +24,11 @@
         /* Estilo personalizado para sidebar */
         .sidebar-custom {
             background-color: #343a40; /* Color de fondo oscuro para el sidebar */
-            color: #fff;
+            color: white; /* Texto blanco */
         }
 
         .sidebar-custom a {
-            color: #ccc;
+            color: white; /* Color blanco para los enlaces */
         }
 
         .sidebar-custom a:hover {
@@ -43,16 +43,42 @@
             border: none;
             font-size: 1.5rem;
         }
+
+        /* Estilo para el sidebar derecho con el mismo estilo que el izquierdo */
+        .sidebar-right {
+            background-color: #343a40; /* Fondo oscuro igual que el sidebar izquierdo */
+            color: white; /* Texto blanco */
+        }
+
+        .sidebar-right a {
+            color: white; /* Color blanco para los enlaces */
+        }
+
+        .sidebar-right a:hover {
+            color: #ffffff;
+            background-color: #007bff;
+        }
+
+        .sidebar-right .sidebar-close-btn {
+            color: #fff;
+        }
+
+        /* Estilo para los inputs en el sidebar derecho */
+        .sidebar-right input, .sidebar-right select, .sidebar-right textarea {
+            background-color:rgb(255, 255, 255);
+            color: black; /* Texto negro para los inputs */
+        }
+
     </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900">
 
-    <div x-data="{ openSidebar: false }">
+    <div x-data="{ openSidebar: false, openRightSidebar: false, showAnuncios: true }">
         <!-- Navbar superior con estilo personalizado -->
         <nav class="navbar-custom">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16 items-center">
-                    <!-- Botón para abrir el sidebar -->
+                    <!-- Botón para abrir el sidebar izquierdo -->
                     <button @click="openSidebar = !openSidebar"
                         class="text-white p-2 rounded-md">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,7 +86,15 @@
                         </svg>
                     </button>
                     <!-- Título o logo del sitio -->
-                    <a href="#" class="text-lg font-semibold text-white">Mi App</a>             
+                    <a href="#" class="text-lg font-semibold text-white">Mi App</a>
+
+                    <!-- Botón para abrir el sidebar derecho (comunicados y anuncios) -->
+                    <button @click="openRightSidebar = !openRightSidebar"
+                        class="text-white p-2 rounded-md">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </nav>
@@ -98,6 +132,55 @@
                 </li>
             </ul>
         </div>
+
+        <!-- Sidebar derecho para anuncios y comunicados -->
+        <div x-show="openRightSidebar" class="fixed right-0 top-0 h-full w-80 sidebar-right z-50 p-4 transform -translate-x-full"
+            :class="{ 'translate-x-0': openRightSidebar }" x-transition>
+            <div class="flex justify-between items-center mb-4">
+                <!-- Título del sidebar derecho -->
+                <h2 class="font-semibold text-lg text-white">Comunicados y Anuncios</h2>
+                <!-- Botón para cerrar el sidebar derecho -->
+                <button @click="openRightSidebar = false" class="sidebar-close-btn">
+                    ✖
+                </button>
+            </div>
+            
+            <!-- Botones para seleccionar entre Anuncios y Comunicados -->
+            <div class="flex justify-between mb-4">
+                <button @click="showAnuncios = true" :class="{ 'bg-blue-500': showAnuncios }" class="px-4 py-2 text-white rounded">
+                    <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15h18M3 19h18M3 11h18M3 7h18" />
+                    </svg>
+                    Anuncios
+                </button>
+                <button @click="showAnuncios = false" :class="{ 'bg-blue-500': !showAnuncios }" class="px-4 py-2 text-white rounded">
+                    <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2l2 7h6l-4 5 2 7-6-5-6 5 2-7-4-5h6l2-7z" />
+                    </svg>
+                    Comunicados
+                </button>
+            </div>
+
+            <!-- Contenido de anuncios -->
+            <div x-show="showAnuncios">
+                <h3 class="text-md font-medium mb-2 text-white">Crear Anuncio</h3>
+                <input type="text" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Escribe el anuncio aquí...">
+            </div>
+
+            <!-- Contenido de comunicados -->
+            <div x-show="!showAnuncios">
+                <h3 class="text-md font-medium mb-2 text-white">Comunicados</h3>
+                <input type="text" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Escribe el comunicado aquí...">
+
+                <select class="w-full p-2 border border-gray-300 rounded">
+                    <option value="informativo">Informativo</option>
+                    <option value="urgente">Urgente</option>
+                    <option value="notificación">Notificación</option>
+                    <option value="advertencia">Advertencia</option>
+                </select>
+            </div>
+        </div>
+
     </div>
 
 </body>
