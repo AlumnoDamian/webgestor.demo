@@ -234,3 +234,30 @@ table {
   border-color: #e0e0e0; /* Border más claro */
 }
 
+/* Estilos para las tarjetas de comunicados y anuncios */
+.bg-red-100 { background-color: #f9d6d6; }
+.bg-blue-100 { background-color: #cfe2ff; }
+.bg-orange-100 { background-color: #ffedcc; }
+.bg-yellow-100 { background-color: #fff3cd; }
+.bg-green-100 { background-color: #d4edda; }
+
+.border-red-500 { border-color: #dc3545; }
+.border-blue-500 { border-color: #007bff; }
+.border-orange-500 { border-color: #fd7e14; }
+.border-yellow-500 { border-color: #ffc107; }
+.border-green-500 { border-color: #28a745; }
+
+/* Estilo para los badges de prioridad */
+.badge {
+  font-size: 0.875rem;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-weight: bold;
+}
+
+/* Colores de las prioridades */
+.bg-red-500 { background-color: #dc3545; }
+.bg-yellow-500 { background-color: #ffc107; }
+.bg-green-500 { background-color: #28a745; }
+
+.text-gray-500 { color: #6c757d; }

@@ -1,15 +1,13 @@
 @extends('layouts.layout')
 
 @section('content')
-<div class="container mt-2">
+<div class="container-fluid container-custom">
 
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb rounded-0 shadow-sm p-2">
-            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}" class="text-muted hover-text-primary transition-all duration-300">Inicio</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Listado de empleados</li>
-        </ol>
-    </nav>
+    <!-- Usar el componente de breadcrumb -->
+    <x-breadcrumb :items="[
+        ['title' => 'Inicio', 'route' => 'dashboard'],
+        ['title' => 'Listado de empleados', 'route' => 'empleados.index']
+    ]"/>
 
     <div class="card shadow-sm hover-shadow-lg">
         <div class="card-header bg-primary text-white">Listado de empleados</div>

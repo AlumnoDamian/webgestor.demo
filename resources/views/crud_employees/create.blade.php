@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
-<div class="container mt-2">
+<div class="container-fluid container-custom">
     
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb">

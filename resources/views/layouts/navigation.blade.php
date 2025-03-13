@@ -93,11 +93,11 @@
                     <!-- Iconos de Anuncios y Comunicados alineados horizontalmente -->
                     <div class="flex space-x-4">
                         <!-- Icono de campana para comunicados -->
-                        <a href="#" class="text-white p-2">
+                        <a href="{{ route('comunicados.index') }}" class="text-white p-2">
                             <i class="fas fa-bell fa-lg"></i>
                         </a>
                         <!-- Icono de chat para anuncios -->
-                        <a href="#" class="text-white p-2">
+                        <a href="{{ route('anuncios.index') }}" class="text-white p-2">
                             <i class="fas fa-comment-dots fa-lg"></i>
                         </a>
                     </div>

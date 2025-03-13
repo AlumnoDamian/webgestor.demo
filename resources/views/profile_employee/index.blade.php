@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
-<div class="container">
+<div class="container-fluid container-custom">
     <div class="card mb-3">
         <div class="card-header">
             Datos personales

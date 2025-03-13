@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('memos', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->enum('type', ['Importante', 'Informativo', 'Urgente']);
             $table->text('content');
+            $table->string('recipient'); // A quién va dirigido
+            $table->date('published_at');
             $table->timestamps();
         });
     }

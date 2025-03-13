@@ -14,7 +14,11 @@ return new class extends Migration
         Schema::create('announcements', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->enum('category', ['General', 'Evento', 'Notificación']);
             $table->text('content');
+            $table->enum('priority', ['Alta', 'Media', 'Baja']);
+            $table->string('author');
+            $table->date('published_at');
             $table->timestamps();
         });
     }

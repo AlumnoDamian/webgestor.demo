@@ -21,9 +21,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
-    Route::get('/notificaciones', [AnnouncementController::class, 'index'])->name('notifications.index');
-
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -48,9 +45,13 @@ Route::middleware('auth')->group(function () {
     Route::get('cuadrante', [ScheduleController::class, 'show'])->name('cuadrante.show');
     Route::post('cuadrante', [ScheduleController::class, 'store'])->name('cuadrante.store');
 
-    Route::get('/anuncio', [AnnouncementController::class, 'index']);
-    Route::get('/comunicado', [MemoController::class, 'index']);
+    Route::get('/comunicados', [MemoController::class, 'index'])->name('comunicados.index');
+    Route::get('/comunicados/create', [MemoController::class, 'create'])->name('comunicados.crear');
+    Route::post('/comunicados', [MemoController::class, 'store'])->name('comunicados.guardar');
 
+    Route::get('/anuncios', [AnnouncementController::class, 'index'])->name('anuncios.index');
+    Route::get('/anuncios/crear', [AnnouncementController::class, 'create'])->name('anuncios.crear');
+    Route::post('/anuncios', [AnnouncementController::class, 'store'])->name('anuncios.guardar');
 });
 
 require __DIR__.'/auth.php';

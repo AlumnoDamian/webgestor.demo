@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
-    <div class="container mt-5">
+    <div class="container-fluid container-custom">
         <h1 class="text-center mb-4">Dashboard</h1>
 
         <!-- Fila Principal -->
