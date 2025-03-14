@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('title');
             $table->enum('type', ['Importante', 'Informativo', 'Urgente']);
             $table->text('content');
-            $table->string('recipient'); // A quién va dirigido
-            $table->date('published_at');
+            $table->timestamp('published_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->foreignId('department_id')->nullable()->constrained('departments')->onDelete('set null');
             $table->timestamps();
         });
     }

@@ -17,7 +17,7 @@ class AnnouncementSeeder extends Seeder
         // Vaciar la tabla de anuncios
         DB::table('announcements')->truncate();
 
-        // Insertar nuevos anuncios
+        // Insertar nuevos anuncios con fecha y hora
         DB::table('announcements')->insert([
             [
                 'title' => 'Anuncio Evento 1',
@@ -25,7 +25,7 @@ class AnnouncementSeeder extends Seeder
                 'content' => 'Anuncio sobre un evento importante en la empresa.',
                 'priority' => 'Alta',
                 'author' => 'Juan Pérez',
-                'published_at' => Carbon::now()->subDays(1),
+                'published_at' => Carbon::now()->subDays(1)->format('Y-m-d H:i:s'),
             ],
             [
                 'title' => 'Anuncio Notificación 1',
@@ -33,7 +33,7 @@ class AnnouncementSeeder extends Seeder
                 'content' => 'Notificación sobre una nueva política interna.',
                 'priority' => 'Media',
                 'author' => 'Ana García',
-                'published_at' => Carbon::now()->subDays(2),
+                'published_at' => Carbon::now()->subDays(2)->format('Y-m-d H:i:s'),
             ],
             [
                 'title' => 'Anuncio General 1',
@@ -41,7 +41,7 @@ class AnnouncementSeeder extends Seeder
                 'content' => 'Anuncio general acerca de las nuevas herramientas.',
                 'priority' => 'Baja',
                 'author' => 'Luis Fernández',
-                'published_at' => Carbon::now()->subDays(3),
+                'published_at' => Carbon::now()->subDays(3)->format('Y-m-d H:i:s'),
             ],
             [
                 'title' => 'Anuncio Evento 2',
@@ -49,7 +49,7 @@ class AnnouncementSeeder extends Seeder
                 'content' => 'Anuncio sobre la conferencia de tecnología de este mes.',
                 'priority' => 'Alta',
                 'author' => 'Sofía López',
-                'published_at' => Carbon::now()->subDays(5),
+                'published_at' => Carbon::now()->subDays(5)->format('Y-m-d H:i:s'),
             ],
             [
                 'title' => 'Anuncio Notificación 2',
@@ -57,7 +57,7 @@ class AnnouncementSeeder extends Seeder
                 'content' => 'Notificación sobre la actualización del sistema.',
                 'priority' => 'Media',
                 'author' => 'Carlos Díaz',
-                'published_at' => Carbon::now()->subDays(7),
+                'published_at' => Carbon::now()->subDays(7)->format('Y-m-d H:i:s'),
             ]
         ]);
     }

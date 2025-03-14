@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('content');
             $table->enum('priority', ['Alta', 'Media', 'Baja']);
             $table->string('author');
-            $table->date('published_at');
+            $table->timestamp('published_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
         });
     }

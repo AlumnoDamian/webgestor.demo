@@ -2,18 +2,18 @@
 
 @section('content')
 <div class="container-fluid container-custom">
-    <!-- Usar el componente de breadcrumb -->
     <x-breadcrumb :items="[
         ['title' => 'Inicio', 'route' => 'dashboard'],
         ['title' => 'Listado de anuncios', 'route' => 'anuncios.index'],
         ['title' => 'Crear el anuncio', 'route' => 'anuncios.crear']
     ]"/>
+
     <div class="row mb-4">
         <div class="col">
             <h2 class="fw-bold">Nuevo Anuncio</h2>
         </div>
     </div>
-    
+
     <div class="card shadow">
         <div class="card-body">
             <form action="{{ route('anuncios.guardar') }}" method="POST">
@@ -22,7 +22,7 @@
                     <label for="title" class="form-label">Título</label>
                     <input type="text" class="form-control" id="title" name="title" required>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="category" class="form-label">Categoría</label>
                     <select class="form-select" id="category" name="category" required>
@@ -32,12 +32,12 @@
                         <option value="Notificación">Notificación</option>
                     </select>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="content" class="form-label">Contenido</label>
                     <textarea class="form-control" id="content" name="content" rows="4" required></textarea>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="priority" class="form-label">Prioridad</label>
                     <select class="form-select" id="priority" name="priority" required>
@@ -47,17 +47,12 @@
                         <option value="Baja">Baja</option>
                     </select>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="author" class="form-label">Autor</label>
-                    <input type="text" class="form-control" id="author" name="author" required>
+                    <input type="text" class="form-control" id="author" name="author" value="{{ Auth::user()->name }}" readonly>
                 </div>
-                
-                <div class="mb-3">
-                    <label for="published_at" class="form-label">Fecha de Publicación</label>
-                    <input type="date" class="form-control" id="published_at" name="published_at" required>
-                </div>
-                
+
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <a href="{{ route('anuncios.index') }}" class="btn btn-secondary me-md-2">Cancelar</a>
                     <button type="submit" class="btn btn-primary">
@@ -69,4 +64,3 @@
     </div>
 </div>
 @endsection
-

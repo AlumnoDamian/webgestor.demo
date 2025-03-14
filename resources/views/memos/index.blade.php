@@ -42,7 +42,7 @@
                             <div class="col-md-4">
                                 <div class="mb-2">
                                     <strong>Destinatario:</strong>
-                                    <p>{{ $memo->recipient }}</p>
+                                    <p>{{ $memo->department->name }}</p>
                                 </div>
                             </div>
                         </div>

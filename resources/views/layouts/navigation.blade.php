@@ -88,7 +88,7 @@
                         </svg>
                     </button>
                     <!-- Título o logo del sitio -->
-                    <a href="#" class="text-lg font-semibold text-white">Mi App</a>
+                    <a href="#" class="text-lg font-semibold text-white">WebGestor</a>
 
                     <!-- Iconos de Anuncios y Comunicados alineados horizontalmente -->
                     <div class="flex space-x-4">

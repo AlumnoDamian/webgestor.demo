@@ -33,14 +33,16 @@
                 </div>
                 
                 <div class="mb-3">
-                    <label for="recipient" class="form-label">Destinatario</label>
-                    <input type="text" class="form-control" id="recipient" name="recipient" required>
+                    <label for="department" class="form-label">Departamento</label>
+                    <select class="form-select" id="department_id" name="department_id">
+                        <option value="" selected>Seleccione un departamento</option>
+                        @foreach($departments as $department)
+                            <option value="{{ $department->id }}">{{ $department->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 
-                <div class="mb-3">
-                    <label for="published_at" class="form-label">Fecha de Publicación</label>
-                    <input type="date" class="form-control" id="published_at" name="published_at" required>
-                </div>
+              
                 
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <a href="{{ route('comunicados.index') }}" class="btn btn-secondary me-md-2">Cancelar</a>

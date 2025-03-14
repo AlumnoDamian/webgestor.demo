@@ -2,7 +2,6 @@
 
 @section('content')
     <div class="container-fluid container-custom">
-        <h1 class="text-center mb-4">Dashboard</h1>
 
         <!-- Fila Principal -->
         <div class="row justify-content-center align-items-stretch">
