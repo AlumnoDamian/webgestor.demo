@@ -9,6 +9,7 @@ use App\Http\Controllers\MemoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\DocumentacionController;
 
 
 Route::get('/', function () {
@@ -52,6 +53,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/anuncios', [AnnouncementController::class, 'index'])->name('anuncios.index');
     Route::get('/anuncios/crear', [AnnouncementController::class, 'create'])->name('anuncios.crear');
     Route::post('/anuncios', [AnnouncementController::class, 'store'])->name('anuncios.guardar');
+
+    Route::get('/documentacion', [DocumentacionController::class, 'index'])->name('documentacion.index');
 });
 
 require __DIR__.'/auth.php';

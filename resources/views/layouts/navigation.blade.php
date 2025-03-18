@@ -126,6 +126,7 @@
                 <li><a href="{{ route('empleados.index') }}" class="block px-4 py-2 hover:bg-blue-500">Listado empleados</a></li>
                 <li><a href="{{ route('crud_departamentos.index') }}" class="block px-4 py-2 hover:bg-blue-500">Listado departamentos</a></li>
                 <li><a href="{{ route('cuadrante.show') }}" class="block px-4 py-2 hover:bg-blue-500">Cuadrante</a></li>
+                <li><a href="{{ route('documentacion.index') }}" class="block px-4 py-2 hover:bg-blue-500">Documentación</a></li>
                 <li><a href="#" class="block px-4 py-2 hover:bg-blue-500">Configuración</a></li>
                 <!-- Cerrar sesión con formulario -->
                 <li>
