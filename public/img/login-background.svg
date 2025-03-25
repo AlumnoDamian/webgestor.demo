@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#EBF4FF"/>
+  <path d="M0 400C0 400 200 350 400 400C600 450 800 350 1000 400C1200 450 1200 400 1200 400V800H0V400Z" fill="#BFDBFE" fill-opacity="0.5"/>
+  <path d="M0 500C0 500 200 450 400 500C600 550 800 450 1000 500C1200 550 1200 500 1200 500V800H0V500Z" fill="#93C5FD" fill-opacity="0.3"/>
+  <path d="M0 600C0 600 200 550 400 600C600 650 800 550 1000 600C1200 650 1200 600 1200 600V800H0V600Z" fill="#60A5FA" fill-opacity="0.2"/>
+  <circle cx="900" cy="200" r="60" fill="#3B82F6" fill-opacity="0.1"/>
+  <circle cx="850" cy="250" r="40" fill="#2563EB" fill-opacity="0.1"/>
+  <circle cx="950" cy="250" r="30" fill="#1D4ED8" fill-opacity="0.1"/>
+</svg>

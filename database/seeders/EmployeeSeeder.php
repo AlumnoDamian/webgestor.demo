@@ -30,7 +30,7 @@ class EmployeeSeeder extends Seeder
                 'password' => 'Password1234', // Usar contraseña en texto plano
                 'birth_date' => '1985-07-14',
                 'address' => 'Calle Falsa 123, Madrid',
-                'phone' => '123-456-789',
+                'phone' => '123456789',
                 'is_active' => true,
                 'role' => 'jefe',
             ],
@@ -42,7 +42,7 @@ class EmployeeSeeder extends Seeder
                 'password' => 'Password1234', // Usar contraseña en texto plano
                 'birth_date' => '1990-01-30',
                 'address' => 'Calle Verdadera 456, Barcelona',
-                'phone' => '987-654-321',
+                'phone' => '987654321',
                 'is_active' => true,
                 'role' => 'recepcionista',
             ],
@@ -56,7 +56,7 @@ class EmployeeSeeder extends Seeder
                 'password' => 'Password1234', // Usar contraseña en texto plano
                 'birth_date' => '1982-03-25',
                 'address' => 'Avenida Principal 789, Valencia',
-                'phone' => '555-123-456',
+                'phone' => '555123456',
                 'is_active' => true,
                 'role' => 'jefe',
             ],
@@ -68,7 +68,7 @@ class EmployeeSeeder extends Seeder
                 'password' => 'Password1234', // Usar contraseña en texto plano
                 'birth_date' => '1995-09-20',
                 'address' => 'Calle Larga 123, Sevilla',
-                'phone' => '666-777-888',
+                'phone' => '666777888',
                 'is_active' => true,
                 'role' => 'limpiador',
             ],
@@ -82,7 +82,7 @@ class EmployeeSeeder extends Seeder
                 'password' => 'Password1234', // Usar contraseña en texto plano
                 'birth_date' => '1989-12-11',
                 'address' => 'Calle Sol 789, Madrid',
-                'phone' => '999-888-777',
+                'phone' => '999888777',
                 'is_active' => true,
                 'role' => 'jefe',
             ],
@@ -94,7 +94,7 @@ class EmployeeSeeder extends Seeder
                 'password' => 'Password1234', // Usar contraseña en texto plano
                 'birth_date' => '1992-02-15',
                 'address' => 'Calle Luna 456, Málaga',
-                'phone' => '777-666-555',
+                'phone' => '777666555',
                 'is_active' => true,
                 'role' => 'analista',
             ],
@@ -108,7 +108,7 @@ class EmployeeSeeder extends Seeder
                 'password' => 'Password1234', // Usar contraseña en texto plano
                 'birth_date' => '1987-04-05',
                 'address' => 'Calle Estrella 123, Valencia',
-                'phone' => '555-444-333',
+                'phone' => '555444333',
                 'is_active' => true,
                 'role' => 'cocinero',
             ],
@@ -120,7 +120,7 @@ class EmployeeSeeder extends Seeder
                 'password' => 'Password1234', // Usar contraseña en texto plano
                 'birth_date' => '1994-06-25',
                 'address' => 'Avenida 5 123, Madrid',
-                'phone' => '444-333-222',
+                'phone' => '444333222',
                 'is_active' => true,
                 'role' => 'conserje',
             ],

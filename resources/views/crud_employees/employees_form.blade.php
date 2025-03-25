@@ -1,4 +1,5 @@
-<form action="{{ $route }}" method="POST" enctype="multipart/form-data" class="p-4 shadow-lg rounded bg-light transition-all duration-300">
+<form id="myForm" action="{{ $route }}" method="POST" enctype="multipart/form-data"
+    class="p-4 shadow-lg rounded bg-light transition-all duration-300">
     @csrf
     @isset($method)
         @method($method)
@@ -8,7 +9,7 @@
         <!-- Campo DNI -->
         <div class="col-md-4 mb-3">
             <label for="dni" class="form-label">DNI</label>
-            <input type="text" name="dni" id="dni" class="form-control @error('dni') is-invalid @enderror" 
+            <input type="text" name="dni" id="dni" class="form-control @error('dni') is-invalid @enderror"
                 value="{{ old('dni', $employee->dni ?? '') }}">
             @error('dni')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -18,7 +19,7 @@
         <!-- Campo Nombre -->
         <div class="col-md-4 mb-3">
             <label for="name" class="form-label">Nombre completo</label>
-            <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" 
+            <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror"
                 value="{{ old('name', $employee->name ?? '') }}">
             @error('name')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -28,7 +29,7 @@
         <!-- Campo Correo Electrónico -->
         <div class="col-md-4 mb-3">
             <label for="email" class="form-label">Correo Electrónico</label>
-            <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror" 
+            <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror"
                 value="{{ old('email', $employee->email ?? '') }}">
             @error('email')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -40,8 +41,9 @@
         <!-- Campo Contraseña -->
         <div class="col-md-4 mb-3">
             <label for="password" class="form-label">Contraseña</label>
-            <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" 
-                   placeholder="{{ isset($employee) ? 'Deja vacío para mantener la contraseña actual' : 'Nueva contraseña' }}">
+            <input type="password" name="password" id="password"
+                class="form-control @error('password') is-invalid @enderror"
+                placeholder="{{ isset($employee) ? 'Deja vacío para mantener la contraseña actual' : 'Nueva contraseña' }}">
             @error('password')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
@@ -50,8 +52,9 @@
         <!-- Campo Confirmar Contraseña -->
         <div class="col-md-4 mb-3">
             <label for="password_confirmation" class="form-label">Repetir Contraseña</label>
-            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" 
-                   placeholder="{{ isset($employee) ? 'Repite la nueva contraseña' : 'Repite la nueva contraseña' }}">
+            <input type="password" name="password_confirmation" id="password_confirmation"
+                class="form-control @error('password_confirmation') is-invalid @enderror"
+                placeholder="{{ isset($employee) ? 'Repite la nueva contraseña' : 'Repite la nueva contraseña' }}">
             @error('password_confirmation')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
@@ -60,8 +63,9 @@
         <!-- Campo Fecha de nacimiento -->
         <div class="col-md-4 mb-3">
             <label for="birth_date" class="form-label">Fecha de nacimiento</label>
-            <input type="text" name="birth_date" id="birth_date" class="form-control @error('birth_date') is-invalid @enderror" 
-                   value="{{ old('birth_date', $employee->birth_date ?? '') }}">
+            <input type="text" name="birth_date" id="birth_date"
+                class="form-control @error('birth_date') is-invalid @enderror"
+                value="{{ old('birth_date', $employee->birth_date ?? '') }}">
             @error('birth_date')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
@@ -72,7 +76,8 @@
         <!-- Campo Dirección -->
         <div class="col-md-4 mb-3">
             <label for="address" class="form-label">Dirección</label>
-            <textarea name="address" id="address" class="form-control @error('address') is-invalid @enderror">{{ old('address', $employee->address ?? '') }}</textarea>
+            <textarea name="address" id="address"
+                class="form-control @error('address') is-invalid @enderror">{{ old('address', $employee->address ?? '') }}</textarea>
             @error('address')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
@@ -81,7 +86,7 @@
         <!-- Campo Teléfono -->
         <div class="col-md-4 mb-3">
             <label for="phone" class="form-label">Teléfono</label>
-            <input type="text" name="phone" id="phone" class="form-control @error('phone') is-invalid @enderror" 
+            <input type="text" name="phone" id="phone" class="form-control @error('phone') is-invalid @enderror"
                 value="{{ old('phone', $employee->phone ?? '') }}">
             @error('phone')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -93,7 +98,8 @@
             <label for="is_active" class="form-label">Estado</label>
             <select name="is_active" id="is_active" class="form-control @error('is_active') is-invalid @enderror">
                 <option value="1" {{ old('is_active', $employee->is_active ?? 1) == 1 ? 'selected' : '' }}>Activo</option>
-                <option value="0" {{ old('is_active', $employee->is_active ?? 1) == 0 ? 'selected' : '' }}>Inactivo</option>
+                <option value="0" {{ old('is_active', $employee->is_active ?? 1) == 0 ? 'selected' : '' }}>Inactivo
+                </option>
             </select>
             @error('is_active')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -113,21 +119,23 @@
             @isset($employee->image)
                 <div class="mt-2">
                     <p class="text-muted">Imagen actual:</p>
-                    <img src="{{ Storage::url($employee->image) }}" alt="Imagen del empleado" width="100" class="img-thumbnail">
+                    <img src="{{ Storage::url($employee->image) }}" alt="Imagen del empleado" width="100"
+                        class="img-thumbnail">
                 </div>
             @endisset
 
-            <img id="image-preview" src="" alt="Vista previa de la imagen" style="display: none; width: 100px;" class="mt-2 img-thumbnail">
+            <img id="image-preview" src="" alt="Vista previa de la imagen" style="display: none; width: 100px;"
+                class="mt-2 img-thumbnail">
         </div>
 
         <!-- Campo Departamento -->
         <div class="col-md-4 mb-3">
             <label for="department_id" class="form-label">Departamento</label>
-            <select name="department_id" id="department_id" class="form-control @error('department_id') is-invalid @enderror">
+            <select name="department_id" id="department_id"
+                class="form-control @error('department_id') is-invalid @enderror">
                 <option value="">Selecciona un departamento</option>
                 @foreach($departments as $department)
-                    <option value="{{ $department->id }}" 
-                        {{ isset($employee) && $employee->departments->contains($department->id) ? 'selected' : '' }}>
+                    <option value="{{ $department->id }}" {{ isset($employee) && $employee->departments->contains($department->id) ? 'selected' : '' }}>
                         {{ $department->name }}
                     </option>
                 @endforeach

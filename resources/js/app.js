@@ -1,16 +1,22 @@
+// Importar Bootstrap y sus dependencias
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import 'bootstrap';
+import * as bootstrap from 'bootstrap';
 
+// Importar estilos propios
 import '../css/app.css';
 import '../css/style.css';
 
+// Importar y configurar Flatpickr
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import { Spanish } from "flatpickr/dist/l10n/es.js"; // Importar el idioma español
 
+// Alpine.js
 import Alpine from 'alpinejs';
 
+// Hacer bootstrap disponible globalmente
+window.bootstrap = bootstrap;
 window.Alpine = Alpine;
 
 Alpine.start();

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
-class DocumentacionController extends Controller
+class DocumentationController extends Controller
 {
     public function index()
     {
-        return view('documentacion.index');
+        return view('documentation.index');
     }
-    
+
 }

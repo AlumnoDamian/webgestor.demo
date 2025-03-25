@@ -1,21 +1,16 @@
-@extends('layouts.layout')
+<x-app-layout>
+    <div class="container-fluid container-custom">
 
-@section('content')
-<div class="container-fluid container-custom">
+        <!-- Usar el componente de breadcrumb -->
+        <x-breadcrumb :items="[
+        ['title' => 'Inicio', 'route' => 'dashboard'],
+        ['title' => 'Listado de departamentos', 'route' => 'crud_departamentos.index'],
+        ['title' => 'Crear un departamento', 'route' => 'departamentos.crear']
+    ]" />
 
-    
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb rounded-0 shadow-sm p-2">
-            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}" class="text-muted hover-text-primary transition-all duration-300">Inicio</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('crud_departamentos.index') }}" class="text-muted hover-text-primary transition-all duration-300">Listado de departamentos</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Crear un departamento</li>
-        </ol>
-    </nav>
-
-    <div class="card shadow-lg rounded-lg">
-        <div class="card-header bg-primary text-white">Crear un departamento</div>
-        @include('crud_departments.departments_form', ['route' => route('departamentos.guardar'), 'buttonText' => 'Guardar'])
+        <div class="card shadow-lg rounded-lg">
+            <div class="card-header bg-primary text-white">Crear un departamento</div>
+            @include('crud_departments.departments_form', ['route' => route('departamentos.guardar'), 'buttonText' => 'Guardar'])
+        </div>
     </div>
-</div>
-@endsection
+</x-app-layout>

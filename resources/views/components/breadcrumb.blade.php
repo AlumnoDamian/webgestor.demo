@@ -5,7 +5,8 @@
                 @if($loop->last)
                     {{ $item['title'] }}
                 @else
-                    <a href="{{ route($item['route']) }}" class="text-muted hover-text-primary transition-all duration-300">{{ $item['title'] }}</a>
+                    <a href="{{ route($item['route']) }}"
+                        class="text-muted hover-text-primary transition-all duration-300">{{ $item['title'] }}</a>
                 @endif
             </li>
         @endforeach
