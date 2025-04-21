@@ -11,26 +11,31 @@ class Employee extends Model
 
     protected $fillable = [
         'user_id',
-        'dni',
         'name',
         'email',
-        'password',
-        'birth_date',
-        'address',
+        'dni',
         'phone',
+        'address',
+        'department_id',
+        'role',
+        'birth_date',
         'is_active',
-        'image',
-        'role'
+        'image'
     ];
-    
+
+    protected $casts = [
+        'birth_date' => 'date',
+        'is_active' => 'boolean'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function departments()
+    public function department()
     {
-        return $this->belongsToMany(Department::class, 'employee_department');
+        return $this->belongsTo(Department::class);
     }
 
     public function scopeJefe($query)

@@ -2,54 +2,80 @@
 
 use App\Http\Controllers\DocumentationController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\MemoController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ScheduleController;
+use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return redirect()->route('dashboard');
-});
+Route::redirect('/', '/dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', App\Livewire\Dashboard::class)
+        ->middleware(['auth', 'verified'])
+        ->name('dashboard');
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // Profile routes
+    Route::controller(ProfileController::class)->group(function () {
+        Route::get('/profile', 'edit')->name('profile.edit');
+        Route::patch('/profile', 'update')->name('profile.update');
+        Route::delete('/profile', 'destroy')->name('profile.destroy');
+    });
+    
+    // Employee Profile route
+    Route::get('/perfil', App\Livewire\Employee\EmployeeProfile::class)->name('perfil');
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Employee routes
+    Route::get('/empleados', App\Livewire\Employee\EmployeeTable::class)->name('empleados.index');
+    Route::get('/empleados/crear', App\Livewire\Employee\EmployeeForm::class)->name('empleados.crear');
+    Route::get('/empleados/{employee}/editar', App\Livewire\Employee\EmployeeForm::class)->name('empleados.editar');
 
-    Route::get('/empleados', [EmployeeController::class, 'index'])->name('empleados.index');
-    Route::get('/empleados/crear', [EmployeeController::class, 'create'])->name('empleados.crear');
-    Route::post('/empleados', [EmployeeController::class, 'store'])->name('empleados.guardar');
-    Route::get('/empleados/{employee}/editar', [EmployeeController::class, 'edit'])->name('empleados.editar');
-    Route::put('/empleados/{employee}', [EmployeeController::class, 'update'])->name('empleados.actualizar');
-    Route::delete('/empleados/{employee}', [EmployeeController::class, 'destroy'])->name('empleados.eliminar');
-    Route::get('/perfil', [EmployeeController::class, 'profile'])->name('profile.index');
+    // Department routes
+    Route::get('/departamentos', App\Livewire\Department\DepartmentTable::class)->name('departamentos.index');
+    Route::get('/departamentos/crear', App\Livewire\Department\DepartmentForm::class)->name('departamentos.crear');
+    Route::get('/departamentos/{department}/editar', App\Livewire\Department\DepartmentForm::class)->name('departamentos.editar');
 
-    Route::get('/departamentos/crear', [DepartmentController::class, 'create'])->name('departamentos.crear');
-    Route::post('/departamentos', [DepartmentController::class, 'store'])->name('departamentos.guardar');
-    Route::get('/departamentos/{id}/editar', [DepartmentController::class, 'edit'])->name('departamentos.editar');
-    Route::put('/departamentos/{id}', [DepartmentController::class, 'update'])->name('departamentos.actualizar');
-    Route::delete('/departamentos/{id}', [DepartmentController::class, 'destroy'])->name('departamentos.eliminar');
-    Route::get('/departamentos', [DepartmentController::class, 'index'])->name('crud_departamentos.index');
-    Route::get('/departamentos/{id}', [DepartmentController::class, 'show'])->name('departamentos.show');
+    // Schedule routes
+    Route::controller(ScheduleController::class)->prefix('cuadrante')->group(function () {
+        Route::get('/', 'show')->name('cuadrante.show');
+        Route::post('/guardar', 'store')->name('cuadrante.store');
+        Route::get('/editar', 'edit')->name('cuadrante.edit');
+        Route::put('/actualizar', 'update')->name('cuadrante.update');
+    });
 
-    Route::get('cuadrante', [ScheduleController::class, 'show'])->name('cuadrante.show');
-    Route::post('cuadrante', [ScheduleController::class, 'store'])->name('cuadrante.store');
+    // Documentation routes
+    Route::controller(DocumentationController::class)->group(function () {
+        Route::get('/documentos', 'index')->name('documentos.index');
+        Route::get('/documentos/crear', 'create')->name('documentos.crear');
+        Route::post('/documentos', 'store')->name('documentos.guardar');
+        Route::get('/documentos/{id}/editar', 'edit')->name('documentos.editar');
+        Route::put('/documentos/{id}', 'update')->name('documentos.actualizar');
+        Route::delete('/documentos/{id}', 'destroy')->name('documentos.eliminar');
+    });
 
-    Route::get('/comunicados', [MemoController::class, 'index'])->name('comunicados.index');
-    Route::get('/comunicados/create', [MemoController::class, 'create'])->name('comunicados.crear');
-    Route::post('/comunicados', [MemoController::class, 'store'])->name('comunicados.guardar');
+    // Announcement routes
+    Route::controller(AnnouncementController::class)->group(function () {
+        Route::get('/anuncios', 'index')->name('anuncios.index');
+        Route::get('/anuncios/crear', 'create')->name('anuncios.crear');
+        Route::post('/anuncios', 'store')->name('anuncios.guardar');
+        Route::get('/anuncios/{id}/editar', 'edit')->name('anuncios.editar');
+        Route::put('/anuncios/{id}', 'update')->name('anuncios.actualizar');
+        Route::delete('/anuncios/{id}', 'destroy')->name('anuncios.eliminar');
+    });
 
-    Route::get('/anuncios', [AnnouncementController::class, 'index'])->name('anuncios.index');
-    Route::get('/anuncios/crear', [AnnouncementController::class, 'create'])->name('anuncios.crear');
-    Route::post('/anuncios', [AnnouncementController::class, 'store'])->name('anuncios.guardar');
+    // Memo routes
+    Route::controller(MemoController::class)->group(function () {
+        Route::get('/memos', 'index')->name('memos.index');
+        Route::get('/memos/crear', 'create')->name('memos.crear');
+        Route::post('/memos', 'store')->name('memos.guardar');
+        Route::get('/memos/{id}/editar', 'edit')->name('memos.editar');
+        Route::put('/memos/{id}', 'update')->name('memos.actualizar');
+        Route::delete('/memos/{id}', 'destroy')->name('memos.eliminar');
+    });
+});
 
-    Route::get('/documentacion', [DocumentationController::class, 'index'])->name('documentacion.index');
+Route::middleware('guest')->group(function () {
+    Route::get('login', App\Livewire\Auth\LoginForm::class)->name('login');
+    Route::get('register', App\Livewire\Auth\RegisterForm::class)->name('register');
 });
 
 require __DIR__ . '/auth.php';

@@ -4,7 +4,7 @@
         <!-- Usar el componente de breadcrumb -->
         <x-breadcrumb :items="[
         ['title' => 'Inicio', 'route' => 'dashboard'],
-        ['title' => 'Listado de comunicados', 'route' => 'comunicados.index'],
+        ['title' => 'Listado de memos', 'route' => 'memos.index'],
     ]" />
 
         <div class="row mb-4">
@@ -12,7 +12,7 @@
                 <h2 class="fw-bold">Comunicados</h2>
             </div>
             <div class="col-auto">
-                <a href="{{ route('comunicados.crear') }}" class="btn btn-primary">
+                <a href="{{ route('memos.crear') }}" class="btn btn-primary">
                     <i class="bi bi-plus-circle me-1"></i> Nuevo Comunicado
                 </a>
             </div>

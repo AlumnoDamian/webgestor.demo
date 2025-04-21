@@ -3,127 +3,60 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Employee;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class EmployeeSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         // Deshabilitar temporalmente las claves foráneas
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-        // Eliminar los registros anteriores
+        // Limpiar las tablas
         DB::table('employees')->truncate();
+        DB::table('users')->truncate();
 
         $employees = [
-            // Empleados para el departamento 1 (Recepción)
             [
-                'user_id' => 1,
-                'dni' => '78768414S',
                 'name' => 'Damián Madueño Bolaños',
                 'email' => 'damian.madueno@gmail.com',
-                'password' => 'Password1234', // Usar contraseña en texto plano
-                'birth_date' => '1985-07-14',
+                'password' => 'Password1234@',
+                'dni' => '78768414S',
+                'phone' => '634567890',
                 'address' => 'Calle Falsa 123, Madrid',
-                'phone' => '123456789',
-                'is_active' => true,
+                'department_id' => 1, // Recepción
                 'role' => 'jefe',
+                'birth_date' => '1985-07-14',
+                'is_active' => true,
             ],
             [
-                'user_id' => 2,
-                'dni' => '87654321B',
-                'name' => 'María López',
-                'email' => 'maria.lopez@gmail.com',
-                'password' => 'Password1234', // Usar contraseña en texto plano
-                'birth_date' => '1990-01-30',
-                'address' => 'Calle Verdadera 456, Barcelona',
-                'phone' => '987654321',
+                'name' => 'Ana García López',
+                'email' => 'ana.garcia@gmail.com',
+                'password' => 'Password1234@',
+                'dni' => '23456789B',
+                'phone' => '678901234',
+                'address' => 'Avenida Principal 45, Barcelona',
+                'department_id' => 2, // Limpieza
+                'role' => 'supervisor',
+                'birth_date' => '1990-03-25',
                 'is_active' => true,
-                'role' => 'recepcionista',
-            ],
-
-            // Empleados para el departamento 2 (Limpieza)
-            [
-                'user_id' => 3,
-                'dni' => '11223344C',
-                'name' => 'Carlos García',
-                'email' => 'carlos.garcia@gmail.com',
-                'password' => 'Password1234', // Usar contraseña en texto plano
-                'birth_date' => '1982-03-25',
-                'address' => 'Avenida Principal 789, Valencia',
-                'phone' => '555123456',
-                'is_active' => true,
-                'role' => 'jefe',
             ],
             [
-                'user_id' => 4,
-                'dni' => '44556677D',
-                'name' => 'Lucía Rodríguez',
-                'email' => 'lucia.rodriguez@gmail.com',
-                'password' => 'Password1234', // Usar contraseña en texto plano
-                'birth_date' => '1995-09-20',
-                'address' => 'Calle Larga 123, Sevilla',
-                'phone' => '666777888',
+                'name' => 'Carlos Martínez Ruiz',
+                'email' => 'carlos.martinez@gmail.com',
+                'password' => 'Password1234@',
+                'dni' => '34567890C',
+                'phone' => '654321098',
+                'address' => 'Plaza Mayor 7, Valencia',
+                'department_id' => 3, // Marketing
+                'role' => 'empleado',
+                'birth_date' => '1988-11-30',
                 'is_active' => true,
-                'role' => 'limpiador',
-            ],
-
-            // Otros empleados
-            [
-                'user_id' => 5,
-                'dni' => '99887766E',
-                'name' => 'David Fernández',
-                'email' => 'david.fernandez@gmail.com',
-                'password' => 'Password1234', // Usar contraseña en texto plano
-                'birth_date' => '1989-12-11',
-                'address' => 'Calle Sol 789, Madrid',
-                'phone' => '999888777',
-                'is_active' => true,
-                'role' => 'jefe',
-            ],
-            [
-                'user_id' => 6,
-                'dni' => '55443322F',
-                'name' => 'Pedro Martínez',
-                'email' => 'pedro.martinez@gmail.com',
-                'password' => 'Password1234', // Usar contraseña en texto plano
-                'birth_date' => '1992-02-15',
-                'address' => 'Calle Luna 456, Málaga',
-                'phone' => '777666555',
-                'is_active' => true,
-                'role' => 'analista',
-            ],
-
-            // Empleados adicionales para otros departamentos
-            [
-                'user_id' => 7,
-                'dni' => '22334455G',
-                'name' => 'Ana Sánchez',
-                'email' => 'ana.sanchez@gmail.com',
-                'password' => 'Password1234', // Usar contraseña en texto plano
-                'birth_date' => '1987-04-05',
-                'address' => 'Calle Estrella 123, Valencia',
-                'phone' => '555444333',
-                'is_active' => true,
-                'role' => 'cocinero',
-            ],
-            [
-                'user_id' => 8,
-                'dni' => '66778899H',
-                'name' => 'José Gómez',
-                'email' => 'jose.gomez@gmail.com',
-                'password' => 'Password1234', // Usar contraseña en texto plano
-                'birth_date' => '1994-06-25',
-                'address' => 'Avenida 5 123, Madrid',
-                'phone' => '444333222',
-                'is_active' => true,
-                'role' => 'conserje',
-            ],
+            ]
         ];
 
         foreach ($employees as $employee) {
@@ -131,7 +64,7 @@ class EmployeeSeeder extends Seeder
             $user = User::create([
                 'name' => $employee['name'],
                 'email' => $employee['email'],
-                'password' => $employee['password'],  // Guardar la contraseña en texto plano
+                'password' => Hash::make($employee['password']),
                 'email_verified_at' => now(),
                 'remember_token' => Str::random(60),
             ]);
@@ -142,12 +75,14 @@ class EmployeeSeeder extends Seeder
                 'dni' => $employee['dni'],
                 'name' => $employee['name'],
                 'email' => $employee['email'],
-                'password' => $employee['password'],
                 'birth_date' => $employee['birth_date'],
                 'address' => $employee['address'],
                 'phone' => $employee['phone'],
                 'is_active' => $employee['is_active'],
                 'role' => $employee['role'],
+                'department_id' => $employee['department_id'],
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
 

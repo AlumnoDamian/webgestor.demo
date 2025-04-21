@@ -1,0 +1,109 @@
+<?php
+
+namespace App\Livewire\Department;
+
+use Livewire\Component;
+use App\Models\Department;
+use App\Models\Employee;
+
+class DepartmentForm extends Component
+{
+    public $department;
+    public $departmentId;
+    public $code;
+    public $name;
+    public $description;
+    public $manager_id;
+    public $budget;
+    public $phone;
+    public $email;
+    public $status = true;
+    public $isEditing = false;
+
+    protected function rules()
+    {
+        $uniqueRule = $this->isEditing 
+            ? 'unique:departments,code,' . $this->department->id 
+            : 'unique:departments,code';
+
+        return [
+            'code' => ['required', 'string', 'max:10', $uniqueRule],
+            'name' => ['required', 'string', 'min:3', 'max:255'],
+            'description' => ['required', 'string', 'min:10'],
+            'manager_id' => ['nullable', 'exists:employees,id'],
+            'budget' => ['required', 'numeric', 'min:0'],
+            'phone' => ['nullable', 'string', 'max:15'],
+            'email' => ['nullable', 'email'],
+            'status' => ['boolean'],
+        ];
+    }
+
+    protected function messages()
+    {
+        return [
+            'code.required' => 'El código es obligatorio.',
+            'code.unique' => 'Este código ya está en uso.',
+            'code.max' => 'El código no puede tener más de 10 caracteres.',
+            'name.required' => 'El nombre es obligatorio.',
+            'name.min' => 'El nombre debe tener al menos 3 caracteres.',
+            'description.required' => 'La descripción es obligatoria.',
+            'description.min' => 'La descripción debe tener al menos 10 caracteres.',
+            'manager_id.exists' => 'El jefe seleccionado no es válido.',
+            'budget.required' => 'El presupuesto es obligatorio.',
+            'budget.numeric' => 'El presupuesto debe ser un número.',
+            'budget.min' => 'El presupuesto no puede ser negativo.',
+            'phone.max' => 'El teléfono no puede tener más de 15 caracteres.',
+            'email.email' => 'El email debe ser una dirección válida.',
+        ];
+    }
+
+    public function mount($department = null)
+    {
+        if ($department) {
+            $this->department = Department::find($department);
+            if ($this->department) {
+                $this->isEditing = true;
+                $this->code = $this->department->code;
+                $this->name = $this->department->name;
+                $this->description = $this->department->description;
+                $this->manager_id = $this->department->manager_id;
+                $this->budget = $this->department->budget;
+                $this->phone = $this->department->phone;
+                $this->email = $this->department->email;
+                $this->status = $this->department->status;
+            }
+        }
+    }
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+
+    public function save()
+    {
+        $validatedData = $this->validate();
+
+        if ($this->isEditing) {
+            $this->department->update($validatedData);
+            session()->flash('message', 'Departamento actualizado correctamente.');
+        } else {
+            Department::create($validatedData);
+            session()->flash('message', 'Departamento creado correctamente.');
+        }
+
+        $this->dispatch('departmentUpdated');
+        $this->dispatch('closeModal');
+    }
+
+    public function closeModal()
+    {
+        $this->dispatch('closeModal');
+    }
+
+    public function render()
+    {
+        $managers = Employee::where('role', 'jefe')->get();
+        return view('livewire.department.department-form', compact('managers'));
+    }
+}

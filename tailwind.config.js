@@ -1,5 +1,6 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 import forms from '@tailwindcss/forms';
+import tailwindScrollbar from 'tailwind-scrollbar';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -19,5 +20,5 @@ export default {
         },
     },
 
-    plugins: [forms],
+    plugins: [forms, tailwindScrollbar({ nocompatible: true })],
 };

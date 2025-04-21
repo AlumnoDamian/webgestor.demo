@@ -24,7 +24,7 @@ class Department extends Model
     ];
 
     /**
-     * Relación con el modelo Employee (Jefe de departamento).
+     * Relación con el jefe del departamento.
      */
     public function manager()
     {
@@ -36,7 +36,6 @@ class Department extends Model
      */
     public function employees()
     {
-        return $this->belongsToMany(Employee::class, 'employee_department');
-        
+        return $this->hasMany(Employee::class);
     }
 }

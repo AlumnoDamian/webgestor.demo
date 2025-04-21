@@ -4,19 +4,19 @@
         <!-- Usar el componente de breadcrumb -->
         <x-breadcrumb :items="[
         ['title' => 'Inicio', 'route' => 'dashboard'],
-        ['title' => 'Listado de comunicados', 'route' => 'comunicados.index'],
-        ['title' => 'Crear el comunicado', 'route' => 'comunicados.crear']
+        ['title' => 'Listado de memos', 'route' => 'memos.index'],
+        ['title' => 'Crear el memo', 'route' => 'memos.crear']
     ]" />
 
         <div class="row mb-4">
             <div class="col">
-                <h2 class="fw-bold">Nuevo Comunicado</h2>
+                <h2 class="fw-bold">Nuevo Memo</h2>
             </div>
         </div>
 
         <div class="card shadow">
             <div class="card-body">
-                <form action="{{ route('comunicados.guardar') }}" method="POST">
+                <form action="{{ route('memos.guardar') }}" method="POST">
                     @csrf
                     <div class="mb-3">
                         <label for="title" class="form-label">Título</label>
@@ -49,7 +49,7 @@
                     </div>
 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <a href="{{ route('comunicados.index') }}" class="btn btn-secondary me-md-2">Cancelar</a>
+                        <a href="{{ route('memos.index') }}" class="btn btn-secondary me-md-2">Cancelar</a>
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-save me-1"></i> Guardar
                         </button>

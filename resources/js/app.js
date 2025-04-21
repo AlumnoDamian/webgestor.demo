@@ -10,7 +10,7 @@ import '../css/style.css';
 // Importar y configurar Flatpickr
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
-import { Spanish } from "flatpickr/dist/l10n/es.js"; // Importar el idioma español
+import { Spanish } from "flatpickr/dist/l10n/es.js";
 
 // Alpine.js
 import Alpine from 'alpinejs';
@@ -21,22 +21,40 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
-// Inicializar Flatpickr
-document.addEventListener('DOMContentLoaded', function () {
-    flatpickr("#birth_date", {
-        dateFormat: "Y-m-d", // Puedes cambiar el formato si lo prefieres
-        altInput: true, // Muestra una entrada alternativa (opcional)
-        altFormat: "F j, Y", // Formato alternativo
-        locale: Spanish, // Establecer el idioma a español
-        minDate: "1900-01-01", // Establecer una fecha mínima si es necesario
-        maxDate: "today", // Establecer la fecha máxima a hoy
-        yearSelectorType: "static", // Mostrar siempre el selector de años
-        disableMobile: true, // Desactivar el calendario móvil para una mejor experiencia de escritorio
-        position: "below", // Colocar el calendario debajo del campo de fecha
-        prevArrow: "<i class='bi bi-chevron-left'></i>", // Icono de flecha izquierda
-        nextArrow: "<i class='bi bi-chevron-right'></i>", // Icono de flecha derecha
-        onChange: function(selectedDates, dateStr, instance) {
-            console.log(`Fecha seleccionada: ${dateStr}`);
-        },
+// Configuración de Flatpickr
+const initializeFlatpickr = (element) => {
+    if (!element._flatpickr) {
+        return flatpickr(element, {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "d/m/Y",
+            locale: Spanish,
+            minDate: "1900-01-01",
+            maxDate: "today",
+            allowInput: false,
+            disableMobile: true,
+            onChange: function(selectedDates, dateStr, instance) {
+                const livewireComponent = window.Livewire.find(
+                    element.closest('[wire\\:id]').getAttribute('wire:id')
+                );
+                if (livewireComponent) {
+                    livewireComponent.set('birth_date', dateStr);
+                }
+            }
+        });
+    }
+};
+
+// Función para inicializar todos los campos de fecha
+const initAllDateFields = () => {
+    document.querySelectorAll('input[type="text"][wire\\:model="birth_date"]').forEach(element => {
+        initializeFlatpickr(element);
     });
-});
+};
+
+// Inicializar en la carga inicial
+document.addEventListener('DOMContentLoaded', initAllDateFields);
+
+// Reinicializar después de las actualizaciones de Livewire
+document.addEventListener('livewire:initialized', initAllDateFields);
+document.addEventListener('livewire:navigated', initAllDateFields);
