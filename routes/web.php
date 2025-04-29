@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/guardar', 'store')->name('cuadrante.store');
         Route::get('/editar', 'edit')->name('cuadrante.edit');
         Route::put('/actualizar', 'update')->name('cuadrante.update');
+        Route::get('/ver', 'view')->name('cuadrante.view');
     });
 
     // Documentation routes

@@ -39,7 +39,7 @@ class ScheduleController extends Controller
                 'departments' => $departments,
                 'employees' => collect(),
                 'schedules' => collect(),
-                'dates' => $dates,
+                'dates' => $dates->toArray(),
             ]);
         }
 
@@ -56,7 +56,7 @@ class ScheduleController extends Controller
             'departments' => $departments,
             'employees' => $employees,
             'schedules' => $schedules,
-            'dates' => $dates,
+            'dates' => $dates->toArray(),
         ]);
     }
 
@@ -136,5 +136,74 @@ class ScheduleController extends Controller
                 'error' => 'Error al guardar los horarios: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function view(Request $request)
+    {
+        $department = $request->input('department');
+        $today = now();
+        
+        // Configurar locale para español
+        $today->locale('es');
+        
+        // Si es sábado, mostraremos la siguiente semana
+        $startDate = $today->dayOfWeek === 6 ? $today->addWeek()->startOfWeek() : $today->startOfWeek();
+        $endDate = $startDate->copy()->endOfWeek();
+        
+        // Generar array de fechas para la semana
+        $dates = collect();
+        $weekDates = [];
+        $currentDate = $startDate->copy();
+        while ($currentDate <= $endDate) {
+            $weekDates[] = [
+                'date' => $currentDate->format('Y-m-d'),
+                'dayName' => ucfirst($currentDate->locale('es')->isoFormat('dddd')),
+                'dayNumber' => $currentDate->format('d'),
+                'month' => ucfirst($currentDate->locale('es')->isoFormat('MMM')),
+            ];
+            $currentDate->addDay();
+        }
+        $dates->push($weekDates);
+
+        $departments = Department::all();
+
+        // Si no hay departamento seleccionado, retornar vista con colecciones vacías
+        if (!$department) {
+            return view('schedules.view', [
+                'departments' => $departments,
+                'employees' => collect(),
+                'schedules' => collect(),
+                'dates' => $dates->toArray(),
+                'startDate' => $startDate,
+                'endDate' => $endDate
+            ]);
+        }
+
+        $employees = Employee::where('department_id', $department)->get();
+        
+        if ($employees->isEmpty()) {
+            return view('schedules.view', [
+                'departments' => $departments,
+                'employees' => collect(),
+                'schedules' => collect(),
+                'dates' => $dates->toArray(),
+                'startDate' => $startDate,
+                'endDate' => $endDate
+            ]);
+        }
+
+        $schedules = Schedule::whereBetween('day', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+            ->whereHas('employee', function ($q) use ($department) {
+                $q->where('department_id', $department);
+            })->get();
+
+        return view('schedules.view', [
+            'employees' => $employees,
+            'schedules' => $schedules,
+            'departments' => $departments,
+            'dates' => $dates->toArray(),
+            'startDate' => $startDate,
+            'endDate' => $endDate
+        ]);
     }
 }
