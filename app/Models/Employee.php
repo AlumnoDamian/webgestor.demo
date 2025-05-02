@@ -16,6 +16,7 @@ class Employee extends Model
         'dni',
         'phone',
         'address',
+        'hire_date',
         'department_id',
         'role',
         'birth_date',
@@ -25,7 +26,13 @@ class Employee extends Model
 
     protected $casts = [
         'birth_date' => 'date',
-        'is_active' => 'boolean'
+        'hire_date' => 'date',
+        'is_active' => 'boolean',
+        'role' => 'string'
+    ];
+
+    protected $attributes = [
+        'role' => null
     ];
 
     public function user()

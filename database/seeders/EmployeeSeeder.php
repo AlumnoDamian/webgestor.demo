@@ -5,9 +5,11 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Employee;
 use App\Models\User;
+use App\Models\Department;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class EmployeeSeeder extends Seeder
 {
@@ -69,6 +71,9 @@ class EmployeeSeeder extends Seeder
                 'remember_token' => Str::random(60),
             ]);
 
+            // Generar una fecha de ingreso aleatoria entre 5 años atrás y hoy
+            $hire_date = Carbon::now()->subDays(rand(1, 5 * 365));
+
             // Crear el empleado en la tabla 'employees'
             DB::table('employees')->insert([
                 'user_id' => $user->id,
@@ -81,6 +86,7 @@ class EmployeeSeeder extends Seeder
                 'is_active' => $employee['is_active'],
                 'role' => $employee['role'],
                 'department_id' => $employee['department_id'],
+                'hire_date' => $hire_date,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

@@ -56,9 +56,24 @@ class EmployeeTable extends Component
 
     public function openFormModal($employeeId = null)
     {
+        \Log::info('Abriendo modal de formulario:', [
+            'employee_id' => $employeeId,
+            'previous_state' => [
+                'showFormModal' => $this->showFormModal,
+                'editingEmployeeId' => $this->editingEmployeeId,
+                'showDeleteModal' => $this->showDeleteModal
+            ]
+        ]);
+
         $this->editingEmployeeId = $employeeId;
         $this->showFormModal = true;
         $this->showDeleteModal = false;
+
+        \Log::info('Estado actualizado del modal:', [
+            'showFormModal' => $this->showFormModal,
+            'editingEmployeeId' => $this->editingEmployeeId,
+            'showDeleteModal' => $this->showDeleteModal
+        ]);
     }
 
     public function closeFormModal()
@@ -83,13 +98,29 @@ class EmployeeTable extends Component
     public function deleteEmployee()
     {
         if ($this->employeeToDelete) {
-            if ($this->employeeToDelete->image) {
-                Storage::disk('public')->delete($this->employeeToDelete->image);
+            try {
+                // Eliminar el usuario asociado si existe
+                if ($this->employeeToDelete->user) {
+                    $this->employeeToDelete->user->delete();
+                }
+                
+                // Eliminar el empleado
+                $this->employeeToDelete->delete();
+                
+                session()->flash('success', 'Empleado eliminado correctamente.');
+            } catch (\Exception $e) {
+                session()->flash('error', 'Error al eliminar el empleado.');
+                \Log::error('Error al eliminar empleado: ' . $e->getMessage());
             }
-            $this->employeeToDelete->delete();
-            $this->closeDeleteModal();
-            session()->flash('success', 'Empleado eliminado correctamente.');
         }
+        
+        $this->closeDeleteModal();
+    }
+
+    public function edit($employeeId)
+    {
+        \Log::info('Método edit llamado con ID:', ['employee_id' => $employeeId]);
+        $this->openFormModal($employeeId);
     }
 
     public function sortBy($field)
@@ -105,29 +136,37 @@ class EmployeeTable extends Component
     public function render()
     {
         $employees = Employee::query()
+            ->with('department') // Solo eager loading de department
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $searchTerm = '%' . $this->search . '%';
-                    $q->where('name', 'like', $searchTerm)
-                        ->orWhere('email', 'like', $searchTerm)
-                        ->orWhere('dni', 'like', $searchTerm)
-                        ->orWhere('phone', 'like', $searchTerm)
-                        ->orWhere('role', 'like', $searchTerm)
-                        ->orWhereHas('department', function ($q) use ($searchTerm) {
-                            $q->where('name', 'like', $searchTerm);
+                    $q->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('email', 'like', '%' . $this->search . '%')
+                        ->orWhere('dni', 'like', '%' . $this->search . '%')
+                        ->orWhereHas('department', function ($q) {
+                            $q->where('name', 'like', '%' . $this->search . '%');
                         });
                 });
             })
             ->when($this->showOnlyActive, function ($query) {
                 $query->where('is_active', true);
             })
-            ->when($this->sortField, function ($query) {
-                $query->orderBy($this->sortField, $this->sortDirection);
-            })
+            ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
 
+        // Estadísticas para el dashboard
+        $totalActive = Employee::where('is_active', true)->count();
+        $totalInactive = Employee::where('is_active', false)->count();
+        $rolesDistribution = Employee::select('role', \DB::raw('count(*) as total'))
+            ->groupBy('role')
+            ->get();
+        $lastUpdated = Employee::latest('updated_at')->first()?->updated_at;
+
         return view('livewire.employee.employee-table', [
-            'employees' => $employees
+            'employees' => $employees,
+            'totalActive' => $totalActive,
+            'totalInactive' => $totalInactive,
+            'rolesDistribution' => $rolesDistribution,
+            'lastUpdated' => $lastUpdated
         ]);
     }
 }

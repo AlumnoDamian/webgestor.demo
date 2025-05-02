@@ -10,7 +10,8 @@ class MemoController extends Controller
 {
     public function index() {
         $memos = Memo::latest()->paginate(10);
-        return view('memos.index', compact('memos'));
+        $departments = Department::all();
+        return view('memos.index', compact('memos', 'departments'));
     }
 
     public function create() {
@@ -24,26 +25,81 @@ class MemoController extends Controller
                 'title' => 'required',
                 'type' => 'required',
                 'content' => 'required',
-                'published_at' => now(),
-                'department_id' => 'required|exists:departments,id'
+                'department_id' => 'required|exists:departments,id',
+                'published_at' => 'required|date'
             ]);
     
             Memo::create([
                 'title' => $request->title,
                 'type' => $request->type,
                 'content' => $request->content,
-                'published_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'department_id' => $request->department_id ?? null, // Usar department_id correctamente
+                'department_id' => $request->department_id,
+                'published_at' => Carbon::parse($request->published_at)->format('Y-m-d H:i:s'),
             ]);
     
-            // Esto te ayudará a ver si la creación del comunicado es exitosa
             \Log::info('Comunicado creado: ', ['title' => $request->title]);
     
             return redirect()->route('memos.index')->with('success', 'Comunicado creado correctamente.');
         } catch (\Exception $e) {
-            // Si ocurre un error, se guarda en el log
             \Log::error('Error al crear comunicado: ', ['error' => $e->getMessage()]);
             return back()->withErrors('Error al crear el comunicado.');
+        }
+    }
+
+    public function update(Request $request, $id) {
+        try {
+            \Log::info('Iniciando actualización de comunicado', [
+                'id' => $id,
+                'request_data' => $request->all(),
+                'method' => $request->method()
+            ]);
+
+            $memo = Memo::findOrFail($id);
+            \Log::info('Comunicado encontrado', [
+                'memo' => $memo,
+                'department_id_actual' => $memo->department_id
+            ]);
+
+            $request->validate([
+                'title' => 'required',
+                'type' => 'required',
+                'content' => 'required',
+                'department_id' => 'required|exists:departments,id'
+            ]);
+
+            \Log::info('Validación pasada, procediendo a actualizar', [
+                'title' => $request->title,
+                'type' => $request->type,
+                'department_id' => $request->department_id
+            ]);
+
+            $updateData = [
+                'title' => $request->title,
+                'type' => $request->type,
+                'content' => $request->content,
+                'department_id' => $request->department_id
+            ];
+
+            \Log::info('Datos a actualizar', ['update_data' => $updateData]);
+
+            $memo->update($updateData);
+
+            \Log::info('Comunicado actualizado correctamente', [
+                'id' => $id,
+                'new_data' => $memo->fresh()->toArray(),
+                'department_id_nuevo' => $memo->fresh()->department_id
+            ]);
+
+            return redirect()->route('memos.index')->with('success', 'Comunicado actualizado correctamente.');
+        } catch (\Exception $e) {
+            \Log::error('Error al actualizar comunicado', [
+                'id' => $id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile()
+            ]);
+            return back()->withErrors('Error al actualizar el comunicado: ' . $e->getMessage());
         }
     }
 }

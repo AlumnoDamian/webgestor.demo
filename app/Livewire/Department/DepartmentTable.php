@@ -26,6 +26,10 @@ class DepartmentTable extends Component
 
     public function mount()
     {
+        $this->listeners = [
+            'closeModal' => 'closeFormModal',
+            'departmentSaved' => '$refresh'
+        ];
         $this->perPage = 10;
         $this->sortField = 'name';
         $this->sortDirection = 'asc';
@@ -51,31 +55,53 @@ class DepartmentTable extends Component
 
     public function confirmDelete($departmentId)
     {
+        logger()->info('Confirmando eliminación del departamento: ' . $departmentId);
         $this->departmentToDelete = Department::find($departmentId);
+        logger()->info('Departamento encontrado: ' . ($this->departmentToDelete ? 'Sí' : 'No'));
         $this->showDeleteModal = true;
         $this->showFormModal = false;
     }
 
     public function closeDeleteModal()
     {
+        logger()->info('Cerrando modal de eliminación');
         $this->showDeleteModal = false;
         $this->departmentToDelete = null;
     }
 
     public function deleteDepartment()
     {
+        logger()->info('Iniciando eliminación de departamento');
         if ($this->departmentToDelete) {
-            // Verificar si el departamento tiene empleados
-            if ($this->departmentToDelete->employees()->count() > 0) {
-                session()->flash('error', 'No se puede eliminar el departamento porque tiene empleados asignados.');
-                $this->closeDeleteModal();
-                return;
+            logger()->info('ID del departamento a eliminar: ' . $this->departmentToDelete->id);
+            
+            try {
+                // Actualizar empleados para dejarlos sin departamento
+                if ($this->departmentToDelete->employees()->count() > 0) {
+                    logger()->info('Desasignando empleados del departamento');
+                    $this->departmentToDelete->employees()->update(['department_id' => null]);
+                }
+                
+                // Eliminar el departamento
+                $this->departmentToDelete->delete();
+                logger()->info('Departamento eliminado correctamente');
+                session()->flash('success', 'Departamento eliminado correctamente.');
+            } catch (\Exception $e) {
+                logger()->error('Error al eliminar departamento: ' . $e->getMessage());
+                session()->flash('error', 'Error al eliminar el departamento: ' . $e->getMessage());
             }
             
-            $this->departmentToDelete->delete();
             $this->closeDeleteModal();
-            session()->flash('success', 'Departamento eliminado correctamente.');
+        } else {
+            logger()->error('No hay departamento seleccionado para eliminar');
         }
+    }
+
+    public function edit($departmentId)
+    {
+        $this->editingDepartmentId = $departmentId;
+        $this->showFormModal = true;
+        $this->showDeleteModal = false;
     }
 
     public function sortBy($field)
@@ -91,16 +117,15 @@ class DepartmentTable extends Component
     public function render()
     {
         $departments = Department::query()
+            ->with(['manager', 'employees']) // Eager loading del manager y empleados
+            ->withCount('employees') // Añadir el conteo de empleados
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $searchTerm = '%' . $this->search . '%';
-                    $q->where('name', 'like', $searchTerm)
-                        ->orWhere('description', 'like', $searchTerm);
+                    $q->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('code', 'like', '%' . $this->search . '%');
                 });
             })
-            ->when($this->sortField, function ($query) {
-                $query->orderBy($this->sortField, $this->sortDirection);
-            })
+            ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
 
         return view('livewire.department.department-table', [

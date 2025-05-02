@@ -17,11 +17,12 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('dni')->unique();
-            $table->string('phone');
-            $table->text('address');
-            $table->foreignId('department_id')->constrained()->onDelete('cascade');
-            $table->enum('role', ['jefe', 'empleado', 'supervisor', 'auxiliar', 'gerente', 'recepcionista', 'cocinero', 'camarero', 'conserje', 'limpiador', 'guardia de seguridad', 'auxiliar administrativo', 'analista']);
-            $table->date('birth_date');
+            $table->enum('role', ['jefe', 'empleado', 'supervisor', 'auxiliar', 'gerente', 'recepcionista', 'cocinero', 'camarero', 'conserje', 'limpiador', 'guardia de seguridad', 'auxiliar administrativo', 'analista'])->nullable();
+            $table->date('birth_date')->nullable(); // Haciendo la fecha de nacimiento nullable
+            $table->string('phone')->nullable();
+            $table->text('address')->nullable();
+            $table->date('hire_date')->nullable(); // Fecha de ingreso
+            $table->foreignId('department_id')->nullable()->constrained()->onDelete('set null');
             $table->boolean('is_active')->default(true);
             $table->string('image')->nullable();
             $table->timestamp('email_verified_at')->nullable();

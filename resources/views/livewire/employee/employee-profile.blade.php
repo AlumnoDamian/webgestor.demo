@@ -154,8 +154,8 @@
                                         <span class="material-symbols-outlined text-xl text-blue-500">calendar_today</span>
                                         <div>
                                             <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Fecha de Ingreso</p>
-                                            <p class="text-base font-semibold text-gray-900 dark:text-white">{{ $employee->created_at->format('d/m/Y') }}</p>
-                                            <p class="text-sm text-blue-500">{{ $employee->created_at->diffForHumans() }}</p>
+                                            <p class="text-base font-semibold text-gray-900 dark:text-white">{{ $employee->hire_date ? $employee->hire_date->format('d/m/Y') : 'No especificada' }}</p>
+                                            <p class="text-sm text-blue-500">{{ $employee->hire_date ? $employee->hire_date->diffForHumans() : '' }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -234,24 +234,24 @@
                             <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 shadow-sm">
                                 <p class="text-xs text-gray-500 dark:text-gray-400">Fecha de Ingreso</p>
                                 <p class="text-sm font-semibold text-purple-600 dark:text-purple-300">
-                                    {{ $employee->created_at->format('d/m/Y') }}
+                                    {{ $employee->hire_date ? $employee->hire_date->format('d/m/Y') : 'No especificada' }}
                                 </p>
                             </div>
                             <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 shadow-sm">
                                 <p class="text-xs text-gray-500 dark:text-gray-400">Tiempo Total</p>
                                 <p class="text-sm font-semibold text-purple-600 dark:text-purple-300">
-                                    {{ $employee->created_at->diffForHumans(null, true) }}
+                                    {{ $employee->hire_date ? $employee->hire_date->diffForHumans(null, true) : '' }}
                                 </p>
                             </div>
                         </div>
                         <div class="mt-3 pt-2 border-t border-gray-200 dark:border-gray-600">
                             <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400">
                                 <span>Progreso del año</span>
-                                <span>{{ floor(($employee->created_at->diffInDays(now()) % 365) / 365 * 100) }}%</span>
+                                <span>{{ floor(($employee->hire_date->diffInDays(now()) % 365) / 365 * 100) }}%</span>
                             </div>
                             <div class="mt-1 h-1.5 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
                                 <div class="h-full bg-purple-500 rounded-full" 
-                                     style="width: {{ floor(($employee->created_at->diffInDays(now()) % 365) / 365 * 100) }}%">
+                                     style="width: {{ floor(($employee->hire_date->diffInDays(now()) % 365) / 365 * 100) }}%">
                                 </div>
                             </div>
                         </div>

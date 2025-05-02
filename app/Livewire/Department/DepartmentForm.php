@@ -5,6 +5,8 @@ namespace App\Livewire\Department;
 use Livewire\Component;
 use App\Models\Department;
 use App\Models\Employee;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DepartmentForm extends Component
 {
@@ -60,9 +62,20 @@ class DepartmentForm extends Component
     public function mount($department = null)
     {
         if ($department) {
-            $this->department = Department::find($department);
+            // Si recibimos un ID en lugar de un objeto Department, buscamos el departamento
+            if (is_numeric($department)) {
+                $this->department = Department::find($department);
+            } else {
+                $this->department = $department;
+            }
+
             if ($this->department) {
-                $this->isEditing = true;
+                Log::info('Montando formulario de departamento', [
+                    'department_id' => $this->department->id,
+                    'status' => (bool)$this->department->status
+                ]);
+                
+                $this->departmentId = $this->department->id;
                 $this->code = $this->department->code;
                 $this->name = $this->department->name;
                 $this->description = $this->department->description;
@@ -70,30 +83,106 @@ class DepartmentForm extends Component
                 $this->budget = $this->department->budget;
                 $this->phone = $this->department->phone;
                 $this->email = $this->department->email;
-                $this->status = $this->department->status;
+                // Convertir explícitamente a booleano
+                $this->status = (bool)$this->department->status;
+                $this->isEditing = true;
             }
         }
     }
 
     public function updated($propertyName)
     {
+        Log::info('Propiedad actualizada', [
+            'property' => $propertyName,
+            'value' => $this->{$propertyName}
+        ]);
         $this->validateOnly($propertyName);
     }
 
     public function save()
     {
-        $validatedData = $this->validate();
+        Log::info('Iniciando guardado de departamento', [
+            'isEditing' => $this->isEditing,
+            'departmentId' => $this->departmentId,
+            'datos_recibidos' => [
+                'code' => $this->code,
+                'name' => $this->name,
+                'description' => $this->description,
+                'manager_id' => $this->manager_id,
+                'budget' => $this->budget,
+                'phone' => $this->phone,
+                'email' => $this->email,
+                'status' => $this->status
+            ]
+        ]);
 
-        if ($this->isEditing) {
-            $this->department->update($validatedData);
-            session()->flash('message', 'Departamento actualizado correctamente.');
-        } else {
-            Department::create($validatedData);
-            session()->flash('message', 'Departamento creado correctamente.');
+        try {
+            DB::beginTransaction();
+
+            $validatedData = $this->validate();
+
+            Log::info('Datos validados', [
+                'validated_data' => $validatedData
+            ]);
+
+            if ($this->isEditing) {
+                $department = Department::findOrFail($this->departmentId);
+                
+                Log::info('Departamento encontrado para actualizar', [
+                    'department_id' => $department->id,
+                    'status_antes' => (bool)$department->status
+                ]);
+
+                $department->update([
+                    'code' => $this->code,
+                    'name' => $this->name,
+                    'description' => $this->description,
+                    'manager_id' => $this->manager_id,
+                    'budget' => $this->budget,
+                    'phone' => $this->phone,
+                    'email' => $this->email,
+                    'status' => $this->status
+                ]);
+
+                Log::info('Departamento actualizado', [
+                    'department_id' => $department->id,
+                    'status_despues' => (bool)$department->fresh()->status,
+                    'datos_actualizados' => $department->fresh()->toArray()
+                ]);
+
+                session()->flash('message', 'Departamento actualizado correctamente.');
+            } else {
+                $department = Department::create([
+                    'code' => $this->code,
+                    'name' => $this->name,
+                    'description' => $this->description,
+                    'manager_id' => $this->manager_id,
+                    'budget' => $this->budget,
+                    'phone' => $this->phone,
+                    'email' => $this->email,
+                    'status' => $this->status
+                ]);
+
+                Log::info('Nuevo departamento creado', [
+                    'department_id' => $department->id,
+                    'datos' => $department->toArray()
+                ]);
+
+                session()->flash('message', 'Departamento creado correctamente.');
+            }
+
+            DB::commit();
+            $this->dispatch('departmentUpdated');
+            $this->dispatch('closeModal');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al guardar departamento', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            session()->flash('error', 'Error al guardar el departamento: ' . $e->getMessage());
         }
-
-        $this->dispatch('departmentUpdated');
-        $this->dispatch('closeModal');
     }
 
     public function closeModal()

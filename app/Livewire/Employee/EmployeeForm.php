@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeForm extends Component
 {
@@ -26,6 +27,7 @@ class EmployeeForm extends Component
     public $dni;
     public $phone;
     public $address;
+    public $hire_date;
     public $department_id;
     public $role;
     public $birth_date;
@@ -38,6 +40,11 @@ class EmployeeForm extends Component
 
     protected function rules()
     {
+        \Log::info('Generando reglas de validación', [
+            'isEditing' => $this->isEditing,
+            'employeeId' => $this->employeeId
+        ]);
+
         $emailRule = ['required', 'email'];
         $dniRule = ['required', 'regex:/^[0-9]{8}[A-Z]$/'];
 
@@ -50,19 +57,43 @@ class EmployeeForm extends Component
             $dniRule[] = 'unique:employees,dni';
         }
 
-        return [
+        $rules = [
             'name' => ['required', 'min:3', 'max:255'],
             'email' => $emailRule,
             'password' => $this->isEditing ? ['nullable', 'min:6'] : ['required', 'min:6'],
             'dni' => $dniRule,
-            'phone' => ['required', 'regex:/^[0-9]{9}$/'],
-            'address' => ['required', 'min:5'],
-            'department_id' => ['required', 'exists:departments,id'],
-            'role' => ['required', 'in:jefe,empleado,supervisor,auxiliar,gerente,recepcionista,cocinero,camarero,conserje,limpiador,guardia de seguridad,auxiliar administrativo,analista'],
-            'birth_date' => ['required', 'date', 'before:today'],
+            'phone' => ['nullable', 'regex:/^[0-9]{9}$/'],
+            'address' => ['nullable', 'min:5'],
+            'hire_date' => ['nullable', 'date'],
+            'department_id' => ['nullable', function ($attribute, $value, $fail) {
+                if ($value === '-') {
+                    return; // Permitir el valor especial '-'
+                }
+                if ($value !== null) {
+                    $exists = \App\Models\Department::where('id', $value)->exists();
+                    if (!$exists) {
+                        $fail('El departamento seleccionado no es válido.');
+                    }
+                }
+            }],
+            'role' => ['nullable', function ($attribute, $value, $fail) {
+                if ($value === '-') {
+                    return; // Permitir el valor especial '-'
+                }
+                if ($value !== null) {
+                    $validRoles = ['jefe', 'empleado', 'supervisor', 'auxiliar', 'gerente', 'recepcionista', 'cocinero', 'camarero', 'conserje', 'limpiador', 'guardia de seguridad', 'auxiliar administrativo', 'analista'];
+                    if (!in_array($value, $validRoles)) {
+                        $fail('El cargo seleccionado no es válido.');
+                    }
+                }
+            }],
+            'birth_date' => ['nullable', 'date', 'before:today'],
             'is_active' => ['boolean'],
             'image' => ['nullable', 'image']
         ];
+
+        \Log::info('Reglas de validación generadas:', $rules);
+        return $rules;
     }
 
     protected function messages()
@@ -82,6 +113,7 @@ class EmployeeForm extends Component
             'phone.regex' => 'El teléfono debe tener 9 números.',
             'address.required' => 'La dirección es obligatoria.',
             'address.min' => 'La dirección debe tener al menos 5 caracteres.',
+            'hire_date.date' => 'La fecha de contratación debe ser una fecha válida.',
             'department_id.required' => 'El departamento es obligatorio.',
             'department_id.exists' => 'El departamento seleccionado no existe.',
             'role.required' => 'El rol es obligatorio.',
@@ -93,11 +125,36 @@ class EmployeeForm extends Component
         ];
     }
 
+    public function updated($propertyName)
+    {
+        \Log::info('Validando propiedad:', [
+            'property' => $propertyName,
+            'value' => $this->$propertyName
+        ]);
+        
+        try {
+            $this->validateOnly($propertyName);
+            \Log::info('Validación exitosa para: ' . $propertyName);
+        } catch (\Exception $e) {
+            \Log::error('Error de validación para: ' . $propertyName, [
+                'error' => $e->getMessage()
+            ]);
+            throw $e;
+        }
+    }
+
     public function mount($employee = null)
     {
         if ($employee) {
-            $this->employee = Employee::find($employee);
+            // Si recibimos un ID en lugar de un objeto Employee, buscamos el empleado
+            if (is_numeric($employee)) {
+                $this->employee = Employee::find($employee);
+            } else {
+                $this->employee = $employee;
+            }
+
             if ($this->employee) {
+                $this->employeeId = $this->employee->id;
                 $this->isEditing = true;
                 $this->name = $this->employee->name;
                 $this->email = $this->employee->email;
@@ -106,19 +163,17 @@ class EmployeeForm extends Component
                 $this->address = $this->employee->address;
                 $this->department_id = $this->employee->department_id;
                 $this->role = $this->employee->role;
-                $this->birth_date = $this->employee->birth_date;
-                $this->is_active = $this->employee->is_active;
-                $this->image = $this->employee->image;
+                // Formatear las fechas al formato Y-m-d que espera el input type="date"
+                $this->birth_date = $this->employee->birth_date ? $this->employee->birth_date->format('Y-m-d') : null;
+                $this->hire_date = $this->employee->hire_date ? $this->employee->hire_date->format('Y-m-d') : null;
+                
+                \Log::info('Datos cargados en el formulario:', [
+                    'employee_id' => $this->employeeId,
+                    'birth_date' => $this->birth_date,
+                    'hire_date' => $this->hire_date
+                ]);
             }
-        } else {
-            // Valores por defecto para nuevo empleado
-            $this->is_active = true; // Por defecto activo
         }
-    }
-
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
     }
 
     public function updatedImage()
@@ -128,44 +183,57 @@ class EmployeeForm extends Component
 
     public function save()
     {
-        \Log::info('Iniciando método save');
-        \Log::info('Datos recibidos:', [
+        \Log::info('Iniciando método save con datos:', [
+            'isEditing' => $this->isEditing,
+            'employeeId' => $this->employeeId,
+            'role' => $this->role,
+            'department_id' => $this->department_id,
+            'birth_date' => $this->birth_date
+        ]);
+
+        // Convertir valores especiales a null
+        if ($this->role === '-') {
+            $this->role = null;
+        }
+        if ($this->department_id === '-') {
+            $this->department_id = null;
+        }
+
+        $validatedData = $this->validate();
+        \Log::info('Datos validados:', $validatedData);
+
+        $employeeData = [
             'name' => $this->name,
             'email' => $this->email,
             'dni' => $this->dni,
             'phone' => $this->phone,
+            'address' => $this->address,
+            'hire_date' => $this->hire_date,
             'department_id' => $this->department_id,
-            'isEditing' => $this->isEditing,
+            'role' => $this->role,
+            'birth_date' => $this->birth_date,
             'is_active' => $this->is_active
-        ]);
+        ];
+
+        \Log::info('Datos a guardar:', $employeeData);
 
         try {
-            \Log::info('Iniciando validación');
-            $validatedData = $this->validate();
-            \Log::info('Datos validados correctamente');
-
-            $employeeData = [
-                'name' => $this->name,
-                'email' => $this->email,
-                'dni' => $this->dni,
-                'phone' => $this->phone,
-                'address' => $this->address,
-                'department_id' => $this->department_id,
-                'role' => $this->role,
-                'birth_date' => $this->birth_date,
-                'is_active' => $this->is_active
-            ];
+            DB::beginTransaction();
 
             if ($this->isEditing) {
-                \Log::info('Actualizando empleado existente');
+                \Log::info('Actualizando empleado existente', ['id' => $this->employee->id]);
+                
                 // Actualizar usuario
-                $user = $this->employee->user;
-                $user->name = $this->name;
-                $user->email = $this->email;
+                $this->employee->user->update([
+                    'name' => $this->name,
+                    'email' => $this->email,
+                ]);
+
                 if ($this->password) {
-                    $user->password = Hash::make($this->password);
+                    $this->employee->user->update([
+                        'password' => Hash::make($this->password)
+                    ]);
                 }
-                $user->save();
 
                 // Procesar imagen si hay una nueva
                 if ($this->image && $this->image instanceof \Illuminate\Http\UploadedFile) {
@@ -177,7 +245,11 @@ class EmployeeForm extends Component
 
                 // Actualizar empleado
                 $this->employee->update($employeeData);
-                session()->flash('message', 'Empleado actualizado correctamente.');
+                \Log::info('Empleado actualizado correctamente', [
+                    'id' => $this->employee->id,
+                    'role' => $this->employee->role
+                ]);
+
             } else {
                 \Log::info('Creando nuevo empleado');
                 // Crear nuevo usuario
@@ -195,21 +267,31 @@ class EmployeeForm extends Component
 
                 // Crear empleado
                 $employeeData['user_id'] = $user->id;
-                Employee::create($employeeData);
+                $employee = Employee::create($employeeData);
+                \Log::info('Empleado creado correctamente', [
+                    'employee_id' => $employee->id,
+                    'datos_creados' => $employee->toArray()
+                ]);
+
                 session()->flash('message', 'Empleado creado correctamente.');
             }
 
-            \Log::info('Operación completada exitosamente');
+            DB::commit();
             $this->dispatch('employeeUpdated'); // Emitir evento para actualizar la tabla
             $this->dispatch('closeModal'); // Emitir evento para cerrar el modal
             $this->reset(); // Limpiar el formulario
+
+            session()->flash('message', 
+                $this->isEditing ? 'El empleado ha sido actualizado correctamente.' : 'El empleado ha sido creado correctamente.'
+            );
+
         } catch (\Exception $e) {
-            \Log::error('Error en save():', [
+            DB::rollBack();
+            \Log::error('Error al guardar empleado:', [
                 'message' => $e->getMessage(),
-                'line' => $e->getLine(),
-                'file' => $e->getFile()
+                'trace' => $e->getTraceAsString()
             ]);
-            session()->flash('error', 'Ha ocurrido un error al guardar el empleado: ' . $e->getMessage());
+            session()->flash('error', 'Ha ocurrido un error al guardar el empleado.');
         }
     }
 

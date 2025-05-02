@@ -49,8 +49,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/documentos/crear', 'create')->name('documentos.crear');
         Route::post('/documentos', 'store')->name('documentos.guardar');
         Route::get('/documentos/{id}/editar', 'edit')->name('documentos.editar');
-        Route::put('/documentos/{id}', 'update')->name('documentos.actualizar');
-        Route::delete('/documentos/{id}', 'destroy')->name('documentos.eliminar');
+    });
+
+    // Memo routes
+    Route::controller(MemoController::class)->group(function () {
+        Route::get('/memos', 'index')->name('memos.index');
+        Route::get('/memos/crear', 'create')->name('memos.crear');
+        Route::post('/memos', 'store')->name('memos.store');
+        Route::put('/memos/{id}', 'update')->name('memos.update');
     });
 
     // Announcement routes
@@ -61,16 +67,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/anuncios/{id}/editar', 'edit')->name('anuncios.editar');
         Route::put('/anuncios/{id}', 'update')->name('anuncios.actualizar');
         Route::delete('/anuncios/{id}', 'destroy')->name('anuncios.eliminar');
-    });
-
-    // Memo routes
-    Route::controller(MemoController::class)->group(function () {
-        Route::get('/memos', 'index')->name('memos.index');
-        Route::get('/memos/crear', 'create')->name('memos.crear');
-        Route::post('/memos', 'store')->name('memos.guardar');
-        Route::get('/memos/{id}/editar', 'edit')->name('memos.editar');
-        Route::put('/memos/{id}', 'update')->name('memos.actualizar');
-        Route::delete('/memos/{id}', 'destroy')->name('memos.eliminar');
     });
 });
 
