@@ -21,7 +21,6 @@ class DatabaseSeeder extends Seeder
             EmployeeSeeder::class,
             EmployeeDepartmentSeeder::class,
             MemoSeeder::class,
-            AnnouncementSeeder::class,
         ]);
        
        

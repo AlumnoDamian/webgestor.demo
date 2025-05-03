@@ -7,9 +7,6 @@
                 <span class="material-symbols-outlined text-2xl">notifications</span>
                     <span class="absolute top-1.5 right-1.5 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-indigo-900"></span>
                 </a>
-                <a href="{{ route('anuncios.index') }}" class="p-2 text-white/80 hover:text-white transition-colors duration-150">
-                    <span class="material-symbols-outlined text-2xl">campaign</span>
-                </a>
                 <div class="h-8 w-px bg-white/10"></div>
                 <a href="{{ route('profile.edit') }}" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/5 transition-colors duration-150">
                     @if(Auth::user()->profile_photo_url)
@@ -71,10 +68,6 @@
                 </a>
             @endif
             
-            <a href="{{ route('documentos.index') }}" class="flex items-center px-4 py-2.5 {{ request()->routeIs('documentos.*') ? 'bg-white/15 text-white' : 'text-white/80 hover:text-white hover:bg-white/10' }} rounded-lg group transition duration-150 ease-in-out">
-                <span class="material-symbols-outlined w-8">description</span>
-                <span class="font-bold">Documentos</span>
-            </a>
         </nav>
 
         <!-- Footer del Sidebar -->

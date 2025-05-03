@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use App\Models\Employee;
-use App\Models\Announcement;
 use App\Models\Memo;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,13 +17,10 @@ class DashboardController extends Controller
         // Obtener todos los departamentos
         $departments = Department::all();
 
-        // Obtener los últimos anuncios (puedes limitar la cantidad si quieres)
-        $announcements = Announcement::latest()->take(3)->get();
-
         // Obtener los últimos comunicados (puedes limitar la cantidad si quieres)
         $communications = Memo::latest()->take(3)->get();
 
         // Retornar la vista con los datos necesarios
-        return view('dashboard', compact('employee', 'departments', 'announcements', 'communications'));
+        return view('dashboard', compact('employee', 'departments', 'communications'));
     }
 }

@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\DocumentationController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\MemoController;
 use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Route;
@@ -59,15 +58,6 @@ Route::middleware('auth')->group(function () {
         Route::put('/memos/{id}', 'update')->name('memos.update');
     });
 
-    // Announcement routes
-    Route::controller(AnnouncementController::class)->group(function () {
-        Route::get('/anuncios', 'index')->name('anuncios.index');
-        Route::get('/anuncios/crear', 'create')->name('anuncios.crear');
-        Route::post('/anuncios', 'store')->name('anuncios.guardar');
-        Route::get('/anuncios/{id}/editar', 'edit')->name('anuncios.editar');
-        Route::put('/anuncios/{id}', 'update')->name('anuncios.actualizar');
-        Route::delete('/anuncios/{id}', 'destroy')->name('anuncios.eliminar');
-    });
 });
 
 Route::middleware('guest')->group(function () {

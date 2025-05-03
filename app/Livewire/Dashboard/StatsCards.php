@@ -5,7 +5,6 @@ namespace App\Livewire\Dashboard;
 use App\Models\Employee;
 use App\Models\Department;
 use App\Models\Memo;
-use App\Models\Announcement;
 use Livewire\Component;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -35,13 +34,6 @@ class StatsCards extends Component
                 'trend' => $this->calculateTrend(Memo::class),
                 'icon' => 'file-alt',
                 'color' => 'yellow'
-            ],
-            'anuncios' => [
-                'count' => Announcement::count(),
-                'active' => Announcement::where('published_at', '<=', now())->count(),
-                'trend' => $this->calculateTrend(Announcement::class),
-                'icon' => 'bullhorn',
-                'color' => 'purple'
             ]
         ];
     }

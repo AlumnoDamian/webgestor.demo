@@ -46,16 +46,7 @@
                                     <i class="fas fa-chevron-right"></i>
                                 </span>
                             </a>
-                            <a href="{{ route('anuncios.crear') }}" 
-                                class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow">
-                                <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-purple-500 rounded-lg">
-                                    <i class="fas fa-bullhorn text-white"></i>
-                                </span>
-                                <span class="flex-1 ml-3 whitespace-nowrap">Nuevo Anuncio</span>
-                                <span class="inline-flex items-center justify-center px-2 py-0.5 ml-3 text-xs font-medium text-gray-500 bg-gray-200 rounded">
-                                    <i class="fas fa-chevron-right"></i>
-                                </span>
-                            </a>
+                            
                         </div>
                     </div>
                 </div>
