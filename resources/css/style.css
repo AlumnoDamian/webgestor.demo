@@ -261,3 +261,64 @@ table {
 .bg-green-500 { background-color: #28a745; }
 
 .text-gray-500 { color: #6c757d; }
+
+/* Estilos personalizados para Navbar */
+.navbar-custom {
+  background-color: #2D89EF; /* Color azul personalizado */
+}
+
+.navbar-custom .navbar-nav .nav-link {
+  color: white !important; /* Color blanco para los enlaces */
+}
+
+.navbar-custom .navbar-nav .nav-link:hover {
+  color: #ffd700 !important; /* Color dorado en hover */
+}
+
+/* Estilo personalizado para sidebar */
+.sidebar-custom {
+  background-color: #343a40; /* Color de fondo oscuro para el sidebar */
+  color: white; /* Texto blanco */
+}
+
+.sidebar-custom a {
+  color: white; /* Color blanco para los enlaces */
+}
+
+.sidebar-custom a:hover {
+  color: #ffffff;
+  background-color: #007bff;
+}
+
+/* Estilo para los botones de cierre del sidebar */
+.sidebar-close-btn {
+  color: #fff;
+  background-color: transparent;
+  border: none;
+  font-size: 1.5rem;
+}
+
+/* Estilo para el sidebar derecho con el mismo estilo que el izquierdo */
+.sidebar-right {
+  background-color: #343a40; /* Fondo oscuro igual que el sidebar izquierdo */
+  color: white; /* Texto blanco */
+}
+
+.sidebar-right a {
+  color: white; /* Color blanco para los enlaces */
+}
+
+.sidebar-right a:hover {
+  color: #ffffff;
+  background-color: #007bff;
+}
+
+.sidebar-right .sidebar-close-btn {
+  color: #fff;
+}
+
+/* Estilo para los inputs en el sidebar derecho */
+.sidebar-right input, .sidebar-right select, .sidebar-right textarea {
+  background-color:rgb(255, 255, 255);
+  color: black; /* Texto negro para los inputs */
+}

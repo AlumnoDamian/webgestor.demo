@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
-            $table->string('day'); // Lunes, Martes, etc.
+            $table->date('day'); // Cambiado a tipo date para almacenar fechas específicas
             $table->string('shift')->nullable(); // Ejemplo: "08:00 - 16:00"
             $table->timestamps();
         });

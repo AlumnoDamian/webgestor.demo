@@ -13,21 +13,22 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('dni')->unique(); // DNI único para evitar duplicados
-            $table->string('name'); // Nombre completo del empleado
-            $table->string('email')->unique(); // Email único
-            $table->string('password'); // Contraseña
-            $table->enum('role', ['jefe', 'empleado', 'supervisor', 'auxiliar', 'gerente', 'recepcionista', 'cocinero', 'camarero', 'conserje', 'limpiador', 'guardia de seguridad', 'auxiliar administrativo', 'analista', ])->default('empleado');
-            $table->date('birth_date')->nullable(); // Fecha de nacimiento
-            $table->text('address')->nullable(); // Dirección
-            $table->string('phone')->nullable(); // Teléfono
-            $table->boolean('is_active')->default(true); // Estado del empleado
-            $table->string('image')->nullable(); // Imagen opcional
-/*             $table->foreignId('department_id')->nullable()->constrained()->onDelete('set null'); */            
-            $table->unsignedBigInteger('department_id')->nullable(); 
-
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('dni')->unique();
+            $table->enum('role', ['jefe', 'empleado', 'supervisor', 'auxiliar', 'gerente', 'recepcionista', 'cocinero', 'camarero', 'conserje', 'limpiador', 'guardia de seguridad', 'auxiliar administrativo', 'analista'])->nullable();
+            $table->date('birth_date')->nullable(); // Haciendo la fecha de nacimiento nullable
+            $table->string('phone')->nullable();
+            $table->text('address')->nullable();
+            $table->date('hire_date')->nullable(); // Fecha de ingreso
+            $table->foreignId('department_id')->nullable()->constrained()->onDelete('set null');
+            $table->boolean('is_active')->default(true);
+            $table->string('image')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->rememberToken();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
