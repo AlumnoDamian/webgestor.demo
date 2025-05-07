@@ -377,14 +377,14 @@
                     <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 shadow-inner">
                         <h4 class="font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-3">
                             <span class="material-symbols-outlined text-2xl text-indigo-500">description</span>
-                            Memos del Departamento
+                            Comunicados del departamento
                         </h4>
                         <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 text-center shadow-sm mb-3">
                             <div class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-yellow-100 dark:bg-yellow-900 mb-2">
                                 <span class="material-symbols-outlined text-sm text-yellow-600 dark:text-yellow-300">folder</span>
                             </div>
                             <p class="text-lg font-bold text-yellow-600 dark:text-yellow-300">{{ $memoStats['total'] }}</p>
-                            <p class="text-xs text-gray-600 dark:text-gray-400">Total Memos</p>
+                            <p class="text-xs text-gray-600 dark:text-gray-400">Total de comunicados</p>
                         </div>
                         <div class="grid grid-cols-3 gap-3">
                             @foreach($memoStats['byType'] as $type => $count)

@@ -5,7 +5,6 @@ namespace App\Livewire\Employee;
 use Livewire\Component;
 use App\Models\Employee;
 use Livewire\WithPagination;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 #[Locked]
@@ -13,8 +12,6 @@ class EmployeeTable extends Component
 {
     use WithPagination;
 
-    #[Locked]
-    public $search = '';
     #[Locked]
     public $showOnlyActive = false;
     #[Locked]
@@ -44,11 +41,6 @@ class EmployeeTable extends Component
         $this->sortDirection = 'asc';
     }
 
-    public function updatingSearch()
-    {
-        $this->resetPage();
-    }
-
     public function updatingShowOnlyActive()
     {
         $this->resetPage();
@@ -56,24 +48,9 @@ class EmployeeTable extends Component
 
     public function openFormModal($employeeId = null)
     {
-        \Log::info('Abriendo modal de formulario:', [
-            'employee_id' => $employeeId,
-            'previous_state' => [
-                'showFormModal' => $this->showFormModal,
-                'editingEmployeeId' => $this->editingEmployeeId,
-                'showDeleteModal' => $this->showDeleteModal
-            ]
-        ]);
-
         $this->editingEmployeeId = $employeeId;
         $this->showFormModal = true;
         $this->showDeleteModal = false;
-
-        \Log::info('Estado actualizado del modal:', [
-            'showFormModal' => $this->showFormModal,
-            'editingEmployeeId' => $this->editingEmployeeId,
-            'showDeleteModal' => $this->showDeleteModal
-        ]);
     }
 
     public function closeFormModal()
@@ -119,7 +96,6 @@ class EmployeeTable extends Component
 
     public function edit($employeeId)
     {
-        \Log::info('Método edit llamado con ID:', ['employee_id' => $employeeId]);
         $this->openFormModal($employeeId);
     }
 
@@ -133,32 +109,24 @@ class EmployeeTable extends Component
         }
     }
 
-    public function render()
+    public function getEmployeesProperty()
     {
-        $employees = Employee::query()
-            ->with('department') // Solo eager loading de department
-            ->when($this->search, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('email', 'like', '%' . $this->search . '%')
-                        ->orWhere('dni', 'like', '%' . $this->search . '%')
-                        ->orWhereHas('department', function ($q) {
-                            $q->where('name', 'like', '%' . $this->search . '%');
-                        });
-                });
-            })
+        return Employee::query()
             ->when($this->showOnlyActive, function ($query) {
-                $query->where('is_active', true);
+                $query->where('status', true);
             })
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
+    }
+
+    public function render()
+    {
+        $employees = $this->getEmployeesProperty();
 
         // Estadísticas para el dashboard
         $totalActive = Employee::where('is_active', true)->count();
         $totalInactive = Employee::where('is_active', false)->count();
-        $rolesDistribution = Employee::select('role', \DB::raw('count(*) as total'))
-            ->groupBy('role')
-            ->get();
+        $rolesDistribution = Employee::selectRaw('role, COUNT(*) as count')->groupBy('role')->get();
         $lastUpdated = Employee::latest('updated_at')->first()?->updated_at;
 
         return view('livewire.employee.employee-table', [

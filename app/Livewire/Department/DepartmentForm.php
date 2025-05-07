@@ -70,11 +70,6 @@ class DepartmentForm extends Component
             }
 
             if ($this->department) {
-                Log::info('Montando formulario de departamento', [
-                    'department_id' => $this->department->id,
-                    'status' => (bool)$this->department->status
-                ]);
-                
                 $this->departmentId = $this->department->id;
                 $this->code = $this->department->code;
                 $this->name = $this->department->name;
@@ -92,47 +87,19 @@ class DepartmentForm extends Component
 
     public function updated($propertyName)
     {
-        Log::info('Propiedad actualizada', [
-            'property' => $propertyName,
-            'value' => $this->{$propertyName}
-        ]);
         $this->validateOnly($propertyName);
     }
 
     public function save()
     {
-        Log::info('Iniciando guardado de departamento', [
-            'isEditing' => $this->isEditing,
-            'departmentId' => $this->departmentId,
-            'datos_recibidos' => [
-                'code' => $this->code,
-                'name' => $this->name,
-                'description' => $this->description,
-                'manager_id' => $this->manager_id,
-                'budget' => $this->budget,
-                'phone' => $this->phone,
-                'email' => $this->email,
-                'status' => $this->status
-            ]
-        ]);
-
         try {
             DB::beginTransaction();
 
             $validatedData = $this->validate();
 
-            Log::info('Datos validados', [
-                'validated_data' => $validatedData
-            ]);
-
             if ($this->isEditing) {
                 $department = Department::findOrFail($this->departmentId);
                 
-                Log::info('Departamento encontrado para actualizar', [
-                    'department_id' => $department->id,
-                    'status_antes' => (bool)$department->status
-                ]);
-
                 $department->update([
                     'code' => $this->code,
                     'name' => $this->name,
@@ -142,12 +109,6 @@ class DepartmentForm extends Component
                     'phone' => $this->phone,
                     'email' => $this->email,
                     'status' => $this->status
-                ]);
-
-                Log::info('Departamento actualizado', [
-                    'department_id' => $department->id,
-                    'status_despues' => (bool)$department->fresh()->status,
-                    'datos_actualizados' => $department->fresh()->toArray()
                 ]);
 
                 session()->flash('message', 'Departamento actualizado correctamente.');
@@ -163,11 +124,6 @@ class DepartmentForm extends Component
                     'status' => $this->status
                 ]);
 
-                Log::info('Nuevo departamento creado', [
-                    'department_id' => $department->id,
-                    'datos' => $department->toArray()
-                ]);
-
                 session()->flash('message', 'Departamento creado correctamente.');
             }
 
@@ -177,10 +133,6 @@ class DepartmentForm extends Component
 
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error al guardar departamento', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
             session()->flash('error', 'Error al guardar el departamento: ' . $e->getMessage());
         }
     }

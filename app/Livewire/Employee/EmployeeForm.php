@@ -40,11 +40,6 @@ class EmployeeForm extends Component
 
     protected function rules()
     {
-        \Log::info('Generando reglas de validación', [
-            'isEditing' => $this->isEditing,
-            'employeeId' => $this->employeeId
-        ]);
-
         $emailRule = ['required', 'email'];
         $dniRule = ['required', 'regex:/^[0-9]{8}[A-Z]$/'];
 
@@ -92,7 +87,6 @@ class EmployeeForm extends Component
             'image' => ['nullable', 'image']
         ];
 
-        \Log::info('Reglas de validación generadas:', $rules);
         return $rules;
     }
 
@@ -127,18 +121,9 @@ class EmployeeForm extends Component
 
     public function updated($propertyName)
     {
-        \Log::info('Validando propiedad:', [
-            'property' => $propertyName,
-            'value' => $this->$propertyName
-        ]);
-        
         try {
             $this->validateOnly($propertyName);
-            \Log::info('Validación exitosa para: ' . $propertyName);
         } catch (\Exception $e) {
-            \Log::error('Error de validación para: ' . $propertyName, [
-                'error' => $e->getMessage()
-            ]);
             throw $e;
         }
     }
@@ -166,12 +151,6 @@ class EmployeeForm extends Component
                 // Formatear las fechas al formato Y-m-d que espera el input type="date"
                 $this->birth_date = $this->employee->birth_date ? $this->employee->birth_date->format('Y-m-d') : null;
                 $this->hire_date = $this->employee->hire_date ? $this->employee->hire_date->format('Y-m-d') : null;
-                
-                \Log::info('Datos cargados en el formulario:', [
-                    'employee_id' => $this->employeeId,
-                    'birth_date' => $this->birth_date,
-                    'hire_date' => $this->hire_date
-                ]);
             }
         }
     }
@@ -183,14 +162,6 @@ class EmployeeForm extends Component
 
     public function save()
     {
-        \Log::info('Iniciando método save con datos:', [
-            'isEditing' => $this->isEditing,
-            'employeeId' => $this->employeeId,
-            'role' => $this->role,
-            'department_id' => $this->department_id,
-            'birth_date' => $this->birth_date
-        ]);
-
         // Convertir valores especiales a null
         if ($this->role === '-') {
             $this->role = null;
@@ -200,7 +171,6 @@ class EmployeeForm extends Component
         }
 
         $validatedData = $this->validate();
-        \Log::info('Datos validados:', $validatedData);
 
         $employeeData = [
             'name' => $this->name,
@@ -215,14 +185,10 @@ class EmployeeForm extends Component
             'is_active' => $this->is_active
         ];
 
-        \Log::info('Datos a guardar:', $employeeData);
-
         try {
             DB::beginTransaction();
 
             if ($this->isEditing) {
-                \Log::info('Actualizando empleado existente', ['id' => $this->employee->id]);
-                
                 // Actualizar usuario
                 $this->employee->user->update([
                     'name' => $this->name,
@@ -245,13 +211,8 @@ class EmployeeForm extends Component
 
                 // Actualizar empleado
                 $this->employee->update($employeeData);
-                \Log::info('Empleado actualizado correctamente', [
-                    'id' => $this->employee->id,
-                    'role' => $this->employee->role
-                ]);
 
             } else {
-                \Log::info('Creando nuevo empleado');
                 // Crear nuevo usuario
                 $user = User::create([
                     'name' => $this->name,
@@ -268,10 +229,6 @@ class EmployeeForm extends Component
                 // Crear empleado
                 $employeeData['user_id'] = $user->id;
                 $employee = Employee::create($employeeData);
-                \Log::info('Empleado creado correctamente', [
-                    'employee_id' => $employee->id,
-                    'datos_creados' => $employee->toArray()
-                ]);
 
                 session()->flash('message', 'Empleado creado correctamente.');
             }
@@ -287,10 +244,6 @@ class EmployeeForm extends Component
 
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('Error al guardar empleado:', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
             session()->flash('error', 'Ha ocurrido un error al guardar el empleado.');
         }
     }

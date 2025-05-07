@@ -5,25 +5,21 @@ namespace App\Livewire\Dashboard;
 use Livewire\Component;
 use App\Models\Memo;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Collection;
 
 class Announcements extends Component
 {
     public function render()
     {
         $user = Auth::user();
+        $employee = $user->employee;
         
-        // Obtener comunicados importantes que:
-        // 1. Sean de tipo 'Importante'
-        // 2. O bien sean para el departamento del usuario O sean para todos los departamentos
-        // 3. Ya estén publicados
-        $memos = Memo::where('type', 'Importante')
-                    ->where(function($query) use ($user) {
-                        $query->where('department_id', $user->employee->department_id)
-                              ->orWhereNull('department_id');
-                    })
-                    ->where('published_at', '<=', now())
-                    ->orderBy('published_at', 'desc')
-                    ->get();
+        $memos = Memo::with('department')
+            ->whereHas('department', function($query) use ($employee) {
+                $query->where('id', $employee->department_id);
+            })
+            ->orderBy('published_at', 'desc')
+            ->get();
 
         return view('livewire.dashboard.announcements', [
             'memos' => $memos

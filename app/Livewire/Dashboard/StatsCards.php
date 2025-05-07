@@ -2,62 +2,15 @@
 
 namespace App\Livewire\Dashboard;
 
+use Livewire\Component;
+use App\Models\Memo;
 use App\Models\Employee;
 use App\Models\Department;
-use App\Models\Memo;
-use Livewire\Component;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class StatsCards extends Component
 {
-    public function getStats()
-    {
-        return [
-            'empleados' => [
-                'count' => Employee::count(),
-                'active' => Employee::where('is_active', true)->count(),
-                'trend' => $this->calculateTrend(Employee::class),
-                'icon' => 'users',
-                'color' => 'blue'
-            ],
-            'departamentos' => [
-                'count' => Department::count(),
-                'active' => Department::count(),
-                'trend' => 0,
-                'icon' => 'building',
-                'color' => 'green'
-            ],
-            'comunicados' => [
-                'count' => Memo::count(),
-                'recent' => Memo::count(),
-                'trend' => $this->calculateTrend(Memo::class),
-                'icon' => 'file-alt',
-                'color' => 'yellow'
-            ]
-        ];
-    }
-
-    private function calculateTrend($model)
-    {
-        $now = Carbon::now();
-        $lastMonth = $now->copy()->subMonth();
-        
-        $currentCount = $model::whereBetween('created_at', [
-            $now->copy()->startOfMonth(),
-            $now->copy()->endOfMonth()
-        ])->count();
-
-        $lastMonthCount = $model::whereBetween('created_at', [
-            $lastMonth->copy()->startOfMonth(),
-            $lastMonth->copy()->endOfMonth()
-        ])->count();
-
-        if ($lastMonthCount == 0) return 0;
-        
-        return (($currentCount - $lastMonthCount) / $lastMonthCount) * 100;
-    }
-
     public function getCurrentEmployee()
     {
         return Employee::select('employees.*', 'departments.name as department_name', 'departments.description as department_description')
@@ -69,20 +22,55 @@ class StatsCards extends Component
 
     public function render()
     {
-        $employee = $this->getCurrentEmployee();
-        $startDate = optional($employee)->start_date ? Carbon::parse($employee->start_date) : null;
+        $currentEmployee = $this->getCurrentEmployee();
+        $hireDate = $currentEmployee ? Carbon::parse($currentEmployee->hire_date) : null;
+        $birthDate = $currentEmployee ? Carbon::parse($currentEmployee->birth_date) : null;
+
+        // Total de comunicados del departamento
+        $totalMemos = Memo::whereHas('department', function($query) use ($currentEmployee) {
+            $query->where('id', $currentEmployee->department_id);
+        })->count();
+
+        // Total de empleados en el departamento
+        $departmentEmployees = Employee::where('department_id', $currentEmployee->department_id)->count();
+
+        // Total de empleados activos en el departamento
+        $activeEmployees = Employee::where('department_id', $currentEmployee->department_id)
+            ->where('is_active', true)
+            ->count();
+
+        // Total de empleados por rol en el departamento
+        $roleDistribution = Employee::where('department_id', $currentEmployee->department_id)
+            ->selectRaw('role, count(*) as count')
+            ->groupBy('role')
+            ->get()
+            ->pluck('count', 'role')
+            ->toArray();
+
+        $totalEmployees = array_sum($roleDistribution);
+        $percentages = [];
+        
+        if ($totalEmployees > 0) {
+            foreach ($roleDistribution as $role => $count) {
+                $percentages[$role] = round(($count / $totalEmployees) * 100);
+            }
+        }
 
         return view('livewire.dashboard.stats-cards', [
-            'stats' => $this->getStats(),
-            'currentEmployee' => $employee,
-            'employeeData' => $employee ? [
-                'antiguedad' => $startDate ? $startDate->diffForHumans() : 'N/A',
-                'dias_empresa' => $startDate ? $startDate->diffInDays(Carbon::now()) : 0,
-                'fecha_inicio' => $startDate ? $startDate->format('d/m/Y') : 'N/A',
-                'estado' => $employee->is_active ? 'Activo' : 'Inactivo',
-                'tipo_contrato' => $employee->contract_type ?? 'No especificado',
-                'horario' => $employee->schedule ?? 'No especificado',
-            ] : null
+            'currentEmployee' => $currentEmployee,
+            'employeeData' => $currentEmployee ? [
+                'antiguedad' => $hireDate ? $hireDate->diffForHumans() : 'N/A',
+                'dias_empresa' => $hireDate ? (int)$hireDate->diffInDays(Carbon::now()) : 0,
+                'fecha_inicio' => $hireDate ? $hireDate->format('d/m/Y') : 'N/A',
+                'estado' => $currentEmployee->is_active ? 'Activo' : 'Inactivo',
+                'cargo' => ucfirst($currentEmployee->position ?? 'No especificado'),
+                'edad' => $birthDate ? $birthDate->age : 'N/A',
+                'fecha_nacimiento' => $birthDate ? $birthDate->format('d/m/Y') : 'N/A'
+            ] : null,
+            'totalMemos' => $totalMemos,
+            'departmentEmployees' => $departmentEmployees,
+            'activeEmployees' => $activeEmployees,
+            'percentages' => $percentages
         ]);
     }
 }

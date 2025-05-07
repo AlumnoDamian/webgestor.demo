@@ -42,14 +42,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/ver', 'view')->name('cuadrante.view');
     });
 
-    // Documentation routes
-    Route::controller(DocumentationController::class)->group(function () {
-        Route::get('/documentos', 'index')->name('documentos.index');
-        Route::get('/documentos/crear', 'create')->name('documentos.crear');
-        Route::post('/documentos', 'store')->name('documentos.guardar');
-        Route::get('/documentos/{id}/editar', 'edit')->name('documentos.editar');
-    });
-
     // Memo routes
     Route::controller(MemoController::class)->group(function () {
         Route::get('/memos', 'index')->name('memos.index');

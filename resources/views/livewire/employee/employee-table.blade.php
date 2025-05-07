@@ -18,21 +18,6 @@
                 <!-- Barra de herramientas -->
                 <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
                     <div class="flex flex-1 w-full md:w-auto gap-4">
-                        <!-- Buscador -->
-                        <div class="flex-1 min-w-0">
-                            <label for="search" class="sr-only">Buscar</label>
-                            <div class="relative rounded-md shadow-sm">
-                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                    <svg class="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                                    </svg>
-                                </div>
-                                <input wire:model.debounce.300ms="search" type="search" name="search" id="search"
-                                    class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    placeholder="Buscar empleados...">
-                            </div>
-                        </div>
-
                         <!-- Filtro de Activos -->
                         <div class="flex items-center bg-white px-4 py-2 rounded-lg border border-gray-300">
                             <label class="relative inline-flex items-center cursor-pointer">
@@ -129,17 +114,17 @@
                         <!-- Barra de estadísticas -->
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                             <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                                <div class="px-6 py-4 bg-gradient-to-br from-transparent to-indigo-50/50 h-full">
+                                <div class="px-6 py-4 bg-gradient-to-br from-transparent to-blue-50/50 h-full">
                                     <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Rol más común</div>
-                                    <div class="mt-2 flex items-baseline">
+                                    <div class="mt-2">
+                                        @php
+                                            $commonRole = $rolesDistribution->sortByDesc('total')->first();
+                                            $roleName = $commonRole ? ucfirst(strtolower($commonRole->role)) : 'N/A';
+                                            $roleCount = $commonRole ? $commonRole->total : 0;
+                                        @endphp
                                         <div class="text-lg font-semibold text-gray-900">
-                                            @php
-                                                $commonRole = $rolesDistribution->sortByDesc('total')->first();
-                                                $roleName = $commonRole ? ucfirst(strtolower($commonRole->role)) : 'N/A';
-                                            @endphp
-                                            {{ $roleName }}
+                                            {{ $roleName }}: <span class="text-lg text-gray-600">{{ $roleCount }} {{ $roleCount === 1 ? 'empleado' : 'empleados' }}</span>
                                         </div>
-                                        <div class="ml-2 text-sm text-gray-600">({{ $commonRole ? $commonRole->total : 0 }})</div>
                                     </div>
                                 </div>
                             </div>

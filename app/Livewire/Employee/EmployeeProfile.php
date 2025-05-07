@@ -27,11 +27,7 @@ class EmployeeProfile extends Component
 
     public function mount()
     {
-        Log::info('Usuario autenticado:', ['user' => auth()->user()]);
-        Log::info('ID del usuario:', ['user_id' => auth()->id()]);
-        
-        $this->employee = auth()->user()->employee;
-        Log::info('Empleado encontrado:', ['employee' => $this->employee]);
+        $this->employee = Employee::where('user_id', auth()->id())->first();
         
         if (!$this->employee) {
             Log::error('No se encontró el empleado para el usuario autenticado');
@@ -170,10 +166,8 @@ class EmployeeProfile extends Component
 
     public function render()
     {
-        Log::info('Renderizando componente con empleado:', [
-            'employee_exists' => isset($this->employee),
-            'employee_data' => $this->employee
+        return view('livewire.employee.employee-profile', [
+            'employee' => $this->employee
         ]);
-        return view('livewire.employee.employee-profile');
     }
 }

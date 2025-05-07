@@ -3,57 +3,107 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Department;
 
 class DepartmentSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Deshabilitar temporalmente las claves foráneas
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-        // Elimina los registros anteriores
-        DB::table('departments')->truncate();
-
         $departments = [
             [
-                'code' => 'REC',
-                'name' => 'Recepción',
-                'description' => 'Departamento encargado de la atención al cliente y el registro de huéspedes.',
-                'manager_id' => 1,
-                'budget' => 5000.00,
-                'phone' => '123-456-789',
-                'email' => 'recepcion@hotel.com',
-                'status' => true,
+                'code' => 'RH',
+                'name' => 'Recursos Humanos',
+                'description' => 'Gestión del personal y desarrollo organizacional',
+                'budget' => 150000.00,
+                'phone' => '912345678',
+                'email' => 'rrhh@webgestor.com',
+                'status' => true
             ],
             [
-                'code' => 'LIM',
-                'name' => 'Limpieza',
-                'description' => 'Departamento responsable de mantener las habitaciones y áreas comunes limpias.',
-                'manager_id' => 3,
-                'budget' => 2000.00,
-                'phone' => '123-456-790',
-                'email' => 'limpieza@hotel.com',
-                'status' => true,
+                'code' => 'IT',
+                'name' => 'Tecnología de la Información',
+                'description' => 'Soporte técnico y desarrollo de software',
+                'budget' => 200000.00,
+                'phone' => '912345679',
+                'email' => 'it@webgestor.com',
+                'status' => true
             ],
             [
                 'code' => 'MKT',
                 'name' => 'Marketing',
-                'description' => 'Departamento encargado de la promoción y publicidad del hotel.',
-                'manager_id' => 5,
-                'budget' => 3000.00,
-                'phone' => '123-456-791',
-                'email' => 'marketing@hotel.com',
-                'status' => true,
+                'description' => 'Estrategias de marketing y comunicación',
+                'budget' => 180000.00,
+                'phone' => '912345680',
+                'email' => 'marketing@webgestor.com',
+                'status' => true
             ],
+            [
+                'code' => 'FIN',
+                'name' => 'Finanzas',
+                'description' => 'Gestión financiera y contabilidad',
+                'budget' => 250000.00,
+                'phone' => '912345681',
+                'email' => 'finanzas@webgestor.com',
+                'status' => true
+            ],
+            [
+                'code' => 'OPS',
+                'name' => 'Operaciones',
+                'description' => 'Gestión de operaciones y logística',
+                'budget' => 300000.00,
+                'phone' => '912345682',
+                'email' => 'operaciones@webgestor.com',
+                'status' => true
+            ],
+            [
+                'code' => 'VNT',
+                'name' => 'Ventas',
+                'description' => 'Gestión comercial y desarrollo de negocio',
+                'budget' => 275000.00,
+                'phone' => '912345683',
+                'email' => 'ventas@webgestor.com',
+                'status' => true
+            ],
+            [
+                'code' => 'CAL',
+                'name' => 'Calidad',
+                'description' => 'Control de calidad y mejora continua',
+                'budget' => 120000.00,
+                'phone' => '912345684',
+                'email' => 'calidad@webgestor.com',
+                'status' => true
+            ],
+            [
+                'code' => 'LEG',
+                'name' => 'Legal',
+                'description' => 'Asesoría legal y cumplimiento normativo',
+                'budget' => 160000.00,
+                'phone' => '912345685',
+                'email' => 'legal@webgestor.com',
+                'status' => true
+            ],
+            [
+                'code' => 'INV',
+                'name' => 'Investigación y Desarrollo',
+                'description' => 'Innovación y desarrollo de nuevos productos',
+                'budget' => 350000.00,
+                'phone' => '912345686',
+                'email' => 'investigacion@webgestor.com',
+                'status' => true
+            ],
+            [
+                'code' => 'COM',
+                'name' => 'Comunicación',
+                'description' => 'Comunicación interna y externa',
+                'budget' => 140000.00,
+                'phone' => '912345687',
+                'email' => 'comunicacion@webgestor.com',
+                'status' => true
+            ]
         ];
 
-        DB::table('departments')->insert($departments);
-
-        // Habilitar las claves foráneas nuevamente
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        foreach ($departments as $department) {
+            Department::create($department);
+        }
     }
 }

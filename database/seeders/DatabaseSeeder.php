@@ -2,10 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,10 +14,9 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $this->call([
-            DepartmentSeeder::class,
-            EmployeeSeeder::class,
-            EmployeeDepartmentSeeder::class,
-            MemoSeeder::class,
+            DepartmentSeeder::class,    // Primero los departamentos
+            EmployeeSeeder::class,      // Luego los empleados (que necesitan departamentos)
+            MemoSeeder::class,          // Memos (que necesitan departamentos)
         ]);
        
        

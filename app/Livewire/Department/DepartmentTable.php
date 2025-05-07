@@ -10,7 +10,6 @@ class DepartmentTable extends Component
 {
     use WithPagination;
 
-    public $search = '';
     public $perPage = 10;
     public $sortField = 'name';
     public $sortDirection = 'asc';
@@ -33,11 +32,6 @@ class DepartmentTable extends Component
         $this->perPage = 10;
         $this->sortField = 'name';
         $this->sortDirection = 'asc';
-    }
-
-    public function updatingSearch()
-    {
-        $this->resetPage();
     }
 
     public function openFormModal($departmentId = null)
@@ -114,19 +108,18 @@ class DepartmentTable extends Component
         }
     }
 
-    public function render()
+    public function getDepartmentsProperty()
     {
-        $departments = Department::query()
+        return Department::query()
             ->with(['manager', 'employees']) // Eager loading del manager y empleados
             ->withCount('employees') // Añadir el conteo de empleados
-            ->when($this->search, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('code', 'like', '%' . $this->search . '%');
-                });
-            })
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
+    }
+
+    public function render()
+    {
+        $departments = $this->getDepartmentsProperty();
 
         return view('livewire.department.department-table', [
             'departments' => $departments

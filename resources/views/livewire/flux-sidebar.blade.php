@@ -9,11 +9,14 @@
                 </a>
                 <div class="h-8 w-px bg-white/10"></div>
                 <a href="{{ route('profile.edit') }}" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/5 transition-colors duration-150">
-                    @if(Auth::user()->profile_photo_url)
-                        <img class="h-8 w-8 rounded-full object-cover ring-2 ring-white/20" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}">
+                    @php
+                        $employee = \App\Models\Employee::where('user_id', Auth::id())->first();
+                    @endphp
+                    @if($employee && $employee->image)
+                        <img class="h-8 w-8 rounded-full object-cover ring-2 ring-white/20" src="{{ asset('storage/' . $employee->image) }}" alt="{{ Auth::user()->name }}">
                     @else
                         <div class="h-8 w-8 rounded-full bg-white/10 ring-2 ring-white/20 flex items-center justify-center">
-                            <span class="material-symbols-outlined">person</span>
+                            <span class="text-sm font-medium text-white">{{ strtoupper(substr(Auth::user()->name, 0, 2)) }}</span>
                         </div>
                     @endif
                     <span class="text-sm font-bold text-white/90">{{ Auth::user()->name }}</span>
