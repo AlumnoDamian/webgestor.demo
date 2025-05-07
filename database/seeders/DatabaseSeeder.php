@@ -14,11 +14,10 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $this->call([
-            DepartmentSeeder::class,    // Primero los departamentos
-            EmployeeSeeder::class,      // Luego los empleados (que necesitan departamentos)
-            MemoSeeder::class,          // Memos (que necesitan departamentos)
+            RoleAndPermissionSeeder::class,  // Primero los roles y permisos
+            DepartmentSeeder::class,         // Luego los departamentos
+            EmployeeSeeder::class,           // Luego los empleados (que necesitan departamentos)
+            MemoSeeder::class,               // Memos (que necesitan departamentos)
         ]);
-       
-       
     }
 }

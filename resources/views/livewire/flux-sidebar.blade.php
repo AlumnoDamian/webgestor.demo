@@ -3,10 +3,12 @@
     <div class="fixed top-0 right-0 left-72 h-16 bg-gradient-to-r from-blue-800 via-indigo-800 to-indigo-900 shadow-md z-40 px-6">
         <div class="h-full flex items-center justify-end space-x-6">
             <div class="flex items-center space-x-4">
+                @can('ver_comunicados')
                 <a href="{{ route('memos.index') }}" class="relative p-2 text-white/80 hover:text-white transition-colors duration-150">
-                <span class="material-symbols-outlined text-2xl">notifications</span>
+                    <span class="material-symbols-outlined text-2xl">notifications</span>
                     <span class="absolute top-1.5 right-1.5 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-indigo-900"></span>
                 </a>
+                @endcan
                 <div class="h-8 w-px bg-white/10"></div>
                 <a href="{{ route('profile.edit') }}" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/5 transition-colors duration-150">
                     @php
@@ -59,10 +61,12 @@
                 <span class="font-bold">Departamentos</span>
             </a>
             
+            @can('ver_cuadrante')
             <a href="{{ route('cuadrante.show') }}" class="flex items-center px-4 py-2.5 {{ request()->routeIs('cuadrante.show') ? 'bg-white/15 text-white' : 'text-white/80 hover:text-white hover:bg-white/10' }} rounded-lg group transition duration-150 ease-in-out">
                 <span class="material-symbols-outlined w-8">calendar_month</span>
                 <span class="font-bold">Cuadrante</span>
             </a>
+            @endcan
 
             @if(auth()->user()->employee)
                 <a href="{{ route('cuadrante.view') }}" class="flex items-center px-4 py-2.5 {{ request()->routeIs('cuadrante.view') ? 'bg-white/15 text-white' : 'text-white/80 hover:text-white hover:bg-white/10' }} rounded-lg group transition duration-150 ease-in-out">

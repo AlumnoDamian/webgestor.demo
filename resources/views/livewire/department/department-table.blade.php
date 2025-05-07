@@ -5,30 +5,51 @@
             <div class="p-6">
                 <!-- Barra de herramientas -->
                 <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
-                    <div class="flex flex-1 w-full md:w-auto gap-4">
+                    <div class="flex flex-wrap gap-3">
                         <!-- Registros por página -->
-                        <div class="flex items-center bg-white rounded-lg border border-gray-300">
-                            <select wire:model.live="perPage" class="text-sm text-gray-900 border-0 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 p-2.5">
-                                <option value="10">10 por página</option>
-                                <option value="25">25 por página</option>
-                                <option value="50">50 por página</option>
-                                <option value="100">100 por página</option>
-                            </select>
-                        </div>
+                        @foreach ([5, 10, 20, 50] as $value)
+                            <button type="button" wire:click="$set('perPage', {{ $value }})" 
+                                class="group relative min-w-[100px] px-4 py-3 
+                                    rounded-lg border shadow-sm transition-all duration-300 ease-in-out
+                                    {{ $perPage === $value
+                                        ? 'bg-gradient-to-b from-blue-50 to-blue-100 border-blue-300 shadow-inner'
+                                        : 'bg-gradient-to-b from-white to-gray-50 border-gray-200 hover:border-blue-400 hover:from-blue-50 hover:to-white hover:shadow-md hover:-translate-y-0.5' }}
+                                    focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="flex-shrink-0 relative">
+                                            <div class="absolute inset-0 bg-blue-100 rounded-lg transform -rotate-6 transition-transform group-hover:rotate-6">
+                                            </div>
+                                            <svg class="relative w-5 h-5 text-blue-600 transform transition-transform group-hover:scale-110"
+                                                viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            </svg>
+                                        </div>
+                                        <span class="text-sm font-medium {{ $perPage === $value ? 'text-blue-900' : 'text-gray-900' }}">
+                                            {{ $value }} registros
+                                        </span>
+                                    </div>
+                                </div>
+                            </button>
+                        @endforeach
                     </div>
 
                     <!-- Botón Nuevo Departamento -->
-                    <button wire:click="openFormModal" type="button" 
-                        class="inline-flex items-center px-4 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-blue-800 via-indigo-800 to-indigo-900 
-                               hover:from-blue-700 hover:via-indigo-700 hover:to-indigo-800 
-                               rounded-lg shadow-sm hover:shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 
-                               transition-all duration-200 transform hover:-translate-y-0.5">
-                        <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                        </svg>
-                        Nuevo Departamento
+                    @role('admin')
+                    <button wire:click="openFormModal" class="group inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-800 via-indigo-800 to-indigo-900 
+                                        border-0 rounded-lg font-semibold text-base text-white tracking-wide shadow-md
+                                        hover:from-blue-700 hover:via-indigo-700 hover:to-indigo-800 
+                                        focus:outline-none focus:ring-2 focus:ring-blue-500/50
+                                        active:from-blue-800 active:via-indigo-800 active:to-indigo-900
+                                        transition-all duration-200 ease-in-out
+                                        min-w-[200px] transform hover:-translate-y-0.5">
+                        <span class="material-symbols-outlined text-xl leading-none relative top-[1px] mr-2">apartment</span>
+                        <span class="relative">
+                            Nuevo Departamento
+                            <span class="absolute -bottom-0.5 left-0 w-full h-0.5 bg-white/30 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></span>
+                        </span>
                     </button>
+                    @endrole
                 </div>
 
                 <!-- Tabla -->
@@ -247,8 +268,9 @@
                                             {{ $department->status ? 'Activo' : 'Inactivo' }}
                                         </span>
                                     </td>
-                                    <td class="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
-                                        <div class="flex justify-end gap-2">
+                                    <td class="px-6 py-4 text-right">
+                                        @can('ver_botones_tabla')
+                                        <div class="flex justify-end space-x-2">
                                             <button wire:click="openFormModal({{ $department->id }})"
                                                 class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 p-1.5 rounded-md transition-colors">
                                                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -262,6 +284,7 @@
                                                 </svg>
                                             </button>
                                         </div>
+                                        @endcan
                                     </td>
                                 </tr>
                             @empty
@@ -299,14 +322,14 @@
                                 <!-- Botón Anterior -->
                                 <button @if($departments->onFirstPage()) disabled @endif
                                     wire:click="previousPage"
-                                    class="relative inline-flex items-center px-3 py-2 text-sm font-medium rounded-l-md
+                                    class="relative inline-flex items-center rounded-l-md px-3 py-2 text-sm font-medium
                                     {{ $departments->onFirstPage() 
                                         ? 'text-gray-400 bg-gray-50 cursor-not-allowed' 
-                                        : 'text-gray-700 bg-white hover:bg-indigo-50 hover:text-indigo-600' }}
-                                    border border-gray-300 focus:z-20 transition-colors duration-200">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                                        : 'text-gray-700 bg-white hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 19.5L8.25 12l7.5-7.5" />
                                     </svg>
+                                    <span class="sr-only">Anterior</span>
                                 </button>
 
                                 <!-- Números de página -->
@@ -340,14 +363,14 @@
                                 <!-- Botón Siguiente -->
                                 <button @if(!$departments->hasMorePages()) disabled @endif
                                     wire:click="nextPage"
-                                    class="relative inline-flex items-center px-3 py-2 text-sm font-medium rounded-r-md
+                                    class="relative inline-flex items-center rounded-r-md px-3 py-2 text-sm font-medium
                                     {{ !$departments->hasMorePages() 
                                         ? 'text-gray-400 bg-gray-50 cursor-not-allowed' 
-                                        : 'text-gray-700 bg-white hover:bg-indigo-50 hover:text-indigo-600' }}
-                                    border border-gray-300 focus:z-20 transition-colors duration-200">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                                        : 'text-gray-700 bg-white hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                                     </svg>
+                                    <span class="sr-only">Siguiente</span>
                                 </button>
                             </nav>
                         </div>
@@ -433,11 +456,13 @@
                         <!-- Modal footer -->
                         <div class="flex items-center justify-end gap-3 p-4 border-t border-gray-200">
                             <button wire:click="closeDeleteModal" type="button" 
-                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
+                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 
+                                transition-all duration-200 transform hover:-translate-y-0.5">
                                 Cancelar
                             </button>
                             <button wire:click="deleteDepartment" type="button"
-                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 
+                                transition-all duration-200 transform hover:-translate-y-0.5">
                                 Eliminar
                             </button>
                         </div>

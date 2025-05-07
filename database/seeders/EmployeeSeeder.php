@@ -7,6 +7,7 @@ use App\Models\Employee;
 use App\Models\User;
 use App\Models\Department;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 use Faker\Factory as Faker;
 
 class EmployeeSeeder extends Seeder
@@ -222,6 +223,9 @@ class EmployeeSeeder extends Seeder
                 'password' => Hash::make($jefe['password'])
             ]);
 
+            // Asignar rol de admin a los jefes
+            $user->assignRole('admin');
+
             Employee::create([
                 'user_id' => $user->id,
                 'name' => $jefe['name'],
@@ -244,69 +248,57 @@ class EmployeeSeeder extends Seeder
         // Ahora creamos empleados para cada departamento
         $roles = ['empleado', 'supervisor', 'auxiliar', 'gerente', 'recepcionista', 'cocinero', 'camarero', 'conserje', 'limpiador', 'guardia de seguridad', 'auxiliar administrativo', 'analista'];
         
-        // Nombres únicos españoles
-        $nombres = [
-            'Adrian', 'Bruno', 'Cesar', 'Daniel', 'Ernesto', 'Fernando', 'Gabriel', 'Hugo', 'Ivan', 'Jorge',
-            'Kevin', 'Lorenzo', 'Mario', 'Nicolas', 'Oscar', 'Pablo', 'Rafael', 'Samuel', 'Tomas', 'Victor',
-            'Alba', 'Blanca', 'Carla', 'Daniela', 'Elena', 'Flora', 'Gema', 'Helena', 'Irene', 'Julia',
-            'Karina', 'Laura', 'Marina', 'Nuria', 'Olga', 'Patricia', 'Rosa', 'Sara', 'Teresa', 'Valeria'
-        ];
+        $faker = Faker::create('es_ES');
+        $departments = Department::all();
 
-        // Primer apellido único español
-        $apellidos1 = [
-            'Alonso', 'Blanco', 'Castro', 'Duran', 'Esteban', 'Ferrer', 'Gallego', 'Herrera', 'Iglesias', 'Jimenez',
-            'Leon', 'Medina', 'Navarro', 'Ortega', 'Pascual', 'Quintana', 'Ramos', 'Santos', 'Torres', 'Vargas',
-            'Aguilar', 'Benitez', 'Campos', 'Delgado', 'Espinosa', 'Flores', 'Garrido', 'Hidalgo', 'Ibañez', 'Lara',
-            'Marquez', 'Nieto', 'Ortiz', 'Parra', 'Quesada', 'Rojas', 'Sanz', 'Toro', 'Vega', 'Zamora'
-        ];
-
-        // Segundo apellido único español
-        $apellidos2 = [
-            'Acosta', 'Borrego', 'Crespo', 'Diez', 'Estrada', 'Franco', 'Guerra', 'Hurtado', 'Ibarra', 'Jaen',
-            'Luna', 'Mora', 'Navas', 'Ochoa', 'Pardo', 'Quiros', 'Reina', 'Salas', 'Trujillo', 'Urbano',
-            'Aranda', 'Bernal', 'Cortes', 'Dominguez', 'Exposito', 'Fuentes', 'Guillen', 'Heredia', 'Iriarte', 'Jurado',
-            'Luque', 'Mesa', 'Naranjo', 'Osuna', 'Prieto', 'Romero', 'Suarez', 'Toledo', 'Uribe', 'Velasco'
-        ];
-
-        // Mezclar los arrays para obtener nombres aleatorios
-        shuffle($nombres);
-        shuffle($apellidos1);
-        shuffle($apellidos2);
-
-        $usedNames = []; // Array para trackear nombres usados
-        $employeeCount = 0;
-
-        for ($i = 1; $i <= 5; $i++) { // Para cada departamento
-            for ($j = 0; $j < 10 && $employeeCount < count($nombres); $j++) { // Creamos 10 empleados por departamento
-                // Generar nombre único combinando arrays mezclados
-                $nombre = $nombres[$employeeCount];
-                $apellido1 = $apellidos1[$employeeCount];
-                $apellido2 = $apellidos2[$employeeCount];
+        foreach ($departments as $department) {
+            $numEmployees = rand(5, 15);
+            for ($i = 0; $i < $numEmployees; $i++) {
+                // Generar nombre aleatorio usando Faker con variaciones
+                $gender = $faker->randomElement(['male', 'female']);
                 
-                $name = "$nombre $apellido1 $apellido2";
-                $email = $this->generateEmail($name);
+                // Generar componentes del nombre
+                $firstName = $faker->firstName($gender);
+                $secondName = rand(1, 100) <= 30 ? $faker->firstName($gender) : ''; // 30% de probabilidad de segundo nombre
+                $lastName1 = $faker->lastName;
+                $lastName2 = rand(1, 100) <= 80 ? $faker->lastName : ''; // 80% de probabilidad de segundo apellido
+                
+                // Construir el nombre completo con diferentes formatos
+                $nameParts = array_filter([$firstName, $secondName]); // Elimina elementos vacíos
+                $lastNameParts = array_filter([$lastName1, $lastName2]); // Elimina elementos vacíos
+                
+                // Aleatorizar el orden de los nombres si hay más de uno
+                if (count($nameParts) > 1 && rand(1, 100) <= 20) { // 20% de probabilidad de cambiar orden
+                    $nameParts = array_reverse($nameParts);
+                }
+                
+                $fullName = implode(' ', array_merge($nameParts, $lastNameParts));
+                $email = $this->generateEmail($fullName);
 
+                // Crear usuario
                 $user = User::create([
-                    'name' => $name,
+                    'name' => $fullName,
                     'email' => $email,
-                    'password' => Hash::make('Password123!')
+                    'password' => Hash::make('Password1234!')
                 ]);
 
+                // Asignar rol aleatorio (80% empleado, 20% admin)
+                $user->assignRole(rand(1, 100) <= 20 ? 'admin' : 'empleado');
+
+                // Crear empleado
                 Employee::create([
                     'user_id' => $user->id,
-                    'name' => $name,
+                    'name' => $fullName,
                     'email' => $email,
                     'dni' => $this->generateDNI(),
                     'role' => $roles[array_rand($roles)],
-                    'birth_date' => Faker::create()->dateTimeBetween('-60 years', '-20 years')->format('Y-m-d'),
+                    'birth_date' => $faker->dateTimeBetween('-60 years', '-20 years')->format('Y-m-d'),
                     'phone' => $this->generatePhone(),
                     'address' => $this->generateAddress(),
-                    'hire_date' => Faker::create()->dateTimeBetween('-5 years', 'now')->format('Y-m-d'),
-                    'department_id' => $i,
-                    'is_active' => Faker::create()->boolean(90)
+                    'hire_date' => $faker->dateTimeBetween('-5 years', 'now')->format('Y-m-d'),
+                    'department_id' => $department->id,
+                    'is_active' => rand(1, 100) <= 80  // 20% de probabilidad de estar inactivo
                 ]);
-
-                $employeeCount++;
             }
         }
     }

@@ -17,41 +17,51 @@
 
                 <!-- Barra de herramientas -->
                 <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
-                    <div class="flex flex-1 w-full md:w-auto gap-4">
-                        <!-- Filtro de Activos -->
-                        <div class="flex items-center bg-white px-4 py-2 rounded-lg border border-gray-300">
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" wire:model.live="showOnlyActive" class="sr-only peer">
-                                <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-indigo-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-                                <span class="ml-3 text-sm font-medium text-gray-700">Solo Activos</span>
-                            </label>
-                        </div>
-
+                    <div class="flex flex-wrap gap-3">
                         <!-- Registros por página -->
-                        <div class="flex items-center bg-white rounded-lg border border-gray-300">
-                            <select wire:model.live="perPage" class="text-sm text-gray-900 border-0 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 p-2.5">
-                                <option value="10">10 por página</option>
-                                <option value="25">25 por página</option>
-                                <option value="50">50 por página</option>
-                                <option value="100">100 por página</option>
-                            </select>
-                        </div>
+                        @foreach ([5, 10, 20, 50] as $value)
+                            <button type="button" wire:click="$set('perPage', {{ $value }})" 
+                                class="group relative min-w-[100px] px-4 py-3 
+                                    rounded-lg border shadow-sm transition-all duration-300 ease-in-out
+                                    {{ $perPage === $value
+                                        ? 'bg-gradient-to-b from-blue-50 to-blue-100 border-blue-300 shadow-inner'
+                                        : 'bg-gradient-to-b from-white to-gray-50 border-gray-200 hover:border-blue-400 hover:from-blue-50 hover:to-white hover:shadow-md hover:-translate-y-0.5' }}
+                                    focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="flex-shrink-0 relative">
+                                            <div class="absolute inset-0 bg-blue-100 rounded-lg transform -rotate-6 transition-transform group-hover:rotate-6">
+                                            </div>
+                                            <svg class="relative w-5 h-5 text-blue-600 transform transition-transform group-hover:scale-110"
+                                                viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            </svg>
+                                        </div>
+                                        <span class="text-sm font-medium {{ $perPage === $value ? 'text-blue-900' : 'text-gray-900' }}">
+                                            {{ $value }} registros
+                                        </span>
+                                    </div>
+                                </div>
+                            </button>
+                        @endforeach
                     </div>
 
                     <!-- Botón Nuevo Empleado -->
-                    <div>
-                        <button wire:click="openFormModal" type="button" 
-                            class="inline-flex items-center px-4 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-blue-800 via-indigo-800 to-indigo-900 
-                                   hover:from-blue-700 hover:via-indigo-700 hover:to-indigo-800 
-                                   rounded-lg shadow-sm hover:shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 
-                                   transition-all duration-200 transform hover:-translate-y-0.5">
-                            <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-                            </svg>
+                    @role('admin')
+                    <button wire:click="openFormModal" class="group inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-800 via-indigo-800 to-indigo-900 
+                                        border-0 rounded-lg font-semibold text-base text-white tracking-wide shadow-md
+                                        hover:from-blue-700 hover:via-indigo-700 hover:to-indigo-800 
+                                        focus:outline-none focus:ring-2 focus:ring-blue-500/50
+                                        active:from-blue-800 active:via-indigo-800 active:to-indigo-900
+                                        transition-all duration-200 ease-in-out
+                                        min-w-[200px] transform hover:-translate-y-0.5">
+                        <span class="material-symbols-outlined text-xl leading-none relative top-[1px] mr-2">group</span>
+                        <span class="relative">
                             Nuevo Empleado
-                        </button>
-                    </div>
+                            <span class="absolute -bottom-0.5 left-0 w-full h-0.5 bg-white/30 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></span>
+                        </span>
+                    </button>
+                    @endrole
                 </div>
 
                 <!-- Información de registros y Tabla -->
@@ -115,15 +125,14 @@
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                             <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                                 <div class="px-6 py-4 bg-gradient-to-br from-transparent to-blue-50/50 h-full">
-                                    <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Rol más común</div>
+                                    <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Cargo más común</div>
                                     <div class="mt-2">
-                                        @php
-                                            $commonRole = $rolesDistribution->sortByDesc('total')->first();
-                                            $roleName = $commonRole ? ucfirst(strtolower($commonRole->role)) : 'N/A';
-                                            $roleCount = $commonRole ? $commonRole->total : 0;
-                                        @endphp
                                         <div class="text-lg font-semibold text-gray-900">
-                                            {{ $roleName }}: <span class="text-lg text-gray-600">{{ $roleCount }} {{ $roleCount === 1 ? 'empleado' : 'empleados' }}</span>
+                                            {{ $mostCommonRole ? ucfirst($mostCommonRole->role) : 'No tiene' }}: 
+                                            <span class="text-lg text-gray-600">
+                                                {{ $mostCommonRole ? $mostCommonRole->count : 0 }} 
+                                                {{ $mostCommonRole && $mostCommonRole->count === 1 ? 'empleado' : 'empleados' }}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -179,9 +188,12 @@
                                 </th>
                                 <th scope="col" class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">
                                     <button type="button" wire:click="sortBy('role')" class="group inline-flex items-center hover:text-indigo-700">
-                                        Rol
+                                        Cargo
                                         <x-sort-icon :field="'role'" :sort-field="$sortField" :sort-direction="$sortDirection" />
                                     </button>
+                                </th>
+                                <th scope="col" class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    Tipo de Usuario
                                 </th>
                                 <th scope="col" class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">
                                     <button type="button" wire:click="sortBy('department_id')" class="group inline-flex items-center hover:text-indigo-700">
@@ -256,6 +268,17 @@
                                         </div>
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap">
+                                        <div class="flex items-center space-x-1.5">
+                                            @if($employee->user && $employee->user->roles->isNotEmpty())
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $employee->user->hasRole('admin') ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800' }}">
+                                                    {{ $employee->user->roles->first()->name }}
+                                                </span>
+                                            @else
+                                                <span class="text-gray-500 italic">Sin rol</span>
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div>
                                                 @if($employee->department)
@@ -319,8 +342,9 @@
                                             {{ $employee->is_active ? 'Activo' : 'Inactivo' }}
                                         </span>
                                     </td>
-                                    <td class="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
-                                        <div class="flex justify-end gap-2">
+                                    <td class="px-6 py-4 text-right">
+                                        @can('ver_botones_tabla')
+                                        <div class="flex justify-end space-x-2">
                                             <button wire:click="edit({{ $employee->id }})"
                                                 class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 p-1.5 rounded-md transition-colors">
                                                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -334,11 +358,12 @@
                                                 </svg>
                                             </button>
                                         </div>
+                                        @endcan
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="9" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                    <td colspan="10" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                                         No hay empleados registrados.
                                     </td>
                                 </tr>
@@ -361,7 +386,7 @@
                                         ? 'text-gray-400 bg-gray-50 cursor-not-allowed' 
                                         : 'text-gray-700 bg-white hover:bg-indigo-50 hover:text-indigo-600' }}">
                                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 19.5L8.25 12l7.5-7.5" />
                                     </svg>
                                     <span class="sr-only">Anterior</span>
                                 </button>
@@ -402,7 +427,7 @@
                                         ? 'text-gray-400 bg-gray-50 cursor-not-allowed' 
                                         : 'text-gray-700 bg-white hover:bg-indigo-50 hover:text-indigo-600' }}">
                                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                                     </svg>
                                     <span class="sr-only">Siguiente</span>
                                 </button>

@@ -7,26 +7,26 @@ use App\Models\Employee;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Storage;
 
-#[Locked]
+
 class EmployeeTable extends Component
 {
     use WithPagination;
 
-    #[Locked]
+    
     public $showOnlyActive = false;
-    #[Locked]
+    
     public $perPage = 10;
-    #[Locked]
+    
     public $sortField = 'name';
-    #[Locked]
+    
     public $sortDirection = 'asc';
-    #[Locked]
+    
     public $showFormModal = false;
-    #[Locked]
+    
     public $showDeleteModal = false;
-    #[Locked]
+    
     public $editingEmployeeId = null;
-    #[Locked]
+    
     public $employeeToDelete = null;
 
     protected $listeners = [
@@ -87,7 +87,6 @@ class EmployeeTable extends Component
                 session()->flash('success', 'Empleado eliminado correctamente.');
             } catch (\Exception $e) {
                 session()->flash('error', 'Error al eliminar el empleado.');
-                \Log::error('Error al eliminar empleado: ' . $e->getMessage());
             }
         }
         
@@ -109,9 +108,20 @@ class EmployeeTable extends Component
         }
     }
 
+    public function getMostCommonRoleProperty()
+    {
+        return Employee::query()
+            ->selectRaw('role, COUNT(*) as count')
+            ->whereNotNull('role')
+            ->groupBy('role')
+            ->orderByDesc('count')
+            ->first();
+    }
+
     public function getEmployeesProperty()
     {
         return Employee::query()
+            ->with(['user.roles'])  // Eager loading de la relación user y roles
             ->when($this->showOnlyActive, function ($query) {
                 $query->where('status', true);
             })
@@ -122,6 +132,7 @@ class EmployeeTable extends Component
     public function render()
     {
         $employees = $this->getEmployeesProperty();
+        $mostCommonRole = $this->getMostCommonRoleProperty();
 
         // Estadísticas para el dashboard
         $totalActive = Employee::where('is_active', true)->count();
@@ -134,7 +145,8 @@ class EmployeeTable extends Component
             'totalActive' => $totalActive,
             'totalInactive' => $totalInactive,
             'rolesDistribution' => $rolesDistribution,
-            'lastUpdated' => $lastUpdated
+            'lastUpdated' => $lastUpdated,
+            'mostCommonRole' => $mostCommonRole
         ]);
     }
 }
