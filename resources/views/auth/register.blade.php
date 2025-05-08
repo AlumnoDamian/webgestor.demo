@@ -104,6 +104,26 @@
             @enderror
         </div>
 
+        <!-- Roles -->
+        <div>
+            <x-input-label :value="__('Tipo de usuario')" class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-3" />
+            <div class="space-y-3">
+                <label class="flex items-center space-x-3">
+                    <input type="radio" name="role" value="admin" class="form-radio h-5 w-5 text-indigo-600 transition duration-150 ease-in-out cursor-pointer">
+                    <span class="text-gray-700 dark:text-gray-300">Administrador</span>
+                </label>
+                <label class="flex items-center space-x-3">
+                    <input type="radio" name="role" value="empleado" class="form-radio h-5 w-5 text-indigo-600 transition duration-150 ease-in-out cursor-pointer">
+                    <span class="text-gray-700 dark:text-gray-300">Empleado</span>
+                </label>
+            </div>
+            @error('role')
+                <p class="mt-2 text-sm text-red-600 dark:text-red-400">
+                    {{ $message }}
+                </p>
+            @enderror
+        </div>
+
         <div class="flex gap-4">
             <x-primary-button onclick="window.location.href='{{ route('login') }}'" type="button"
                 class="w-full justify-center py-3 px-4 text-base font-semibold bg-indigo-600 hover:bg-indigo-500">

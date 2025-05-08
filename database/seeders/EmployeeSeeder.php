@@ -80,226 +80,83 @@ class EmployeeSeeder extends Seeder
 
     public function run(): void
     {
-        // Primero creamos los jefes de departamento
-        $jefes = [
+        $employees = [
             [
-                'name' => 'Antonio Ramirez Garcia',
-                'email' => 'antonio.ramirez@webgestor.com',
-                'dni' => $this->generateDNI(),
+                'name' => 'Juan Pérez',
+                'email' => 'juan@webgestor.com',
+                'dni' => '12345678A',
                 'role' => 'jefe',
-                'birth_date' => '1975-03-15',
-                'phone' => $this->generatePhone(),
-                'address' => $this->generateAddress(),
-                'hire_date' => '2019-01-01',
-                'department_id' => 1,
-                'is_active' => true,
-                'password' => 'Password123!'
+                'birth_date' => '1990-05-15',
+                'phone' => '612345678',
+                'address' => 'Calle Mayor 1, Madrid',
+                'hire_date' => '2020-01-10',
+                'spatie_role' => 'admin'
             ],
             [
-                'name' => 'Beatriz Sanchez Lopez',
-                'email' => 'beatriz.sanchez@webgestor.com',
-                'dni' => $this->generateDNI(),
-                'role' => 'jefe',
-                'birth_date' => '1978-06-22',
-                'phone' => $this->generatePhone(),
-                'address' => $this->generateAddress(),
-                'hire_date' => '2019-02-01',
-                'department_id' => 2,
-                'is_active' => true,
-                'password' => 'Password123!'
+                'name' => 'María García',
+                'email' => 'maria@webgestor.com',
+                'dni' => '87654321B',
+                'role' => 'supervisor',
+                'birth_date' => '1988-09-20',
+                'phone' => '623456789',
+                'address' => 'Avenida Principal 23, Barcelona',
+                'hire_date' => '2019-11-15',
+                'spatie_role' => 'empleado'
             ],
             [
-                'name' => 'Carlos Martinez Ruiz',
-                'email' => 'carlos.martinez@webgestor.com',
-                'dni' => $this->generateDNI(),
-                'role' => 'jefe',
-                'birth_date' => '1976-09-10',
-                'phone' => $this->generatePhone(),
-                'address' => $this->generateAddress(),
-                'hire_date' => '2019-03-01',
-                'department_id' => 3,
-                'is_active' => true,
-                'password' => 'Password123!'
+                'name' => 'Carlos Rodríguez',
+                'email' => 'carlos@webgestor.com',
+                'dni' => '23456789C',
+                'role' => 'gerente',
+                'birth_date' => '1992-03-10',
+                'phone' => '634567890',
+                'address' => 'Plaza España 5, Valencia',
+                'hire_date' => '2021-02-01',
+                'spatie_role' => 'admin'
             ],
             [
-                'name' => 'Diana Lopez Torres',
-                'email' => 'diana.lopez@webgestor.com',
-                'dni' => $this->generateDNI(),
-                'role' => 'jefe',
-                'birth_date' => '1977-12-05',
-                'phone' => $this->generatePhone(),
-                'address' => $this->generateAddress(),
-                'hire_date' => '2019-04-01',
-                'department_id' => 4,
-                'is_active' => true,
-                'password' => 'Password123!'
+                'name' => 'Ana Martínez',
+                'email' => 'ana@webgestor.com',
+                'dni' => '34567890D',
+                'role' => 'recepcionista',
+                'birth_date' => '1995-11-25',
+                'phone' => '645678901',
+                'address' => 'Calle Real 45, Sevilla',
+                'hire_date' => '2022-06-20',
+                'spatie_role' => 'empleado'
             ],
             [
-                'name' => 'Eduardo Fernandez Ruiz',
-                'email' => 'eduardo.fernandez@webgestor.com',
-                'dni' => $this->generateDNI(),
-                'role' => 'jefe',
-                'birth_date' => '1974-08-20',
-                'phone' => $this->generatePhone(),
-                'address' => $this->generateAddress(),
-                'hire_date' => '2019-05-01',
-                'department_id' => 5,
-                'is_active' => true,
-                'password' => 'Password123!'
-            ],
-            [
-                'name' => 'Fernando Ruiz Silva',
-                'dni' => $this->generateDNI(),
-                'role' => 'jefe',
-                'birth_date' => '1976-07-25',
-                'phone' => $this->generatePhone(),
-                'address' => $this->generateAddress(),
-                'hire_date' => '2019-06-01',
-                'department_id' => 6,
-                'is_active' => true,
-                'password' => 'Password123!'
-            ],
-            [
-                'name' => 'Gloria Moreno Castro',
-                'dni' => $this->generateDNI(),
-                'role' => 'jefe',
-                'birth_date' => '1978-11-30',
-                'phone' => $this->generatePhone(),
-                'address' => $this->generateAddress(),
-                'hire_date' => '2019-07-01',
-                'department_id' => 7,
-                'is_active' => true,
-                'password' => 'Password123!'
-            ],
-            [
-                'name' => 'Hugo Torres Vega',
-                'dni' => $this->generateDNI(),
-                'role' => 'jefe',
-                'birth_date' => '1977-02-14',
-                'phone' => $this->generatePhone(),
-                'address' => $this->generateAddress(),
-                'hire_date' => '2019-08-01',
-                'department_id' => 8,
-                'is_active' => true,
-                'password' => 'Password123!'
-            ],
-            [
-                'name' => 'Isabel Diaz Ortiz',
-                'dni' => $this->generateDNI(),
-                'role' => 'jefe',
-                'birth_date' => '1979-05-20',
-                'phone' => $this->generatePhone(),
-                'address' => $this->generateAddress(),
-                'hire_date' => '2019-09-01',
-                'department_id' => 9,
-                'is_active' => true,
-                'password' => 'Password123!'
-            ],
-            [
-                'name' => 'Javier Castro Lopez',
-                'dni' => $this->generateDNI(),
-                'role' => 'jefe',
-                'birth_date' => '1976-08-08',
-                'phone' => $this->generatePhone(),
-                'address' => $this->generateAddress(),
-                'hire_date' => '2019-10-01',
-                'department_id' => 10,
-                'is_active' => true,
-                'password' => 'Password123!'
+                'name' => 'David López',
+                'email' => 'david@webgestor.com',
+                'dni' => '45678901E',
+                'role' => 'auxiliar administrativo',
+                'birth_date' => '1987-07-30',
+                'phone' => '656789012',
+                'address' => 'Avenida Libertad 12, Málaga',
+                'hire_date' => '2018-09-05',
+                'spatie_role' => 'empleado'
             ]
         ];
 
-        foreach ($jefes as $jefe) {
-            if (isset($jefe['email'])) {
-                $email = $jefe['email'];
-            } else {
-                $name = $jefe['name'];
-                $email = $this->generateEmail($name);
-            }
-            
+        foreach ($employees as $employeeData) {
+            // Crear usuario
             $user = User::create([
-                'name' => $jefe['name'],
-                'email' => $email,
-                'password' => Hash::make($jefe['password'])
+                'name' => $employeeData['name'],
+                'email' => $employeeData['email'],
+                'password' => Hash::make('Password123!')
             ]);
 
-            // Asignar rol de admin a los jefes
-            $user->assignRole('admin');
+            // Asignar rol de Spatie
+            $user->assignRole($employeeData['spatie_role']);
 
-            Employee::create([
-                'user_id' => $user->id,
-                'name' => $jefe['name'],
-                'email' => $email,
-                'dni' => $jefe['dni'],
-                'role' => $jefe['role'],
-                'birth_date' => $jefe['birth_date'],
-                'phone' => $jefe['phone'],
-                'address' => $jefe['address'],
-                'hire_date' => $jefe['hire_date'],
-                'department_id' => $jefe['department_id'],
-                'is_active' => $jefe['is_active']
-            ]);
+            // Asignar user_id
+            $employeeData['user_id'] = $user->id;
 
-            // Actualizar el departamento con el ID del jefe
-            Department::where('id', $jefe['department_id'])
-                     ->update(['manager_id' => Employee::where('user_id', $user->id)->first()->id]);
-        }
+            // Eliminar el campo spatie_role ya que no es parte de la tabla employees
+            unset($employeeData['spatie_role']);
 
-        // Ahora creamos empleados para cada departamento
-        $roles = ['empleado', 'supervisor', 'auxiliar', 'gerente', 'recepcionista', 'cocinero', 'camarero', 'conserje', 'limpiador', 'guardia de seguridad', 'auxiliar administrativo', 'analista'];
-        
-        $faker = Faker::create('es_ES');
-        $departments = Department::all();
-
-        foreach ($departments as $department) {
-            $numEmployees = rand(5, 15);
-            for ($i = 0; $i < $numEmployees; $i++) {
-                // Generar nombre aleatorio usando Faker con variaciones
-                $gender = $faker->randomElement(['male', 'female']);
-                
-                // Generar componentes del nombre
-                $firstName = $faker->firstName($gender);
-                $secondName = rand(1, 100) <= 30 ? $faker->firstName($gender) : ''; // 30% de probabilidad de segundo nombre
-                $lastName1 = $faker->lastName;
-                $lastName2 = rand(1, 100) <= 80 ? $faker->lastName : ''; // 80% de probabilidad de segundo apellido
-                
-                // Construir el nombre completo con diferentes formatos
-                $nameParts = array_filter([$firstName, $secondName]); // Elimina elementos vacíos
-                $lastNameParts = array_filter([$lastName1, $lastName2]); // Elimina elementos vacíos
-                
-                // Aleatorizar el orden de los nombres si hay más de uno
-                if (count($nameParts) > 1 && rand(1, 100) <= 20) { // 20% de probabilidad de cambiar orden
-                    $nameParts = array_reverse($nameParts);
-                }
-                
-                $fullName = implode(' ', array_merge($nameParts, $lastNameParts));
-                $email = $this->generateEmail($fullName);
-
-                // Crear usuario
-                $user = User::create([
-                    'name' => $fullName,
-                    'email' => $email,
-                    'password' => Hash::make('Password1234!')
-                ]);
-
-                // Asignar rol aleatorio (80% empleado, 20% admin)
-                $user->assignRole(rand(1, 100) <= 20 ? 'admin' : 'empleado');
-
-                // Crear empleado
-                Employee::create([
-                    'user_id' => $user->id,
-                    'name' => $fullName,
-                    'email' => $email,
-                    'dni' => $this->generateDNI(),
-                    'role' => $roles[array_rand($roles)],
-                    'birth_date' => $faker->dateTimeBetween('-60 years', '-20 years')->format('Y-m-d'),
-                    'phone' => $this->generatePhone(),
-                    'address' => $this->generateAddress(),
-                    'hire_date' => $faker->dateTimeBetween('-5 years', 'now')->format('Y-m-d'),
-                    'department_id' => $department->id,
-                    'is_active' => rand(1, 100) <= 80  // 20% de probabilidad de estar inactivo
-                ]);
-            }
+            // Crear empleado con todos los campos de la tabla
+            Employee::create($employeeData);
         }
     }
 }

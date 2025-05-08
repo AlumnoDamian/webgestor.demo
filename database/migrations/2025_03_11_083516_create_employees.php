@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('dni')->unique();
+            $table->string('dni')->unique()->nullable();
             $table->enum('role', ['jefe', 'empleado', 'supervisor', 'auxiliar', 'gerente', 'recepcionista', 'cocinero', 'camarero', 'conserje', 'limpiador', 'guardia de seguridad', 'auxiliar administrativo', 'analista'])->nullable();
             $table->date('birth_date')->nullable(); // Haciendo la fecha de nacimiento nullable
             $table->string('phone')->nullable();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Employee; // Agregar el modelo Employee
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -42,6 +43,8 @@ class RegisteredUserController extends Controller
             'password.required' => 'La contraseña es obligatoria.',
             'password.confirmed' => 'Las contraseñas no coinciden.',
             'password.min' => 'La contraseña debe tener al menos :min caracteres.',
+            'role.required' => 'Debes seleccionar un tipo de usuario.',
+            'role.in' => 'El tipo de usuario seleccionado no es válido.',
         ];
 
         $request->validate([
@@ -54,12 +57,34 @@ class RegisteredUserController extends Controller
                 ->symbols()
                 ->uncompromised()
             ],
+            'role' => ['required', 'string', 'in:admin,empleado'],
         ], $messages);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+        ]);
+
+        // Asignar el rol seleccionado
+        $user->assignRole($request->role);
+
+        // Generar un DNI temporal único
+        $tempDni = 'TEMP-' . str_pad($user->id, 5, '0', STR_PAD_LEFT);
+
+        // Crear el registro de empleado automáticamente
+        Employee::create([
+            'user_id' => $user->id,
+            'name' => $request->name,
+            'email' => $request->email,
+            'dni' => $tempDni,  // DNI temporal único
+            'role' => 'empleado',
+            'birth_date' => null,
+            'phone' => null,
+            'address' => null,
+            'hire_date' => now(),  // Fecha actual como fecha de contratación
+            'department_id' => null,
+            'is_active' => true
         ]);
 
         event(new Registered($user));

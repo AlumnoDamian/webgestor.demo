@@ -26,26 +26,48 @@ class StatsCards extends Component
         $hireDate = $currentEmployee ? Carbon::parse($currentEmployee->hire_date) : null;
         $birthDate = $currentEmployee ? Carbon::parse($currentEmployee->birth_date) : null;
 
+        // Preparar datos del empleado
+        $employeeData = [
+            'estado' => $currentEmployee ? ($currentEmployee->is_active ? 'Activo' : 'Inactivo') : 'N/A',
+            'edad' => $birthDate ? $birthDate->age : 'N/A',
+            'fecha_nacimiento' => $birthDate ? $birthDate->format('d/m/Y') : 'No registrada',
+            'antiguedad' => $hireDate ? $hireDate->diffForHumans() : 'N/A',
+            'fecha_inicio' => $hireDate ? $hireDate->format('d/m/Y') : 'No registrada',
+            'dias_empresa' => $hireDate ? (int)$hireDate->diffInDays(Carbon::now()) : 'N/A'
+        ];
+
         // Total de comunicados del departamento
-        $totalMemos = Memo::whereHas('department', function($query) use ($currentEmployee) {
-            $query->where('id', $currentEmployee->department_id);
-        })->count();
+        $totalMemos = 0;
+        if ($currentEmployee && $currentEmployee->department_id) {
+            $totalMemos = Memo::whereHas('department', function($query) use ($currentEmployee) {
+                $query->where('id', $currentEmployee->department_id);
+            })->count();
+        }
 
         // Total de empleados en el departamento
-        $departmentEmployees = Employee::where('department_id', $currentEmployee->department_id)->count();
+        $departmentEmployees = 0;
+        if ($currentEmployee && $currentEmployee->department_id) {
+            $departmentEmployees = Employee::where('department_id', $currentEmployee->department_id)->count();
+        }
 
         // Total de empleados activos en el departamento
-        $activeEmployees = Employee::where('department_id', $currentEmployee->department_id)
-            ->where('is_active', true)
-            ->count();
+        $activeEmployees = 0;
+        if ($currentEmployee && $currentEmployee->department_id) {
+            $activeEmployees = Employee::where('department_id', $currentEmployee->department_id)
+                ->where('is_active', true)
+                ->count();
+        }
 
         // Total de empleados por rol en el departamento
-        $roleDistribution = Employee::where('department_id', $currentEmployee->department_id)
-            ->selectRaw('role, count(*) as count')
-            ->groupBy('role')
-            ->get()
-            ->pluck('count', 'role')
-            ->toArray();
+        $roleDistribution = [];
+        if ($currentEmployee && $currentEmployee->department_id) {
+            $roleDistribution = Employee::where('department_id', $currentEmployee->department_id)
+                ->selectRaw('role, count(*) as count')
+                ->groupBy('role')
+                ->get()
+                ->pluck('count', 'role')
+                ->toArray();
+        }
 
         $totalEmployees = array_sum($roleDistribution);
         $percentages = [];
@@ -58,15 +80,7 @@ class StatsCards extends Component
 
         return view('livewire.dashboard.stats-cards', [
             'currentEmployee' => $currentEmployee,
-            'employeeData' => $currentEmployee ? [
-                'antiguedad' => $hireDate ? $hireDate->diffForHumans() : 'N/A',
-                'dias_empresa' => $hireDate ? (int)$hireDate->diffInDays(Carbon::now()) : 0,
-                'fecha_inicio' => $hireDate ? $hireDate->format('d/m/Y') : 'N/A',
-                'estado' => $currentEmployee->is_active ? 'Activo' : 'Inactivo',
-                'cargo' => ucfirst($currentEmployee->position ?? 'No especificado'),
-                'edad' => $birthDate ? $birthDate->age : 'N/A',
-                'fecha_nacimiento' => $birthDate ? $birthDate->format('d/m/Y') : 'N/A'
-            ] : null,
+            'employeeData' => $employeeData,
             'totalMemos' => $totalMemos,
             'departmentEmployees' => $departmentEmployees,
             'activeEmployees' => $activeEmployees,

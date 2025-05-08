@@ -7,7 +7,7 @@ use App\Models\Schedule;
 use App\Models\Employee;
 use App\Models\Department;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ScheduleController extends Controller
 {
@@ -62,46 +62,78 @@ class ScheduleController extends Controller
 
     public function store(Request $request)
     {
+        Log::info('Recibida solicitud de guardar horarios', [
+            'request_data' => $request->all(),
+            'department_id' => $request->input('department_id')
+        ]);
+
+        // Validar que se haya seleccionado un departamento
+        if (!$request->has('department_id')) {
+            Log::warning('Intento de guardar sin departamento seleccionado');
+            return response()->json([
+                'error' => 'Debe seleccionar un departamento.'
+            ], 422);
+        }
+
+        // Si no hay horarios para guardar, registrar y devolver mensaje
+        if (!$request->has('schedules')) {
+            Log::info('No se recibieron horarios para guardar');
+            return response()->json([
+                'message' => 'No se han realizado cambios en los horarios.'
+            ]);
+        }
+
         try {
-            $schedules = $request->input('schedules');
+            $updatedCount = 0;
+            $deletedCount = 0;
 
-            if (empty($schedules)) {
-                return response()->json([
-                    'message' => 'No se recibieron horarios para guardar'
-                ], 400);
-            }
+            // Guardar los horarios
+            foreach ($request->schedules as $employeeId => $scheduleData) {
+                Log::info("Procesando horarios para empleado ID: {$employeeId}", [
+                    'schedule_data' => $scheduleData
+                ]);
 
-            DB::beginTransaction();
-
-            // Agrupar horarios por empleado
-            $schedulesByEmployee = collect($schedules)->groupBy('employee_id');
-
-            foreach ($schedulesByEmployee as $employeeId => $employeeSchedules) {
-                // Eliminar horarios existentes para el empleado
-                Schedule::where('employee_id', $employeeId)->delete();
-
-                // Crear nuevos horarios
-                foreach ($employeeSchedules as $schedule) {
-                    Schedule::create([
-                        'employee_id' => $employeeId,
-                        'day_of_week' => $schedule['day_of_week'],
-                        'start_time' => $schedule['start_time'],
-                        'end_time' => $schedule['end_time']
-                    ]);
+                if (is_array($scheduleData)) {
+                    foreach ($scheduleData as $date => $shift) {
+                        if ($shift) {
+                            Schedule::updateOrCreate(
+                                ['employee_id' => $employeeId, 'day' => $date],
+                                ['shift' => $shift]
+                            );
+                            $updatedCount++;
+                        } else {
+                            // Si el turno está vacío, eliminar el registro si existe
+                            $deleted = Schedule::where('employee_id', $employeeId)
+                                ->where('day', $date)
+                                ->delete();
+                            if ($deleted) $deletedCount++;
+                        }
+                    }
                 }
             }
 
-            DB::commit();
-
-            return response()->json([
-                'message' => 'Horarios guardados correctamente'
+            Log::info('Horarios guardados exitosamente', [
+                'updated' => $updatedCount,
+                'deleted' => $deletedCount
             ]);
 
-        } catch (\Exception $e) {
-            DB::rollBack();
             return response()->json([
-                'message' => 'Error al guardar los horarios',
-                'error' => $e->getMessage()
+                'success' => true,
+                'message' => 'Horarios guardados correctamente.',
+                'stats' => [
+                    'updated' => $updatedCount,
+                    'deleted' => $deletedCount
+                ]
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Error al guardar horarios', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'error' => 'Error al guardar los horarios: ' . $e->getMessage()
             ], 500);
         }
     }

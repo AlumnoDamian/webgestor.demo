@@ -21,9 +21,6 @@
                             <p class="text-sm text-blue-100">Última actualización: {{ $employee->updated_at->format('d/m/Y H:i') }}</p>
                         </div>
                     </div>
-                    <button class="text-white hover:text-blue-100 transition-colors duration-200">
-                        <span class="material-symbols-outlined">edit</span>
-                    </button>
                 </div>
             </div>
 
@@ -267,41 +264,39 @@
                         Actividad y Estadísticas
                     </h3>
                 </div>
-                
                 <div class="p-6 space-y-6">
-                    <!-- Estadísticas del Departamento -->
-                    <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 shadow-inner">
-                        <h4 class="font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-3">
-                            <span class="material-symbols-outlined text-2xl text-indigo-500">groups</span>
-                            Estadísticas del Departamento
-                        </h4>
-                        <div class="grid grid-cols-3 gap-3">
-                            <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 text-center shadow-sm">
-                                <div class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 mb-2">
-                                    <span class="material-symbols-outlined text-sm text-blue-600 dark:text-blue-300">group</span>
+                    @if($employee->department_id)
+                        <!-- Estadísticas del Departamento -->
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 shadow-inner">
+                            <h4 class="font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-3">
+                                <span class="material-symbols-outlined text-2xl text-indigo-500">groups</span>
+                                Estadísticas del Departamento
+                            </h4>
+                            <div class="grid grid-cols-3 gap-3">
+                                <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 text-center shadow-sm">
+                                    <div class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 mb-2">
+                                        <span class="material-symbols-outlined text-sm text-blue-600 dark:text-blue-300">group</span>
+                                    </div>
+                                    <p class="text-lg font-bold text-blue-600 dark:text-blue-300">{{ $departmentEmployees['total'] }}</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">Total</p>
                                 </div>
-                                <p class="text-lg font-bold text-blue-600 dark:text-blue-300">{{ $departmentEmployees['total'] }}</p>
-                                <p class="text-xs text-gray-600 dark:text-gray-400">Total</p>
-                            </div>
-                            <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 text-center shadow-sm">
-                                <div class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-100 dark:bg-green-900 mb-2">
-                                    <span class="material-symbols-outlined text-sm text-green-600 dark:text-green-300">check_circle</span>
+                                <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 text-center shadow-sm">
+                                    <div class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-100 dark:bg-green-900 mb-2">
+                                        <span class="material-symbols-outlined text-sm text-green-600 dark:text-green-300">check_circle</span>
+                                    </div>
+                                    <p class="text-lg font-bold text-green-600 dark:text-green-300">{{ $departmentEmployees['active'] }}</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">Activos</p>
                                 </div>
-                                <p class="text-lg font-bold text-green-600 dark:text-green-300">{{ $departmentEmployees['active'] }}</p>
-                                <p class="text-xs text-gray-600 dark:text-gray-400">Activos</p>
-                            </div>
-                            <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 text-center shadow-sm">
-                                <div class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900 mb-2">
-                                    <span class="material-symbols-outlined text-sm text-purple-600 dark:text-purple-300">person_add</span>
+                                <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 text-center shadow-sm">
+                                    <div class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900 mb-2">
+                                        <span class="material-symbols-outlined text-sm text-purple-600 dark:text-purple-300">person_add</span>
+                                    </div>
+                                    <p class="text-lg font-bold text-purple-600 dark:text-purple-300">{{ $departmentEmployees['recentJoins'] }}</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">Nuevos</p>
                                 </div>
-                                <p class="text-lg font-bold text-purple-600 dark:text-purple-300">{{ $departmentEmployees['recentJoins'] }}</p>
-                                <p class="text-xs text-gray-600 dark:text-gray-400">Nuevos</p>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Distribución de Roles -->
-                    @if($roleDistribution)
                     <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 shadow-inner">
                         <h4 class="font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-3">
                             <span class="material-symbols-outlined text-2xl text-indigo-500">pie_chart</span>
@@ -329,77 +324,105 @@
                             @endforeach
                         </div>
                     </div>
-                    @endif
 
-                    <!-- Estadísticas de Edad -->
-                    @if(isset($ageData) && isset($ageData['departmentAverage']))
-                    <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 shadow-inner">
-                        <h4 class="font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-3">
-                            <span class="material-symbols-outlined text-2xl text-indigo-500">calendar_today</span>
-                            Estadísticas de Edad
-                        </h4>
-                        <div class="grid grid-cols-2 gap-3 mb-3">
-                            <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 text-center shadow-sm">
-                                <div class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900 mb-2">
-                                    <span class="material-symbols-outlined text-sm text-indigo-600 dark:text-indigo-300">groups</span>
+                        <!-- Estadísticas de Edad -->
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 shadow-inner">
+                            <h4 class="font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-3">
+                                <span class="material-symbols-outlined text-2xl text-indigo-500">calendar_today</span>
+                                Estadísticas de Edad
+                            </h4>
+                            <div class="grid grid-cols-2 gap-3 mb-3">
+                                <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 text-center shadow-sm">
+                                    <div class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900 mb-2">
+                                        <span class="material-symbols-outlined text-sm text-indigo-600 dark:text-indigo-300">groups</span>
+                                    </div>
+                                    <p class="text-lg font-bold text-indigo-600 dark:text-indigo-300">{{ number_format($ageData['departmentAverage'], 1) }}</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">Promedio Dept.</p>
                                 </div>
-                                <p class="text-lg font-bold text-indigo-600 dark:text-indigo-300">{{ number_format($ageData['departmentAverage'], 1) }}</p>
-                                <p class="text-xs text-gray-600 dark:text-gray-400">Promedio Dept.</p>
+                                <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 text-center shadow-sm">
+                                    <div class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900 mb-2">
+                                        <span class="material-symbols-outlined text-sm text-indigo-600 dark:text-indigo-300">person</span>
+                                    </div>
+                                    <p class="text-lg font-bold text-indigo-600 dark:text-indigo-300">{{ $ageData['employeeAge'] }}</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">Tu Edad</p>
+                                </div>
                             </div>
-                            <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 text-center shadow-sm">
-                                <div class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900 mb-2">
-                                    <span class="material-symbols-outlined text-sm text-indigo-600 dark:text-indigo-300">person</span>
+                            @if(isset($ageData['oldestAge']) && isset($ageData['youngestAge']) && $ageData['oldestAge'] > $ageData['youngestAge'])
+                            <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 shadow-sm">
+                                <div class="flex justify-between text-xs text-gray-600 dark:text-gray-400 mb-2">
+                                    <span>{{ $ageData['youngestAge'] }} años</span>
+                                    <span>{{ $ageData['oldestAge'] }} años</span>
                                 </div>
-                                <p class="text-lg font-bold text-indigo-600 dark:text-indigo-300">{{ $ageData['employeeAge'] }}</p>
-                                <p class="text-xs text-gray-600 dark:text-gray-400">Tu Edad</p>
+                                <div class="relative pt-1">
+                                    <div class="overflow-hidden h-2 text-xs flex rounded bg-indigo-200 dark:bg-indigo-900">
+                                        <div style="width:{{ (($ageData['employeeAge'] - $ageData['youngestAge']) / ($ageData['oldestAge'] - $ageData['youngestAge'])) * 100 }}%" 
+                                             class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-indigo-500">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+
+                        <!-- Comunicados del departamento -->
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 shadow-inner">
+                            <h4 class="font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-3">
+                                <span class="material-symbols-outlined text-2xl text-indigo-500">description</span>
+                                Comunicados del departamento
+                            </h4>
+                            <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 text-center shadow-sm mb-3">
+                                <div class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-yellow-100 dark:bg-yellow-900 mb-2">
+                                    <span class="material-symbols-outlined text-sm text-yellow-600 dark:text-yellow-300">folder</span>
+                                </div>
+                                <p class="text-lg font-bold text-yellow-600 dark:text-yellow-300">{{ $memoStats['total'] }}</p>
+                                <p class="text-xs text-gray-600 dark:text-gray-400">Total de comunicados</p>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3">
+                                @foreach($memoStats['byType'] as $type => $count)
+                                <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 text-center shadow-sm">
+                                    <p class="text-lg font-bold 
+                                        {{ $type === 'Importante' ? 'text-red-600 dark:text-red-300' : 
+                                           ($type === 'Informativo' ? 'text-blue-600 dark:text-blue-300' : 
+                                           'text-yellow-600 dark:text-yellow-300') }}">
+                                        {{ $count }}
+                                    </p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">{{ $type }}</p>
+                                </div>
+                                @endforeach
                             </div>
                         </div>
-                        @if(isset($ageData['oldestAge']) && isset($ageData['youngestAge']) && $ageData['oldestAge'] > $ageData['youngestAge'])
-                        <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 shadow-sm">
-                            <div class="flex justify-between text-xs text-gray-600 dark:text-gray-400 mb-2">
-                                <span>{{ $ageData['youngestAge'] }} años</span>
-                                <span>{{ $ageData['oldestAge'] }} años</span>
+                    @else
+                        <div class="flex flex-col items-center justify-center py-12 px-4">
+                            <!-- Icono y título -->
+                            <div class="bg-yellow-50 dark:bg-yellow-900/30 rounded-full p-6 mb-6">
+                                <svg class="w-16 h-16 text-yellow-500 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                </svg>
                             </div>
-                            <div class="relative pt-1">
-                                <div class="overflow-hidden h-2 text-xs flex rounded bg-indigo-200 dark:bg-indigo-900">
-                                    <div style="width:{{ (($ageData['employeeAge'] - $ageData['youngestAge']) / ($ageData['oldestAge'] - $ageData['youngestAge'])) * 100 }}%" 
-                                         class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-indigo-500">
+                            
+                            <!-- Contenido -->
+                            <div class="text-center max-w-lg">
+                                <h3 class="text-2xl font-bold text-yellow-600 dark:text-yellow-400 mb-4">
+                                    Sin departamento asignado
+                                </h3>
+                                <div class="bg-yellow-50 dark:bg-yellow-900/30 rounded-xl p-6 border border-yellow-200 dark:border-yellow-800/50">
+                                    <p class="text-gray-700 dark:text-gray-300 text-lg mb-4 leading-relaxed">
+                                        No se pueden mostrar las estadísticas y actividades en este momento
+                                    </p>
+                                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                                        Para acceder a las estadísticas del departamento, comunicados y otra información relevante, necesitas estar asignado a un departamento.
+                                    </p>
+                                    
+                                    <!-- Botón de acción -->
+                                    <div class="mt-6">
+                                        <button class="inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors duration-200 group">
+                                            <span class="material-symbols-outlined mr-2 group-hover:scale-110 transition-transform duration-200">support_agent</span>
+                                            Contactar con RRHH
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        @endif
-                    </div>
-                    @endif
-
-                    <!-- Estadísticas de Memos -->
-                    @if($memoStats['total'] > 0)
-                    <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 shadow-inner">
-                        <h4 class="font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-3">
-                            <span class="material-symbols-outlined text-2xl text-indigo-500">description</span>
-                            Comunicados del departamento
-                        </h4>
-                        <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 text-center shadow-sm mb-3">
-                            <div class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-yellow-100 dark:bg-yellow-900 mb-2">
-                                <span class="material-symbols-outlined text-sm text-yellow-600 dark:text-yellow-300">folder</span>
-                            </div>
-                            <p class="text-lg font-bold text-yellow-600 dark:text-yellow-300">{{ $memoStats['total'] }}</p>
-                            <p class="text-xs text-gray-600 dark:text-gray-400">Total de comunicados</p>
-                        </div>
-                        <div class="grid grid-cols-3 gap-3">
-                            @foreach($memoStats['byType'] as $type => $count)
-                            <div class="bg-white dark:bg-gray-600 rounded-lg px-3 py-2 text-center shadow-sm">
-                                <p class="text-lg font-bold 
-                                    {{ $type === 'Importante' ? 'text-red-600 dark:text-red-300' : 
-                                       ($type === 'Informativo' ? 'text-blue-600 dark:text-blue-300' : 
-                                       'text-yellow-600 dark:text-yellow-300') }}">
-                                    {{ $count }}
-                                </p>
-                                <p class="text-xs text-gray-600 dark:text-gray-400">{{ $type }}</p>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
                     @endif
                 </div>
             </div>

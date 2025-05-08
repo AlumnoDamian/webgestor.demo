@@ -14,13 +14,17 @@ class Announcements extends Component
         $user = Auth::user();
         $employee = $user->employee;
         
-        $memos = Memo::with('department')
-            ->whereHas('department', function($query) use ($employee) {
-                $query->where('id', $employee->department_id);
-            })
-            ->orderBy('published_at', 'desc')
-            ->get();
-
+        $memos = collect();  // Inicializar como colección vacía
+        
+        if ($employee && $employee->department_id) {
+            $memos = Memo::with('department')
+                ->whereHas('department', function($query) use ($employee) {
+                    $query->where('id', $employee->department_id);
+                })
+                ->orderBy('published_at', 'desc')
+                ->get();
+        }
+ 
         return view('livewire.dashboard.announcements', [
             'memos' => $memos
         ]);

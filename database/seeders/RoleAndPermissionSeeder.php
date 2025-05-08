@@ -19,7 +19,10 @@ class RoleAndPermissionSeeder extends Seeder
             'ver_cuadrante',
             'ver_botones_tabla',
             'ver_comunicados',
-            'gestionar_todo'
+            'gestionar_todo',
+            'ver_perfil',
+            'ver_horarios',
+            'ver_ficha'
         ];
 
         foreach ($permissions as $permission) {
@@ -30,7 +33,11 @@ class RoleAndPermissionSeeder extends Seeder
         $adminRole->givePermissionTo(Permission::all());
 
         // Asignar permisos limitados al rol empleado
-        // El empleado no tendrá acceso a 'ver_cuadrante', 'ver_botones_tabla', ni 'ver_comunicados'
-        // No asignamos ningún permiso específico al empleado por ahora
+        $empleadoRole->givePermissionTo([
+            'ver_perfil',
+            'ver_horarios',
+            'ver_comunicados',
+            'ver_ficha'
+        ]);
     }
 }

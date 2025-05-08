@@ -68,13 +68,10 @@
             </a>
             @endcan
 
-            @if(auth()->user()->employee)
-                <a href="{{ route('cuadrante.view') }}" class="flex items-center px-4 py-2.5 {{ request()->routeIs('cuadrante.view') ? 'bg-white/15 text-white' : 'text-white/80 hover:text-white hover:bg-white/10' }} rounded-lg group transition duration-150 ease-in-out">
-                    <span class="material-symbols-outlined w-8">schedule</span>
-                    <span class="font-bold">Ver Horarios</span>
-                </a>
-            @endif
-            
+            <a href="{{ route('cuadrante.view') }}" class="flex items-center px-4 py-2.5 {{ request()->routeIs('cuadrante.view') ? 'bg-white/15 text-white' : 'text-white/80 hover:text-white hover:bg-white/10' }} rounded-lg group transition duration-150 ease-in-out">
+                <span class="material-symbols-outlined w-8">schedule</span>
+                <span class="font-bold">Ver Horarios</span>
+            </a>
         </nav>
 
         <!-- Footer del Sidebar -->
