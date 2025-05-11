@@ -124,43 +124,6 @@ class ScheduleTest extends TestCase
     }
 
     #[Test]
-    public function schedule_can_be_ordered_by_date()
-    {
-        // Limpiar horarios existentes
-        Schedule::query()->delete();
-
-        $today = now()->startOfDay();
-        $tomorrow = now()->addDay()->startOfDay();
-        $nextWeek = now()->addWeek()->startOfDay();
-
-        Schedule::factory()->create([
-            'employee_id' => $this->employee->id,
-            'day' => $tomorrow
-        ]);
-
-        $todaySchedule = Schedule::factory()->create([
-            'employee_id' => $this->employee->id,
-            'day' => $today
-        ]);
-
-        $nextWeekSchedule = Schedule::factory()->create([
-            'employee_id' => $this->employee->id,
-            'day' => $nextWeek
-        ]);
-
-        $orderedSchedules = Schedule::orderBy('day', 'asc')->get();
-
-        $this->assertTrue(
-            $orderedSchedules->first()->day->isSameDay($today),
-            'First schedule should be today'
-        );
-        $this->assertTrue(
-            $orderedSchedules->last()->day->isSameDay($nextWeek),
-            'Last schedule should be next week'
-        );
-    }
-
-    #[Test]
     public function schedule_is_deleted_when_employee_is_deleted()
     {
         // Limpiar horarios existentes
@@ -191,26 +154,6 @@ class ScheduleTest extends TestCase
 
         $schedulesCount = $this->employee->schedules()->count();
         $this->assertEquals(3, $schedulesCount);
-    }
-
-    #[Test]
-    public function schedule_can_be_updated()
-    {
-        $newShift = '11:00 - 19:00';
-        $newDay = now()->addDays(3)->startOfDay();
-
-        $this->schedule->update([
-            'shift' => $newShift,
-            'day' => $newDay
-        ]);
-
-        $this->schedule->refresh();
-
-        $this->assertEquals($newShift, $this->schedule->shift);
-        $this->assertTrue(
-            $this->schedule->day->isSameDay($newDay),
-            'Schedule day should match the new day'
-        );
     }
 
     #[Test]

@@ -71,8 +71,18 @@ EXIT;
 ### 🔧 Clonar el repositorio de GitHub
 ```bash
 cd /var/www/html
-git clone https://github.com/AlumnoDamian/webgestor.demo.git
+sudo git clone https://github.com/AlumnoDamian/webgestor.demo.git
 cd webgestor.demo
+```
+
+### 📌 Permitir que Git trabajae con ese directorio
+```bash
+git config --global --add safe.directory /var/www/html/webgestor.demo
+```
+
+### 🛠 Establecer permisos (Linux)
+```bash
+sudo chown -R $USER:$USER /var/www/html/webgestor.demo
 ```
 
 ### 📌 Instalar dependencias del proyecto
@@ -101,29 +111,23 @@ DB_PASSWORD=Password*1234!
 php artisan key:generate
 ```
 
-### 🛠 Establecer permisos (Linux)
+### 📦 Descargar NPM
 ```bash
-sudo chown -R $USER:$USER /var/www/html/webgestor.demo
+sudo apt install npm
+npm install
+npm run build
+```
+
+### 🌱 🧱 Ejecutar migraciones y seeders
+```bash
+php artisan db:wipe (Para borrar todas las migraciones)
+php artisan migrate
+php artisan db:seed
 ```
 
 ### 🌐 Levantar el servidor integrado de Laravel
 ```bash
 php artisan serve
-```
-
-### 📦 Instalación de paquetes útiles (OBLIGATORIO)
-```bash
-npm install flatpickr
-composer require spatie/laravel-permission
-npm install @tailwindcss/postcss --save-dev
-composer require livewire/livewire
-```
-
-### 🌱 🧱 Ejecutar migraciones y seeders
-```bash
-php artisan db:wipe
-php artisan migrate
-php artisan db:seed
 ```
 
 ---

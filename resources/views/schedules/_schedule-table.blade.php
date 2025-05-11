@@ -99,17 +99,23 @@
                                                                     transition-all duration-200
                                                                     {{ $isPastDay ? 'text-gray-300' : '' }}
                                                                     {{ \Carbon\Carbon::parse($date)->isToday() ? 'border-blue-500 ring-2 ring-blue-200' : '' }}">
-                                                <option value="">Sin turno asignado</option>
-                                                <option value="MT" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'MT' ? 'selected' : '' }}>MT</option>
-                                                <option value="TT" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'TT' ? 'selected' : '' }}>TT</option>
-                                                <option value="NT" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'NT' ? 'selected' : '' }}>NT</option>
-                                                <option value="VC" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'VC' ? 'selected' : '' }}>VC</option>
-                                                <option value="BM" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'BM' ? 'selected' : '' }}>BM</option>
-                                                <option value="PM" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'PM' ? 'selected' : '' }}>PM</option>
-                                                <option value="FM" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'FM' ? 'selected' : '' }}>FM</option>
-                                                <option value="FT" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'FT' ? 'selected' : '' }}>FT</option>
-                                                <option value="AP" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'AP' ? 'selected' : '' }}>AP</option>
-                                                <option value="DL" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'DL' ? 'selected' : '' }}>DL</option>
+                                                                    <option value="">--</option>
+                                                @php
+                                                    $dayDate = $day['date'];
+                                                    $schedule = $schedules->first(function($s) use ($employee, $dayDate) {
+                                                        return $s->employee_id == $employee->id && $s->day === $dayDate;
+                                                    });
+                                                @endphp
+                                                <option value="MT" {{ $schedule && $schedule->shift === 'MT' && !$isPastDay ? 'selected' : '' }}>MT</option>
+                                                <option value="TT" {{ $schedule && $schedule->shift === 'TT' && !$isPastDay ? 'selected' : '' }}>TT</option>
+                                                <option value="NT" {{ $schedule && $schedule->shift === 'NT' && !$isPastDay ? 'selected' : '' }}>NT</option>
+                                                <option value="VC" {{ $schedule && $schedule->shift === 'VC' && !$isPastDay ? 'selected' : '' }}>VC</option>
+                                                <option value="BM" {{ $schedule && $schedule->shift === 'BM' && !$isPastDay ? 'selected' : '' }}>BM</option>
+                                                <option value="PM" {{ $schedule && $schedule->shift === 'PM' && !$isPastDay ? 'selected' : '' }}>PM</option>
+                                                <option value="FM" {{ $schedule && $schedule->shift === 'FM' && !$isPastDay ? 'selected' : '' }}>FM</option>
+                                                <option value="FT" {{ $schedule && $schedule->shift === 'FT' && !$isPastDay ? 'selected' : '' }}>FT</option>
+                                                <option value="AP" {{ $schedule && $schedule->shift === 'AP' && !$isPastDay ? 'selected' : '' }}>AP</option>
+                                                <option value="DL" {{ $schedule && $schedule->shift === 'DL' && !$isPastDay ? 'selected' : '' }}>DL</option>
                                             </select>
                                             </div>
                                     </td>

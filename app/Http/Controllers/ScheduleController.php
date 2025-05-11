@@ -50,6 +50,7 @@ class ScheduleController extends Controller
         }
 
         $employees = $department->employees;
+        // Obtener los horarios
         $schedules = Schedule::whereIn('employee_id', $employees->pluck('id'))->get();
         
         return view('schedules.index', [
@@ -67,20 +68,24 @@ class ScheduleController extends Controller
 
             // Guardar los horarios
             foreach ($request->schedules as $employeeId => $scheduleData) {
+                
                 if (is_array($scheduleData)) {
                     foreach ($scheduleData as $date => $shift) {
+                        
                         if ($shift) {
-                            Schedule::updateOrCreate(
-                                ['employee_id' => $employeeId, 'day' => $date],
+                            $schedule = Schedule::updateOrCreate(
+                                ['employee_id' => $employeeId, 'day' => Carbon::parse($date)->format('Y-m-d')],
                                 ['shift' => $shift]
                             );
                             $updatedCount++;
                         } else {
                             // Si el turno está vacío, eliminar el registro si existe
                             $deleted = Schedule::where('employee_id', $employeeId)
-                                ->where('day', $date)
+                                ->where('day', Carbon::parse($date)->format('Y-m-d'))
                                 ->delete();
-                            if ($deleted) $deletedCount++;
+                            if ($deleted) {
+                                $deletedCount++;
+                            }
                         }
                     }
                 }

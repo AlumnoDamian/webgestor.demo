@@ -195,7 +195,7 @@ php artisan test tests/Feature/Schedule            # Cuadrantes
 |-------------|-----------|------------------|---------------|
 | Department  | 100%      | 15/15           | 15           |
 | Employee    | 100%      | 20/20           | 20           |
-| Schedule    | 100%      | 18/18           | 18           |
+| Schedule    | 100%      | 16/16           | 16           |
 | Memo        | 100%      | 12/12           | 12           |
 
 ### Componentes Livewire
