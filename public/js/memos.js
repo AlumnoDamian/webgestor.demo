@@ -26,32 +26,26 @@ function closeModal() {
     document.body.classList.remove('overflow-hidden');
 }
 
-function editMemo(id) {
-    fetch(`/memos/${id}/edit`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('form_method').value = 'PUT';
-            document.getElementById('memo_id').value = data.id;
-            document.getElementById('title').value = data.title;
-            document.getElementById('content').value = data.content;
-            document.getElementById('type').value = data.type;
-            document.getElementById('department_id').value = data.department_id;
-            document.getElementById('published_at').value = data.published_at;
-            document.getElementById('modalTitle').textContent = 'Editar Comunicado';
-            
-            openModal(id);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            // Mostrar mensaje de error
-            const toast = document.createElement('div');
-            toast.className = 'fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg';
-            toast.textContent = 'Error al cargar el comunicado';
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        });
+function openEditModal(id, title, type, content, department_id, published_at) {
+    document.getElementById('memo_id').value = id;
+    document.getElementById('modalTitle').textContent = 'Editar Comunicado';
+    document.getElementById('title').value = title;
+    document.getElementById('type').value = type;
+    document.getElementById('content').value = content;
+    document.getElementById('department_id').value = department_id;
+    
+    // Ocultar y quitar requerido del campo de fecha
+    document.getElementById('published_at_field').style.display = 'none';
+    document.getElementById('published_at').required = false;
+    
+    document.getElementById('form_method').value = 'PUT';
+    document.getElementById('memoForm').action = `/memos/${id}`;
+    
+    document.getElementById('submitButton').textContent = 'Actualizar Comunicado';
+    
+    document.getElementById('memoModal').classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
 }
-
 function deleteMemo(id) {
     if (confirm('¿Está seguro de que desea eliminar este comunicado?')) {
         const form = document.createElement('form');

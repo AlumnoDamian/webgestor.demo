@@ -1,25 +1,42 @@
-# Fase de análisis del proyecto
-[Enlace a la fase de análisis](https://docs.google.com/document/d/1GkexEH7eRECTtTPw5ov1jCAnPJO-yGoMe0A2pKMoVUo/edit?usp=sharing)
+# 🏢 Webgestor - Sistema de Gestión Empresarial
 
-# Fase de diseño
+<div align="center">
 
-## Diagrama de clases
-[Ver diagrama de clases](x_documentacion/diagrama_de_clases.jpeg)
+![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-## Diagrama Entidad-Relación
-[Ver diagrama de entidad-relación](x_documentacion/database_diagrams.md)
+</div>
 
-## Estructura de nuestra BBDD
-[Ver estructura de la BBDD](x_documentacion/mysql-schema.sql)
+## 📑 Tabla de Contenidos
 
-## Diseño base de la página
-[Enlace al mockup](https://miro.com/welcomeonboard/cjVzUzlMcHR4NnF3SWxUL3lKbk91V2NjU0FwSEdtNmNMYWNJTlNybkNMQjUzSjdyNHk3Nm9vblcxNjJ1ZE5aU1RiNk1kWnYrNyszem01c2RwenpZdzR2UXZveU5jS2JPbjdXbFZieGRkYXk2SUZaenZmQnRqbWFUREJpdkNLZHpNakdSWkpBejJWRjJhRnhhb1UwcS9BPT0hdjE=?share_link_id=256490327332)
+- [📋 Documentación del Proyecto](#-documentación-del-proyecto)
+- [✨ Características](#-características)
+- [🚀 Guía de Instalación](#-guía-de-instalación)
+  - [🐧 Linux](#-linux)
+  - [🪟 Windows](#-windows)
+- [🔧 Configuración](#-configuración)
+- [📝 Documentación de Pruebas](#-documentación-de-pruebas)
 
-## Documentación de pruebas
-[Ver documentación de pruebas](x_documentacion/testing.md)
+## 📋 Documentación del Proyecto
 
-# Video de youtube
-[Ver video de youtube](https://www.youtube.com/watch?v=1BjsWZuWhDA)
+- [📊 Fase de Análisis](https://docs.google.com/document/d/1GkexEH7eRECTtTPw5ov1jCAnPJO-yGoMe0A2pKMoVUo/edit?usp=sharing)
+- [📐 Diagrama de Clases](x_documentacion/diagrama_de_clases.jpeg)
+- [🗄️ Diagrama Entidad-Relación](x_documentacion/database_diagrams.md)
+- [💾 Estructura de la BBDD](x_documentacion/mysql-schema.sql)
+- [🎨 Mockup del Diseño](https://miro.com/welcomeonboard/cjVzUzlMcHR4NnF3SWxUL3lKbk91V2NjU0FwSEdtNmNMYWNJTlNybkNMQjUzSjdyNHk3Nm9vblcxNjJ1ZE5aU1RiNk1kWnYrNyszem01c2RwenpZdzR2UXZveU5jS2JPbjdXbFZieGRkYXk2SUZaenZmQnRqbWFUREJpdkNLZHpNakdSWkpBejJWRjJhRnhhb1UwcS9BPT0hdjE=?share_link_id=256490327332)
+- [🎥 Video Demo](https://www.youtube.com/watch?v=1BjsWZuWhDA)
+
+## ✨ Características
+
+- 👥 Gestión de empleados y departamentos
+- 📅 Sistema de horarios y turnos
+- 📝 Gestión de memorandos
+- 🔐 Sistema de roles y permisos
+- 🎨 Interfaz moderna con Tailwind CSS
+- 📱 Diseño responsive
+
 # 🚀 Guía de instalación y configuración de Webgestor
 
 ## Versión LINUX
