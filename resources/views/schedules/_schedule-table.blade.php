@@ -99,37 +99,17 @@
                                                                     transition-all duration-200
                                                                     {{ $isPastDay ? 'text-gray-300' : '' }}
                                                                     {{ \Carbon\Carbon::parse($date)->isToday() ? 'border-blue-500 ring-2 ring-blue-200' : '' }}">
-                                                <option value="">--</option>
-                                                <option value="MT" {{ $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first() && $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first()->shift == "MT" && !$isPastDay ? 'selected' : '' }}>
-                                                    MT
-                                                </option>
-                                                <option value="TT" {{ $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first() && $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first()->shift == "TT" && !$isPastDay ? 'selected' : '' }}>
-                                                    TT
-                                                </option>
-                                                <option value="NT" {{ $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first() && $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first()->shift == "NT" && !$isPastDay ? 'selected' : '' }}>
-                                                    NT
-                                                </option>
-                                                <option value="VC" {{ $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first() && $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first()->shift == "VC" && !$isPastDay ? 'selected' : '' }}>
-                                                    VC
-                                                </option>
-                                                <option value="BM" {{ $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first() && $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first()->shift == "BM" && !$isPastDay ? 'selected' : '' }}>
-                                                    BM
-                                                </option>
-                                                <option value="PM" {{ $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first() && $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first()->shift == "PM" && !$isPastDay ? 'selected' : '' }}>
-                                                    PM
-                                                </option>
-                                                <option value="FM" {{ $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first() && $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first()->shift == "FM" && !$isPastDay ? 'selected' : '' }}>
-                                                    FM
-                                                </option>
-                                                <option value="FT" {{ $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first() && $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first()->shift == "FT" && !$isPastDay ? 'selected' : '' }}>
-                                                    FT
-                                                </option>
-                                                <option value="AP" {{ $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first() && $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first()->shift == "AP" && !$isPastDay ? 'selected' : '' }}>
-                                                    AP
-                                                </option>
-                                                <option value="DL" {{ $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first() && $schedules->where('employee_id', $employee->id)->where('day', $day['date'])->first()->shift == "DL" && !$isPastDay ? 'selected' : '' }}>
-                                                    DL
-                                                </option>
+                                                <option value="">Sin turno asignado</option>
+                                                <option value="MT" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'MT' ? 'selected' : '' }}>MT</option>
+                                                <option value="TT" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'TT' ? 'selected' : '' }}>TT</option>
+                                                <option value="NT" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'NT' ? 'selected' : '' }}>NT</option>
+                                                <option value="VC" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'VC' ? 'selected' : '' }}>VC</option>
+                                                <option value="BM" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'BM' ? 'selected' : '' }}>BM</option>
+                                                <option value="PM" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'PM' ? 'selected' : '' }}>PM</option>
+                                                <option value="FM" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'FM' ? 'selected' : '' }}>FM</option>
+                                                <option value="FT" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'FT' ? 'selected' : '' }}>FT</option>
+                                                <option value="AP" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'AP' ? 'selected' : '' }}>AP</option>
+                                                <option value="DL" {{ isset($schedules[$employee->id][$day['date']]) && $schedules[$employee->id][$day['date']] == 'DL' ? 'selected' : '' }}>DL</option>
                                             </select>
                                             </div>
                                     </td>

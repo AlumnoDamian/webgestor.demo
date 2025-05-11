@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Memo;
 use App\Models\Department;
 use Illuminate\Support\Carbon;
@@ -20,54 +21,84 @@ class MemoController extends Controller
     }
 
     public function store(Request $request) {
-        try {
-            $validatedData = $request->validate([
-                'title' => 'required|string|max:255',
-                'content' => 'required|string',
-                'department_id' => 'required|exists:departments,id',
-                'priority' => 'required|in:low,medium,high',
-                'status' => 'required|in:draft,published'
-            ]);
+       
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'department_id' => 'required|exists:departments,id',
+            'type' => 'required|in:Importante,Informativo,Urgente',
+            'published_at' => 'required|date'
+        ]);
 
-            $memo = Memo::create($validatedData);
+        $memo = Memo::create($validatedData);
 
+        if ($request->ajax()) {
             return response()->json([
+                'success' => true,
                 'message' => 'Comunicado creado correctamente',
                 'memo' => $memo
             ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error al crear el comunicado',
-                'error' => $e->getMessage()
-            ], 500);
         }
+
+        return redirect()->route('memos.index')->with('success', 'Comunicado creado correctamente');
+    }
+
+    public function edit($id)
+    {
+        $memo = Memo::findOrFail($id);
+        
+        if (request()->ajax()) {
+            return response()->json([
+                'id' => $memo->id,
+                'title' => $memo->title,
+                'content' => $memo->content,
+                'type' => $memo->type,
+                'department_id' => $memo->department_id,
+                'published_at' => $memo->published_at
+            ]);
+        }
+
+        $departments = Department::all();
+        return view('memos.edit', compact('memo', 'departments'));
     }
 
     public function update(Request $request, $id) {
-        try {
-            $memo = Memo::findOrFail($id);
+        
+        $memo = Memo::findOrFail($id);
 
-            $validatedData = $request->validate([
-                'title' => 'required|string|max:255',
-                'content' => 'required|string',
-                'department_id' => 'required|exists:departments,id',
-                'priority' => 'required|in:low,medium,high',
-                'status' => 'required|in:draft,published'
-            ]);
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'department_id' => 'required|exists:departments,id',
+            'type' => 'required|in:Importante,Informativo,Urgente',
+            'published_at' => 'required|date'
+        ]);
 
-            $memo->update($validatedData);
+        $memo->update($validatedData);
 
+        if ($request->ajax()) {
             return response()->json([
+                'success' => true,
                 'message' => 'Comunicado actualizado correctamente',
                 'memo' => $memo
             ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error al actualizar el comunicado',
-                'error' => $e->getMessage()
-            ], 500);
         }
+
+        return redirect()->route('memos.index')->with('success', 'Comunicado actualizado correctamente');
+    }
+
+    public function destroy($id)
+    {
+        $memo = Memo::findOrFail($id);
+        $memo->delete();
+
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Comunicado eliminado correctamente'
+            ]);
+        }
+
+        return redirect()->route('memos.index')->with('success', 'Comunicado eliminado correctamente');
     }
 }

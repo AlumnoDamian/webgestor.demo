@@ -78,13 +78,31 @@ class StatsCards extends Component
             }
         }
 
+        // Calculate age data
+        $ageData = ['departmentAverage' => 0, 'employeeAge' => 0];
+        if ($currentEmployee && $currentEmployee->department_id) {
+            // Get employee age
+            $ageData['employeeAge'] = $birthDate ? $birthDate->age : 0;
+            
+            // Calculate department average age
+            $departmentAges = Employee::where('department_id', $currentEmployee->department_id)
+                ->whereNotNull('birth_date')
+                ->get()
+                ->map(function ($employee) {
+                    return Carbon::parse($employee->birth_date)->age;
+                });
+            
+            $ageData['departmentAverage'] = $departmentAges->count() > 0 ? $departmentAges->average() : 0;
+        }
+
         return view('livewire.dashboard.stats-cards', [
             'currentEmployee' => $currentEmployee,
             'employeeData' => $employeeData,
             'totalMemos' => $totalMemos,
             'departmentEmployees' => $departmentEmployees,
             'activeEmployees' => $activeEmployees,
-            'percentages' => $percentages
+            'percentages' => $percentages,
+            'ageData' => $ageData
         ]);
     }
 }

@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Employee extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -49,5 +52,20 @@ class Employee extends Model
     {
         return $query->where('role', 'jefe');
     }
-    
+
+    // Relación con horarios
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(Schedule::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Cuando se elimina un empleado, se eliminan sus horarios
+        static::deleting(function ($employee) {
+            $employee->schedules()->delete();
+        });
+    }
 }

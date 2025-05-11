@@ -84,9 +84,9 @@ class EmployeeTable extends Component
                 // Eliminar el empleado
                 $this->employeeToDelete->delete();
                 
-                session()->flash('success', 'Empleado eliminado correctamente.');
+                $this->dispatch('notify', type: 'success', message: 'Empleado eliminado correctamente.');
             } catch (\Exception $e) {
-                session()->flash('error', 'Error al eliminar el empleado.');
+                $this->dispatch('notify', type: 'error', message: 'Error al eliminar el empleado.');
             }
         }
         
@@ -123,7 +123,7 @@ class EmployeeTable extends Component
         return Employee::query()
             ->with(['user.roles'])  // Eager loading de la relación user y roles
             ->when($this->showOnlyActive, function ($query) {
-                $query->where('status', true);
+                $query->where('is_active', true);
             })
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);

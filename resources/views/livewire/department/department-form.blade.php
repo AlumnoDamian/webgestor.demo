@@ -13,12 +13,13 @@
                             Código del Departamento <span class="text-red-600">*</span>
                         </label>
                         <div class="mt-2">
-                            <input type="text" wire:model="code" id="code" 
-                                class="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('code') ring-red-600 @enderror" 
+                            <input type="text" wire:model.live="code" id="code" 
+                                class="block w-full rounded-md border-0 p-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('code') ring-red-600 @enderror" 
                                 placeholder="Código del departamento">
-                            <div class="absolute inset-0 rounded-lg shadow-sm pointer-events-none transition-all duration-200 group-focus-within:shadow-md group-focus-within:shadow-indigo-500/20"></div>
                         </div>
-                        @error('code') <span class="text-red-600 text-sm mt-1 block">{{ $message }}</span> @enderror
+                        @error('code')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="md:col-span-9 group">
@@ -26,12 +27,13 @@
                             Nombre del Departamento <span class="text-red-600">*</span>
                         </label>
                         <div class="mt-2">
-                            <input type="text" wire:model="name" id="name" 
-                                class="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('name') ring-red-600 @enderror" 
+                            <input type="text" wire:model.live="name" id="name" 
+                                class="block w-full rounded-md border-0 p-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('name') ring-red-600 @enderror" 
                                 placeholder="Nombre del departamento">
-                            <div class="absolute inset-0 rounded-lg shadow-sm pointer-events-none transition-all duration-200 group-focus-within:shadow-md group-focus-within:shadow-indigo-500/20"></div>
                         </div>
-                        @error('name') <span class="text-red-600 text-sm mt-1 block">{{ $message }}</span> @enderror
+                        @error('name')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <!-- Estado en la segunda fila -->
@@ -64,13 +66,12 @@
                         </label>
                         <div class="mt-2">
                             <select wire:model="manager_id" id="manager_id" 
-                                class="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('manager_id') ring-red-600 @enderror">
+                                class="block w-full rounded-md border-0 p-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('manager_id') ring-red-600 @enderror">
                                 <option value="">Seleccionar Jefe</option>
                                 @foreach($managers as $manager)
                                     <option value="{{ $manager->id }}">{{ $manager->name }}</option>
                                 @endforeach
                             </select>
-                            <div class="absolute inset-0 rounded-lg shadow-sm pointer-events-none transition-all duration-200 group-focus-within:shadow-md group-focus-within:shadow-indigo-500/20"></div>
                         </div>
                         @error('manager_id') <span class="text-red-600 text-sm mt-1 block">{{ $message }}</span> @enderror
                     </div>
@@ -80,10 +81,9 @@
                             Presupuesto
                         </label>
                         <div class="mt-2">
-                            <input type="number" wire:model="budget" id="budget" step="0.01" 
-                                class="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('budget') ring-red-600 @enderror" 
+                            <input type="number" wire:model.live="budget" id="budget" step="0.01" 
+                                class="block w-full rounded-md border-0 p-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('budget') ring-red-600 @enderror" 
                                 placeholder="0.00">
-                            <div class="absolute inset-0 rounded-lg shadow-sm pointer-events-none transition-all duration-200 group-focus-within:shadow-md group-focus-within:shadow-indigo-500/20"></div>
                         </div>
                         @error('budget') <span class="text-red-600 text-sm mt-1 block">{{ $message }}</span> @enderror
                     </div>
@@ -94,23 +94,21 @@
                             Teléfono
                         </label>
                         <div class="mt-2">
-                            <input type="tel" wire:model="phone" id="phone" 
-                                class="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('phone') ring-red-600 @enderror" 
+                            <input type="tel" wire:model.live="phone" id="phone" 
+                                class="block w-full rounded-md border-0 p-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('phone') ring-red-600 @enderror" 
                                 placeholder="123456789">
-                            <div class="absolute inset-0 rounded-lg shadow-sm pointer-events-none transition-all duration-200 group-focus-within:shadow-md group-focus-within:shadow-indigo-500/20"></div>
                         </div>
                         @error('phone') <span class="text-red-600 text-sm mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="md:col-span-6 group">
                         <label for="email" class="block text-sm font-medium leading-6 text-gray-900">
-                            Email del Departamento <span class="text-red-600">*</span>
+                            Email del Departamento
                         </label>
                         <div class="mt-2">
-                            <input type="email" wire:model="email" id="email" 
-                                class="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('email') ring-red-600 @enderror" 
+                            <input type="email" wire:model.live="email" id="email" 
+                                class="block w-full rounded-md border-0 p-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('email') ring-red-600 @enderror" 
                                 placeholder="departamento@ejemplo.com">
-                            <div class="absolute inset-0 rounded-lg shadow-sm pointer-events-none transition-all duration-200 group-focus-within:shadow-md group-focus-within:shadow-indigo-500/20"></div>
                         </div>
                         @error('email') <span class="text-red-600 text-sm mt-1 block">{{ $message }}</span> @enderror
                     </div>
@@ -127,10 +125,9 @@
                         Descripción
                     </label>
                     <div class="mt-2">
-                        <textarea wire:model="description" id="description" rows="4" 
-                            class="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('description') ring-red-600 @enderror"
+                        <textarea wire:model.live="description" id="description" rows="4" 
+                            class="block w-full rounded-md border-0 p-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('description') ring-red-600 @enderror"
                             placeholder="Describe las funciones y objetivos del departamento..."></textarea>
-                        <div class="absolute inset-0 rounded-lg shadow-sm pointer-events-none transition-all duration-200 group-focus-within:shadow-md group-focus-within:shadow-indigo-500/20"></div>
                     </div>
                     @error('description') <span class="text-red-600 text-sm mt-1 block">{{ $message }}</span> @enderror
                 </div>

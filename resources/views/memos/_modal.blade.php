@@ -26,20 +26,27 @@
                 <div class="px-6 py-6 space-y-6">
                     <!-- Título -->
                     <div class="group">
-                        <label for="title" class="block text-sm font-medium text-gray-700 mb-1 group-focus-within:text-indigo-600">Título</label>
+                        <label for="title" class="block text-sm font-medium text-gray-700 mb-1 group-focus-within:text-indigo-600">
+                            Título <span class="text-red-500">*</span>
+                        </label>
                         <div class="relative">
-                            <input type="text" id="title" name="title" required
-                                class="w-full rounded-lg border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200">
+                            <input type="text" id="title" name="title"
+                                class="w-full rounded-lg border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200 @error('title') border-red-500 @enderror">
                             <div class="absolute inset-0 rounded-lg shadow-sm pointer-events-none transition-all duration-200 group-focus-within:shadow-md group-focus-within:shadow-indigo-500/10"></div>
                         </div>
+                        @error('title')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <!-- Tipo -->
                     <div class="group">
-                        <label for="type" class="block text-sm font-medium text-gray-700 mb-1 group-focus-within:text-indigo-600">Tipo</label>
+                        <label for="type" class="block text-sm font-medium text-gray-700 mb-1 group-focus-within:text-indigo-600">
+                            Tipo <span class="text-red-500">*</span>
+                        </label>
                         <div class="relative">
-                            <select id="type" name="type" required
-                                class="w-full rounded-lg border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200">
+                            <select id="type" name="type"
+                                class="w-full rounded-lg border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200 @error('type') border-red-500 @enderror">
                                 <option value="" selected disabled>Seleccione un tipo</option>
                                 <option value="Importante">Importante</option>
                                 <option value="Informativo">Informativo</option>
@@ -47,24 +54,34 @@
                             </select>
                             <div class="absolute inset-0 rounded-lg shadow-sm pointer-events-none transition-all duration-200 group-focus-within:shadow-md group-focus-within:shadow-indigo-500/10"></div>
                         </div>
+                        @error('type')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <!-- Contenido -->
                     <div class="group">
-                        <label for="content" class="block text-sm font-medium text-gray-700 mb-1 group-focus-within:text-indigo-600">Contenido</label>
+                        <label for="content" class="block text-sm font-medium text-gray-700 mb-1 group-focus-within:text-indigo-600">
+                            Contenido <span class="text-red-500">*</span>
+                        </label>
                         <div class="relative">
-                            <textarea id="content" name="content" rows="4" required
-                                class="w-full rounded-lg border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200"></textarea>
+                            <textarea id="content" name="content" rows="4"
+                                class="w-full rounded-lg border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200 @error('content') border-red-500 @enderror"></textarea>
                             <div class="absolute inset-0 rounded-lg shadow-sm pointer-events-none transition-all duration-200 group-focus-within:shadow-md group-focus-within:shadow-indigo-500/10"></div>
                         </div>
+                        @error('content')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <!-- Departamento -->
                     <div class="group">
-                        <label for="department_id" class="block text-sm font-medium text-gray-700 mb-1 group-focus-within:text-indigo-600">Departamento Destinatario</label>
+                        <label for="department_id" class="block text-sm font-medium text-gray-700 mb-1 group-focus-within:text-indigo-600">
+                            Departamento Destinatario <span class="text-red-500">*</span>
+                        </label>
                         <div class="relative">
-                            <select id="department_id" name="department_id" required
-                                class="w-full rounded-lg border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200">
+                            <select id="department_id" name="department_id"
+                                class="w-full rounded-lg border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200 @error('department_id') border-red-500 @enderror">
                                 <option value="" selected disabled>Seleccione un departamento</option>
                                 @foreach($departments as $department)
                                     <option value="{{ $department->id }}">{{ $department->name }}</option>
@@ -72,23 +89,31 @@
                             </select>
                             <div class="absolute inset-0 rounded-lg shadow-sm pointer-events-none transition-all duration-200 group-focus-within:shadow-md group-focus-within:shadow-indigo-500/10"></div>
                         </div>
+                        @error('department_id')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <!-- Fecha de Publicación -->
                     <div id="published_at_field" class="group">
-                        <label for="published_at" class="block text-sm font-medium text-gray-700 mb-1 group-focus-within:text-indigo-600">Fecha de Publicación</label>
+                        <label for="published_at" class="block text-sm font-medium text-gray-700 mb-1 group-focus-within:text-indigo-600">
+                            Fecha de Publicación <span class="text-red-500">*</span>
+                        </label>
                         <div class="relative">
                             <input type="datetime-local" id="published_at" name="published_at"
-                                class="w-full rounded-lg border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200">
+                                class="w-full rounded-lg border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200 @error('published_at') border-red-500 @enderror">
                             <div class="absolute inset-0 rounded-lg shadow-sm pointer-events-none transition-all duration-200 group-focus-within:shadow-md group-focus-within:shadow-indigo-500/10"></div>
                         </div>
+                        @error('published_at')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
-                <!-- Footer con efecto de vidrio -->
-                <div class="px-6 py-4 bg-gray-50/80 backdrop-blur-sm border-t border-gray-100 flex justify-end space-x-3">
-                    <button type="button" onclick="closeModal()"
-                        class="px-4 py-2.5 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200">
+                <!-- Footer -->
+                <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
+                    <button type="button" onclick="closeModal()" 
+                        class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg transition-colors duration-200">
                         Cancelar
                     </button>
                     <button type="submit" id="submitButton"

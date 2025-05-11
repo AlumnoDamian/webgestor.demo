@@ -15,38 +15,59 @@
                 <form action="{{ route('memos.guardar') }}" method="POST" class="space-y-6">
                     @csrf
                     <div>
-                        <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-                        <input type="text" id="title" name="title" required
-                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                        <label for="title" class="block text-sm font-medium text-gray-700 mb-1">
+                            Título <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="title" name="title" value="{{ old('title') }}"
+                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 @error('title') border-red-500 @enderror">
+                        @error('title')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
-                        <select id="type" name="type" required
-                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                        <label for="type" class="block text-sm font-medium text-gray-700 mb-1">
+                            Tipo <span class="text-red-500">*</span>
+                        </label>
+                        <select id="type" name="type"
+                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 @error('type') border-red-500 @enderror">
                             <option value="" selected disabled>Seleccione un tipo</option>
-                            <option value="Importante" class="text-red-600">Importante</option>
-                            <option value="Informativo" class="text-blue-600">Informativo</option>
-                            <option value="Urgente" class="text-yellow-600">Urgente</option>
+                            <option value="Importante" class="text-red-600" {{ old('type') == 'Importante' ? 'selected' : '' }}>Importante</option>
+                            <option value="Informativo" class="text-blue-600" {{ old('type') == 'Informativo' ? 'selected' : '' }}>Informativo</option>
+                            <option value="Urgente" class="text-yellow-600" {{ old('type') == 'Urgente' ? 'selected' : '' }}>Urgente</option>
                         </select>
+                        @error('type')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
-                        <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Contenido</label>
-                        <textarea id="content" name="content" rows="4" required
-                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none"></textarea>
+                        <label for="content" class="block text-sm font-medium text-gray-700 mb-1">
+                            Contenido <span class="text-red-500">*</span>
+                        </label>
+                        <textarea id="content" name="content" rows="4"
+                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none @error('content') border-red-500 @enderror">{{ old('content') }}</textarea>
+                        @error('content')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
-                        <label for="recipient" class="block text-sm font-medium text-gray-700 mb-1">Destinatario</label>
-                        <input type="text" id="recipient" name="recipient" required
-                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-                    </div>
-
-                    <div>
-                        <label for="published_at" class="block text-sm font-medium text-gray-700 mb-1">Fecha de Publicación</label>
-                        <input type="date" id="published_at" name="published_at" required
-                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                        <label for="department_id" class="block text-sm font-medium text-gray-700 mb-1">
+                            Departamento <span class="text-red-500">*</span>
+                        </label>
+                        <select id="department_id" name="department_id"
+                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 @error('department_id') border-red-500 @enderror">
+                            <option value="" selected disabled>Seleccione un departamento</option>
+                            @foreach($departments as $department)
+                                <option value="{{ $department->id }}" {{ old('department_id') == $department->id ? 'selected' : '' }}>
+                                    {{ $department->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('department_id')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="flex justify-end space-x-3">

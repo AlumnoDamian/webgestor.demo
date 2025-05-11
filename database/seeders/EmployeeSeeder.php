@@ -152,10 +152,14 @@ class EmployeeSeeder extends Seeder
             // Asignar user_id
             $employeeData['user_id'] = $user->id;
 
+            // Obtener un departamento aleatorio
+            $department = Department::inRandomOrder()->first();
+            $employeeData['department_id'] = $department?->id ?? 1; // fallback a 1 si no hay departamentos
+
             // Eliminar el campo spatie_role ya que no es parte de la tabla employees
             unset($employeeData['spatie_role']);
 
-            // Crear empleado con todos los campos de la tabla
+            // Crear empleado
             Employee::create($employeeData);
         }
     }

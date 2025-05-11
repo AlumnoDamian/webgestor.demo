@@ -46,7 +46,7 @@
                                 </button>
                             @endif
                         </div>
-                        @error('image') <span class="text-red-600 text-sm mt-1 block">{{ $message }}</span> @enderror
+                        @error('image') <span class="text-red-600 text-sm mt-1 block">{{ $errors->first('image') }}</span> @enderror
                         <p class="mt-2 text-sm text-gray-500">JPG, PNG o GIF. Máximo 1MB.</p>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                             <input type="text" wire:model="dni" id="dni" class="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('dni') ring-red-600 @enderror" placeholder="12345678A">
                         </div>
                         @error('dni')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            <p class="mt-2 text-sm text-red-600">{{ $errors->first('dni') }}</p>
                         @enderror
                     </div>
 
@@ -79,7 +79,7 @@
                             <input type="text" wire:model="name" id="name" class="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('name') ring-red-600 @enderror" placeholder="Nombre del empleado">
                         </div>
                         @error('name')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            <p class="mt-2 text-sm text-red-600">{{ $errors->first('name') }}</p>
                         @enderror
                     </div>
 
@@ -90,9 +90,6 @@
                         <div class="mt-2">
                             <input type="date" wire:model="birth_date" id="birth_date" class="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('birth_date') ring-red-600 @enderror">
                         </div>
-                        @error('birth_date')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <!-- Estado -->
@@ -107,7 +104,7 @@
                                 {{ $is_active ? 'Activo' : 'Inactivo' }}
                             </span>
                         </div>
-                        @error('is_active') <span class="text-red-600 text-sm mt-1 block">{{ $message }}</span> @enderror
+                        @error('is_active') <span class="text-red-600 text-sm mt-1 block">{{ $errors->first('is_active') }}</span> @enderror
                     </div>
                 </div>
             </div>
@@ -131,18 +128,15 @@
                                 @endforeach
                             </select>
                         </div>
-                        @error('department_id')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <div class="md:col-span-6 group">
                         <label for="role" class="block text-sm font-medium leading-6 text-gray-900">
-                            Cargo
+                            Cargo <span class="text-gray-500">(opcional)</span>
                         </label>
                         <div class="mt-2">
                             <select wire:model="role" id="role" class="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('role') ring-red-600 @enderror">
-                                <option value="-">Seleccionar cargo</option>
+                                <option value="-">Sin cargo asignado</option>
                                 <option value="jefe">Jefe</option>
                                 <option value="empleado">Empleado</option>
                                 <option value="supervisor">Supervisor</option>
@@ -159,7 +153,27 @@
                             </select>
                         </div>
                         @error('role')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            <p class="mt-2 text-sm text-red-600">{{ $errors->first('role') }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Rol del Sistema (Spatie) -->
+                    <div class="md:col-span-12 group">
+                        <label class="block text-sm font-medium leading-6 text-gray-900 mb-3">
+                            Rol del Sistema
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center space-x-3">
+                                <input type="radio" wire:model="spatie_role" name="spatie_role" value="admin" class="form-radio h-5 w-5 text-indigo-600 transition duration-150 ease-in-out cursor-pointer">
+                                <span class="text-gray-700 dark:text-gray-300">Administrador</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="radio" wire:model="spatie_role" name="spatie_role" value="empleado" class="form-radio h-5 w-5 text-indigo-600 transition duration-150 ease-in-out cursor-pointer">
+                                <span class="text-gray-700 dark:text-gray-300">Empleado</span>
+                            </label>
+                        </div>
+                        @error('spatie_role')
+                            <p class="mt-2 text-sm text-red-600">{{ $errors->first('spatie_role') }}</p>
                         @enderror
                     </div>
 
@@ -171,9 +185,6 @@
                         <div class="mt-2">
                             <input type="date" wire:model="hire_date" id="hire_date" class="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('hire_date') ring-red-600 @enderror">
                         </div>
-                        @error('hire_date')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
                     </div>
                 </div>
             </div>
@@ -191,9 +202,6 @@
                         <div class="mt-2">
                             <input type="tel" wire:model="phone" id="phone" class="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('phone') ring-red-600 @enderror" placeholder="123456789">
                         </div>
-                        @error('phone')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <div class="md:col-span-6 group">
@@ -203,14 +211,12 @@
                         <div class="mt-2">
                             <textarea wire:model="address" id="address" rows="3" class="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('address') ring-red-600 @enderror" placeholder="Dirección completa"></textarea>
                         </div>
-                        @error('address')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
                     </div>
                 </div>
             </div>
 
             <!-- Credenciales -->
+            @unless($isEditing)
             <div>
                 <h3 class="text-lg font-medium text-gray-900 mb-4 pb-2 border-b border-gray-200">
                     Credenciales
@@ -225,20 +231,20 @@
                             <input type="email" wire:model="email" id="email" class="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('email') ring-red-600 @enderror" placeholder="correo@ejemplo.com">
                         </div>
                         @error('email')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            <p class="mt-2 text-sm text-red-600">{{ $errors->first('email') }}</p>
                         @enderror
                     </div>
 
                     <!-- Contraseña -->
                     <div class="md:col-span-6 group">
                         <label for="password" class="block text-sm font-medium leading-6 text-gray-900">
-                            Contraseña {{ $isEditing ? '(dejar en blanco para mantener)' : '' }} <span class="text-red-600">*</span>
+                            Contraseña <span class="text-red-600">*</span>
                         </label>
                         <div class="mt-2">
                             <input type="password" wire:model="password" id="password" class="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('password') ring-red-600 @enderror">
                         </div>
                         @error('password')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            <p class="mt-2 text-sm text-red-600">{{ $errors->first('password') }}</p>
                         @enderror
                     </div>
 
@@ -250,11 +256,12 @@
                             <input type="password" wire:model="password_confirmation" id="password_confirmation" class="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('password_confirmation') ring-red-600 @enderror">
                         </div>
                         @error('password_confirmation')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            <p class="mt-2 text-sm text-red-600">{{ $errors->first('password_confirmation') }}</p>
                         @enderror
                     </div>
                 </div>
             </div>
+            @endunless
 
             <!-- Botones de acción -->
             <div class="px-6 py-4 bg-gray-50 flex justify-end space-x-3 rounded-b-lg">

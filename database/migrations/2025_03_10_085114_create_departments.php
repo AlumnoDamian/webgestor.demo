@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique(); // Código identificador del departamento
-            $table->string('name'); // Nombre del departamento
-            $table->text('description'); // Descripción opcional
-            $table->decimal('budget', 10, 2)->default(0); // Presupuesto del departamento
-            $table->string('phone')->nullable(); // Teléfono de contacto
-            $table->string('email')->unique()->nullable(); // Correo electrónico del departamento
-            $table->boolean('status')->default(true); // Estado activo/inactivo
-            $table->unsignedBigInteger('manager_id')->nullable(); // Jefe del departamento
+            $table->string('code')->unique();
+            $table->string('name'); 
+            $table->text('description')->nullable();
+            $table->decimal('budget', 10, 2)->default(0)->nullable();
+            $table->string('phone')->nullable(); 
+            $table->string('email')->unique()->nullable(); 
+            $table->boolean('status')->default(true); 
+            $table->unsignedBigInteger('manager_id')->nullable();
             $table->timestamps();
         });
     }

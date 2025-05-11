@@ -1,66 +1,242 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Fase de análisis del proyecto
+[Enlace a la fase de análisis](https://docs.google.com/document/d/1GkexEH7eRECTtTPw5ov1jCAnPJO-yGoMe0A2pKMoVUo/edit?usp=sharing)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Fase de diseño
 
-## About Laravel
+## Diagrama de clases
+[Ver diagrama de clases](x_documentacion/diagrama_de_clases.jpeg)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Diagrama Entidad-Relación
+[Ver diagrama de entidad-relación](x_documentacion/database_diagrams.md)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Estructura de nuestra BBDD
+[Ver estructura de la BBDD](x_documentacion/mysql-schema.sql)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Diseño base de la página
+[Enlace al mockup](https://miro.com/welcomeonboard/cjVzUzlMcHR4NnF3SWxUL3lKbk91V2NjU0FwSEdtNmNMYWNJTlNybkNMQjUzSjdyNHk3Nm9vblcxNjJ1ZE5aU1RiNk1kWnYrNyszem01c2RwenpZdzR2UXZveU5jS2JPbjdXbFZieGRkYXk2SUZaenZmQnRqbWFUREJpdkNLZHpNakdSWkpBejJWRjJhRnhhb1UwcS9BPT0hdjE=?share_link_id=256490327332)
 
-## Learning Laravel
+## Documentación de pruebas
+[Ver documentación de pruebas](x_documentacion/testing.md)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+# Video de youtube
+[Ver video de youtube](https://www.youtube.com/watch?v=1BjsWZuWhDA)
+# 🚀 Guía de instalación y configuración de Webgestor
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Versión LINUX
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 🛠 Actualización del sistema
+```bash
+sudo apt update && sudo apt upgrade -y
+```
 
-## Laravel Sponsors
+### 💻 Instalación de PHP y extensiones necesarias
+```bash
+sudo apt install software-properties-common -y
+sudo add-apt-repository ppa:ondrej/php -y
+sudo apt update
+sudo apt install php php-cli php-mbstring php-xml php-bcmath php-curl php-zip unzip curl -y
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 📌 Verificar versión de PHP
+```bash
+php -v
+```
 
-### Premium Partners
+### 🏆 Instalación de Composer
+```bash
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### 📌 Verificar versión de Composer
+```bash
+composer --version
+```
 
-## Contributing
+### 💼 Instalación y configuración de MySQL
+```bash
+sudo apt install mysql-server php-mysql -y
+sudo mysql
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### 🔧 Dentro del cliente MySQL:
+```sql
+CREATE DATABASE laravel;
+CREATE USER 'laraveluser'@'localhost' IDENTIFIED BY 'Password*1234!';
+GRANT ALL PRIVILEGES ON laravel.* TO 'laraveluser'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+```
 
-## Code of Conduct
+### 🔧 Clonar el repositorio de GitHub
+```bash
+cd /var/www/html
+git clone https://github.com/AlumnoDamian/webgestor.demo.git
+cd webgestor.demo
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 📌 Instalar dependencias del proyecto
+```bash
+composer install
+```
 
-## Security Vulnerabilities
+### 📌 Configuración del entorno Laravel (.env)
+```bash
+cp .env.example .env
+nano .env
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 📌 Ajustar las variables:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=laraveluser
+DB_PASSWORD=Password*1234!
+```
 
-## License
+### 🔐 Generar la clave de la aplicación
+```bash
+php artisan key:generate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 🛠 Establecer permisos (Linux)
+```bash
+sudo chown -R $USER:$USER /var/www/html/webgestor.demo
+```
+
+### 🌐 Levantar el servidor integrado de Laravel
+```bash
+php artisan serve
+```
+
+### 📦 Instalación de paquetes útiles (OBLIGATORIO)
+```bash
+npm install flatpickr
+composer require spatie/laravel-permission
+npm install @tailwindcss/postcss --save-dev
+composer require livewire/livewire
+```
+
+### 🌱 🧱 Ejecutar migraciones y seeders
+```bash
+php artisan db:wipe
+php artisan migrate
+php artisan db:seed
+```
+
+---
+
+## 🪟 Guía de instalación y configuración de Webgestor en Windows
+
+### ✅ Requisitos previos
+
+#### 🟠 Instalar Git
+[https://git-scm.com/download/win](https://git-scm.com/download/win)
+
+Verificar instalación:
+```bash
+git --version
+```
+
+#### 💻 Instalación de PHP y extensiones necesarias
+[https://windows.php.net/download](https://windows.php.net/download)
+
+- Descargar la versión más reciente (Non Thread Safe, x64) ZIP
+- Extraer en `C:\php`
+
+#### ➕ Agregar PHP al PATH:
+1. Panel de control → Sistema → Configuración avanzada del sistema  
+2. Variables de entorno → Editar `Path` → Nuevo → `C:\php`
+
+Verificar:
+```bash
+php -v
+```
+
+#### 🏆 Instalación de Composer
+[https://getcomposer.org/download](https://getcomposer.org/download)
+
+Verificar:
+```bash
+composer --version
+```
+
+#### 💼 Instalación y configuración de MySQL
+[https://dev.mysql.com/downloads/installer/](https://dev.mysql.com/downloads/installer/)
+
+- Instalar MySQL Server (y opcionalmente Workbench)
+- Configurar usuario `root`
+
+Dentro del cliente de MySQL:
+```sql
+CREATE DATABASE laravel;
+CREATE USER 'laraveluser'@'localhost' IDENTIFIED BY 'Password*1234!';
+GRANT ALL PRIVILEGES ON laravel.* TO 'laraveluser'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+---
+
+## 🚀 Instalación del proyecto Webgestor
+
+### 🔧 Clonar el repositorio de GitHub
+```bash
+cd ruta\de	u\carpeta\de\proyectos
+git clone https://github.com/AlumnoDamian/webgestor.demo.git
+cd webgestor.demo
+```
+
+### 💻 Instalar dependencias PHP
+```bash
+composer install
+```
+
+### 📦 Configurar archivo .env
+```bash
+copy .env.example .env
+```
+
+### 📌 Editar las variables de entorno:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=laraveluser
+DB_PASSWORD=Password*1234!
+```
+
+### 🔐 Generar la clave de la app
+```bash
+php artisan key:generate
+```
+
+### 🛠 Ejecutar migraciones
+```bash
+php artisan migrate
+```
+
+### 📦 Instalación de paquetes útiles (OBLIGATORIO)
+```bash
+npm install flatpickr
+npm install @tailwindcss/postcss --save-dev
+composer require spatie/laravel-permission
+composer require livewire/livewire
+```
+
+### 🌱 🧱 Ejecutar migraciones y seeders
+```bash
+php artisan db:wipe
+php artisan migrate
+php artisan db:seed
+```
+
+### 🟢 Iniciar el servidor
+```bash
+php artisan serve
+```
+
+Acceder en el navegador:  
+[http://127.0.0.1:8000](http://127.0.0.1:8000)

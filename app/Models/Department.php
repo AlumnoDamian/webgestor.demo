@@ -38,4 +38,10 @@ class Department extends Model
     {
         return $this->hasMany(Employee::class);
     }
+
+    // Relación con memos
+    public function memos()
+    {
+        return $this->hasMany(Memo::class);
+    }
 }

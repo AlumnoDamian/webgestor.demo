@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->constrained()->onDelete('cascade');
-            $table->date('day'); // Cambiado a tipo date para almacenar fechas específicas
-            $table->string('shift')->nullable(); // Ejemplo: "08:00 - 16:00"
+            $table->foreignId('employee_id')
+                  ->constrained()
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade');
+            $table->date('day')->nullable(); // Fecha puede ser nula
+            $table->string('shift')->nullable(); // Turno puede ser nulo
             $table->timestamps();
         });
     }

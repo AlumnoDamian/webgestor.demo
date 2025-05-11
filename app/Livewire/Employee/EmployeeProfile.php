@@ -142,7 +142,7 @@ class EmployeeProfile extends Component
     public function updatedNewImage()
     {
         $this->validate([
-            'newImage' => 'image|max:1024', // 1MB Max
+            'newImage' => 'image', // Sin límite de tamaño
         ]);
 
         $path = $this->newImage->store('employee-photos', 'public');

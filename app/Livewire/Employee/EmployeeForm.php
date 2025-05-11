@@ -30,6 +30,7 @@ class EmployeeForm extends Component
     public $hire_date;
     public $department_id;
     public $role;
+    public $spatie_role;
     public $birth_date;
     public $is_active = true;
     public $image;
@@ -38,6 +39,8 @@ class EmployeeForm extends Component
 
     protected $queryString = ['email'];
 
+    protected $listeners = ['removeImage'];
+
     protected function rules()
     {
         $emailRule = ['required', 'email'];
@@ -45,7 +48,6 @@ class EmployeeForm extends Component
 
         // Si estamos editando, ignorar el email y dni del empleado actual
         if ($this->isEditing) {
-            $emailRule[] = Rule::unique('users', 'email')->ignore($this->employee->user_id);
             $dniRule[] = Rule::unique('employees', 'dni')->ignore($this->employee->id);
         } else {
             $emailRule[] = 'unique:users,email';
@@ -54,8 +56,6 @@ class EmployeeForm extends Component
 
         $rules = [
             'name' => ['required', 'min:3', 'max:255'],
-            'email' => $emailRule,
-            'password' => $this->isEditing ? ['nullable', 'min:6'] : ['required', 'min:6'],
             'dni' => $dniRule,
             'phone' => ['nullable', 'regex:/^[0-9]{9}$/'],
             'address' => ['nullable', 'min:5'],
@@ -71,9 +71,10 @@ class EmployeeForm extends Component
                     }
                 }
             }],
-            'role' => ['nullable', function ($attribute, $value, $fail) {
+            'role' => ['required', function ($attribute, $value, $fail) {
                 if ($value === '-') {
-                    return; // Permitir el valor especial '-'
+                    $fail('Debe seleccionar un cargo para el empleado.');
+                    return;
                 }
                 if ($value !== null) {
                     $validRoles = ['jefe', 'empleado', 'supervisor', 'auxiliar', 'gerente', 'recepcionista', 'cocinero', 'camarero', 'conserje', 'limpiador', 'guardia de seguridad', 'auxiliar administrativo', 'analista'];
@@ -82,10 +83,17 @@ class EmployeeForm extends Component
                     }
                 }
             }],
+            'spatie_role' => ['required', 'in:admin,empleado'],
             'birth_date' => ['nullable', 'date', 'before:today'],
             'is_active' => ['boolean'],
             'image' => ['nullable', 'image']
         ];
+
+        // Solo agregar reglas de email y contraseña si no está editando
+        if (!$this->isEditing) {
+            $rules['email'] = $emailRule;
+            $rules['password'] = ['required', 'min:6'];
+        }
 
         return $rules;
     }
@@ -110,8 +118,10 @@ class EmployeeForm extends Component
             'hire_date.date' => 'La fecha de contratación debe ser una fecha válida.',
             'department_id.required' => 'El departamento es obligatorio.',
             'department_id.exists' => 'El departamento seleccionado no existe.',
-            'role.required' => 'El rol es obligatorio.',
-            'role.in' => 'El rol seleccionado no es válido.',
+            'role.required' => 'Debe seleccionar un cargo para el empleado.',
+            'role.in' => 'El cargo seleccionado no es válido.',
+            'spatie_role.required' => 'El rol del sistema es obligatorio.',
+            'spatie_role.in' => 'El rol del sistema debe ser Administrador o Empleado.',
             'birth_date.required' => 'La fecha de nacimiento es obligatoria.',
             'birth_date.date' => 'La fecha de nacimiento debe ser una fecha válida.',
             'birth_date.before' => 'La fecha de nacimiento debe ser anterior a hoy.',
@@ -148,6 +158,7 @@ class EmployeeForm extends Component
                 $this->address = $this->employee->address;
                 $this->department_id = $this->employee->department_id;
                 $this->role = $this->employee->role;
+                $this->spatie_role = $this->employee->user->roles->first()?->name ?? 'empleado';
                 // Formatear las fechas al formato Y-m-d que espera el input type="date"
                 $this->birth_date = $this->employee->birth_date ? $this->employee->birth_date->format('Y-m-d') : null;
                 $this->hire_date = $this->employee->hire_date ? $this->employee->hire_date->format('Y-m-d') : null;
@@ -158,6 +169,20 @@ class EmployeeForm extends Component
     public function updatedImage()
     {
         $this->temporaryImage = $this->image;
+    }
+
+    public function removeImage()
+    {
+        if ($this->isEditing && $this->employee->image) {
+            Storage::delete('public/' . $this->employee->image);
+            $this->employee->update(['image' => null]);
+            $this->image = null;
+            $this->temporaryImage = null;
+            session()->flash('message', 'La imagen ha sido eliminada correctamente.');
+        } else {
+            $this->image = null;
+            $this->temporaryImage = null;
+        }
     }
 
     public function save()
@@ -174,13 +199,12 @@ class EmployeeForm extends Component
 
         $employeeData = [
             'name' => $this->name,
-            'email' => $this->email,
             'dni' => $this->dni,
             'phone' => $this->phone,
             'address' => $this->address,
             'hire_date' => $this->hire_date,
             'department_id' => $this->department_id,
-            'role' => $this->role,
+            'role' => strval($this->role), // Asegurar que el rol sea string
             'birth_date' => $this->birth_date,
             'is_active' => $this->is_active
         ];
@@ -189,17 +213,8 @@ class EmployeeForm extends Component
             DB::beginTransaction();
 
             if ($this->isEditing) {
-                // Actualizar usuario
-                $this->employee->user->update([
-                    'name' => $this->name,
-                    'email' => $this->email,
-                ]);
-
-                if ($this->password) {
-                    $this->employee->user->update([
-                        'password' => Hash::make($this->password)
-                    ]);
-                }
+                // Actualizar rol de Spatie
+                $this->employee->user->syncRoles([$this->spatie_role]);
 
                 // Procesar imagen si hay una nueva
                 if ($this->image && $this->image instanceof \Illuminate\Http\UploadedFile) {
@@ -221,13 +236,19 @@ class EmployeeForm extends Component
                     'email_verified_at' => now(),
                 ]);
 
+                // Asignar rol de Spatie
+                $user->assignRole($this->spatie_role);
+
                 // Procesar imagen si existe
                 if ($this->image) {
                     $employeeData['image'] = $this->image->store('employees', 'public');
                 }
 
-                // Crear empleado
+                // Agregar email y user_id al empleado
+                $employeeData['email'] = $this->email;
                 $employeeData['user_id'] = $user->id;
+
+                // Crear empleado
                 $employee = Employee::create($employeeData);
 
                 session()->flash('message', 'Empleado creado correctamente.');

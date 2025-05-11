@@ -61,38 +61,12 @@ class ScheduleController extends Controller
     }
 
     public function store(Request $request)
-    {
-        Log::info('Recibida solicitud de guardar horarios', [
-            'request_data' => $request->all(),
-            'department_id' => $request->input('department_id')
-        ]);
-
-        // Validar que se haya seleccionado un departamento
-        if (!$request->has('department_id')) {
-            Log::warning('Intento de guardar sin departamento seleccionado');
-            return response()->json([
-                'error' => 'Debe seleccionar un departamento.'
-            ], 422);
-        }
-
-        // Si no hay horarios para guardar, registrar y devolver mensaje
-        if (!$request->has('schedules')) {
-            Log::info('No se recibieron horarios para guardar');
-            return response()->json([
-                'message' => 'No se han realizado cambios en los horarios.'
-            ]);
-        }
-
-        try {
+    {        
             $updatedCount = 0;
             $deletedCount = 0;
 
             // Guardar los horarios
             foreach ($request->schedules as $employeeId => $scheduleData) {
-                Log::info("Procesando horarios para empleado ID: {$employeeId}", [
-                    'schedule_data' => $scheduleData
-                ]);
-
                 if (is_array($scheduleData)) {
                     foreach ($scheduleData as $date => $shift) {
                         if ($shift) {
@@ -112,30 +86,12 @@ class ScheduleController extends Controller
                 }
             }
 
-            Log::info('Horarios guardados exitosamente', [
-                'updated' => $updatedCount,
-                'deleted' => $deletedCount
-            ]);
+            // Obtener el department_id del primer empleado
+            $employee = Employee::find(array_key_first($request->schedules));
+            $departmentId = $employee ? $employee->department_id : null;
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Horarios guardados correctamente.',
-                'stats' => [
-                    'updated' => $updatedCount,
-                    'deleted' => $deletedCount
-                ]
-            ]);
-            
-        } catch (\Exception $e) {
-            Log::error('Error al guardar horarios', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-
-            return response()->json([
-                'error' => 'Error al guardar los horarios: ' . $e->getMessage()
-            ], 500);
-        }
+            return redirect()->route('cuadrante.show', ['department_id' => $departmentId])
+                           ->with('success', "Horarios actualizados correctamente. Actualizados: $updatedCount, Eliminados: $deletedCount");
     }
 
     public function view(Request $request)

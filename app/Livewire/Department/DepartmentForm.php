@@ -31,9 +31,9 @@ class DepartmentForm extends Component
         return [
             'code' => ['required', 'string', 'max:10', $uniqueRule],
             'name' => ['required', 'string', 'min:3', 'max:255'],
-            'description' => ['required', 'string', 'min:10'],
+            'description' => ['nullable', 'string'],
             'manager_id' => ['nullable', 'exists:employees,id'],
-            'budget' => ['required', 'numeric', 'min:0'],
+            'budget' => ['nullable', 'numeric', 'min:0'],
             'phone' => ['nullable', 'string', 'max:15'],
             'email' => ['nullable', 'email'],
             'status' => ['boolean'],
@@ -48,14 +48,9 @@ class DepartmentForm extends Component
             'code.max' => 'El código no puede tener más de 10 caracteres.',
             'name.required' => 'El nombre es obligatorio.',
             'name.min' => 'El nombre debe tener al menos 3 caracteres.',
-            'description.required' => 'La descripción es obligatoria.',
-            'description.min' => 'La descripción debe tener al menos 10 caracteres.',
-            'manager_id.exists' => 'El jefe seleccionado no es válido.',
-            'budget.required' => 'El presupuesto es obligatorio.',
-            'budget.numeric' => 'El presupuesto debe ser un número.',
             'budget.min' => 'El presupuesto no puede ser negativo.',
             'phone.max' => 'El teléfono no puede tener más de 15 caracteres.',
-            'email.email' => 'El email debe ser una dirección válida.',
+            'email.email' => 'El formato del email no es válido.',
         ];
     }
 
@@ -87,43 +82,63 @@ class DepartmentForm extends Component
 
     public function updated($propertyName)
     {
-        $this->validateOnly($propertyName);
+        if (in_array($propertyName, ['code', 'name'])) {
+            $this->validateOnly($propertyName, [
+                'code' => ['required', 'string', 'max:10', $this->isEditing ? 'unique:departments,code,' . $this->department->id : 'unique:departments,code'],
+                'name' => ['required', 'string', 'min:3', 'max:255'],
+            ]);
+        }
     }
 
     public function save()
     {
+        // Validar los campos requeridos primero
+        $rules = [
+            'code' => ['required', 'string', 'max:10', $this->isEditing ? 'unique:departments,code,' . $this->departmentId : 'unique:departments,code'],
+            'name' => ['required', 'string', 'min:3', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'manager_id' => ['nullable', 'exists:employees,id'],
+            'budget' => ['nullable', 'numeric', 'min:0'],
+            'phone' => ['nullable', 'string', 'max:15'],
+            'email' => ['nullable', 'email'],
+            'status' => ['boolean'],
+        ];
+
+        $messages = [
+            'code.required' => 'El código del departamento es obligatorio.',
+            'code.unique' => 'Este código ya está en uso.',
+            'code.max' => 'El código no puede tener más de 10 caracteres.',
+            'name.required' => 'El nombre del departamento es obligatorio.',
+            'name.min' => 'El nombre debe tener al menos 3 caracteres.',
+            'budget.min' => 'El presupuesto no puede ser negativo.',
+            'phone.max' => 'El teléfono no puede tener más de 15 caracteres.',
+            'email.email' => 'El formato del email no es válido.',
+        ];
+
         try {
+            // Validar con mensajes personalizados
+            $validatedData = $this->validate($rules, $messages);
+
             DB::beginTransaction();
 
-            $validatedData = $this->validate();
+            // Convertir campos vacíos a null
+            $departmentData = [
+                'code' => $this->code,
+                'name' => $this->name,
+                'description' => $this->description ?: null,
+                'manager_id' => $this->manager_id ?: null,
+                'budget' => $this->budget ?: null,
+                'phone' => $this->phone ?: null,
+                'email' => $this->email ?: null,
+                'status' => $this->status
+            ];
 
             if ($this->isEditing) {
                 $department = Department::findOrFail($this->departmentId);
-                
-                $department->update([
-                    'code' => $this->code,
-                    'name' => $this->name,
-                    'description' => $this->description,
-                    'manager_id' => $this->manager_id,
-                    'budget' => $this->budget,
-                    'phone' => $this->phone,
-                    'email' => $this->email,
-                    'status' => $this->status
-                ]);
-
+                $department->update($departmentData);
                 session()->flash('message', 'Departamento actualizado correctamente.');
             } else {
-                $department = Department::create([
-                    'code' => $this->code,
-                    'name' => $this->name,
-                    'description' => $this->description,
-                    'manager_id' => $this->manager_id,
-                    'budget' => $this->budget,
-                    'phone' => $this->phone,
-                    'email' => $this->email,
-                    'status' => $this->status
-                ]);
-
+                Department::create($departmentData);
                 session()->flash('message', 'Departamento creado correctamente.');
             }
 
@@ -131,9 +146,14 @@ class DepartmentForm extends Component
             $this->dispatch('departmentUpdated');
             $this->dispatch('closeModal');
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Capturar errores de validación y mostrarlos
+            $this->setErrorBag($e->validator->getMessageBag());
+            throw $e;
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'Error al guardar el departamento: ' . $e->getMessage());
+            Log::error('Error al guardar departamento: ' . $e->getMessage());
+            session()->flash('error', 'Error al guardar el departamento. Por favor, verifica los datos e intenta nuevamente.');
         }
     }
 
