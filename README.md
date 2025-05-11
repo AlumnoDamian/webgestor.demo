@@ -27,7 +27,7 @@
 - [💾 Estructura de la BBDD](x_documentacion/mysql-schema.sql)
 - [🎨 Mockup del Diseño](https://miro.com/welcomeonboard/cjVzUzlMcHR4NnF3SWxUL3lKbk91V2NjU0FwSEdtNmNMYWNJTlNybkNMQjUzSjdyNHk3Nm9vblcxNjJ1ZE5aU1RiNk1kWnYrNyszem01c2RwenpZdzR2UXZveU5jS2JPbjdXbFZieGRkYXk2SUZaenZmQnRqbWFUREJpdkNLZHpNakdSWkpBejJWRjJhRnhhb1UwcS9BPT0hdjE=?share_link_id=256490327332)
 - [🎥 Video Demo](https://www.youtube.com/watch?v=1BjsWZuWhDA)
-- 
+
 ## ✨ Características
 
 - 👥 Gestión de empleados y departamentos
